@@ -178,7 +178,7 @@ namespace TroveTools.NET.ViewModel
         #region Private methods
         private void RefreshMods(object obj)
         {
-            // Check all mods for updates
+            log.Info("Checking all mods for updates");
             foreach (dynamic mod in MyMods)
             {
                 mod.CheckForUpdates();

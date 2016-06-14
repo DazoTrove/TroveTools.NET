@@ -35,7 +35,7 @@
         </StatusBar>
         <Popup IsOpen="{Binding IsChecked, ElementName=btnLogMessages}" PlacementTarget="{Binding ElementName=btnLogMessages}" Placement="Top" StaysOpen="False">
             <Border BorderBrush="Black" BorderThickness="1" >
-                <RichTextBox Name="rtbLogMessages" Height="300" Width="800" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextChanged="rtbLogMessages_TextChanged" >
+                <RichTextBox Name="rtbLogMessages" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextChanged="rtbLogMessages_TextChanged" Width="{Binding ActualWidth,ElementName=tabControl}" Height="300">
                     <FlowDocument>
                         <Paragraph>
                             <Run Text="{Binding LogAppender.Messages, Mode=OneWay}" />
