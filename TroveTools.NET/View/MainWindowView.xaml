@@ -1,0 +1,49 @@
+﻿<Window x:Class="TroveTools.NET.View.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vw="clr-namespace:TroveTools.NET.View"
+        xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d"
+        Title="{Binding DisplayName}" Width="950" Height="700" Icon="/Resources/TroveTools.ico"
+        DataContext="{Binding Source={x:Static vm:MainWindowViewModel.Instance}}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadDataCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.Resources>
+        <ResourceDictionary Source="Resources.xaml" />
+    </Window.Resources>
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <ToggleButton Name="btnLogMessages">
+                    <!-- Control Template can be used to remove default toggle button styling, but we would need a different visual clue that the log text is clickable - ->
+                    <ToggleButton.Template>
+                        <ControlTemplate TargetType="ToggleButton">
+                    -->
+                            <TextBlock Margin="10,0" Text="{Binding LogAppender.LastMessage}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
+                    <!--
+                        </ControlTemplate>
+                    </ToggleButton.Template>
+                    -->
+                </ToggleButton>
+            </StatusBarItem>
+        </StatusBar>
+        <Popup IsOpen="{Binding IsChecked, ElementName=btnLogMessages}" PlacementTarget="{Binding ElementName=btnLogMessages}" Placement="Top" StaysOpen="False">
+            <Border BorderBrush="Black" BorderThickness="1" >
+                <RichTextBox Name="rtbLogMessages" Height="300" Width="800" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextChanged="rtbLogMessages_TextChanged" >
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text="{Binding LogAppender.Messages, Mode=OneWay}" />
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+        </Popup>
+        <TabControl x:Name="tabControl" ItemsSource="{Binding Workspaces}" ItemTemplate="{StaticResource TabItemTemplate}" IsSynchronizedWithCurrentItem="True" />
+    </DockPanel>
+</Window>

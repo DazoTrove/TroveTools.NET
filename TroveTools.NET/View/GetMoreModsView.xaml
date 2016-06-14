@@ -1,0 +1,174 @@
+﻿<UserControl x:Class="TroveTools.NET.View.GetMoreModsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:c="clr-namespace:TroveTools.NET.Converter"
+             xmlns:vw="clr-namespace:TroveTools.NET.View"
+             xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
+             xmlns:sd="clr-namespace:TroveTools.NET.SampleData"
+             mc:Ignorable="d" 
+             d:DesignWidth="900" d:DesignHeight="650">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml"/>
+                <ResourceDictionary>
+                    <SolidColorBrush x:Key="brushWatermarkBackground" Color="White" />
+                    <SolidColorBrush x:Key="brushWatermarkForeground" Color="LightSteelBlue" />
+                    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                    <Style x:Key="EntryFieldStyle" TargetType="Grid" >
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Margin" Value="0,0,10,0" />
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <DockPanel>
+        <ToolBar x:Name="toolBar" ToolBarTray.IsLocked="True" DockPanel.Dock="Top">
+            <Hyperlink Foreground="{x:Null}" Command="{Binding LaunchTrovesaurusCommand}">
+                <Image x:Name="imgTrovesaurus" Source="/Resources/TrovesaurusLogo.png" VerticalAlignment="Center" Height="31" Width="200" Margin="0,0,10,0" />
+            </Hyperlink>
+            <Image Source="/Resources/glyphicons-28-search.png" Width="18" Height="18" Margin="0,0,5,0" />
+            <Grid Background="{StaticResource brushWatermarkBackground}" Style="{StaticResource EntryFieldStyle}">
+                <TextBlock Margin="5,2" Text="Search" Foreground="{StaticResource brushWatermarkForeground}" 
+                       Visibility="{Binding ElementName=txtSearchMods, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <TextBox x:Name="txtSearchMods" Width="200" Background="Transparent" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Style="{StaticResource BorderlessButton}" HorizontalAlignment="Right" Command="{Binding ClearSearchCommand}">
+                    <Image Width="13" Height="13" Source="/Resources/glyphicons-193-remove-sign.png" Margin="0,0,5,0" />
+                </Button>
+            </Grid>
+            <ComboBox x:Name="cbTypes" Width="150" Margin="0,0,10,0" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding TypesView}" />
+            <ComboBox x:Name="cbSubTypes" Width="150" Margin="0,0,10,0" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding SubTypesView}" />
+            <Button x:Name="btnRefresh" Margin="0,0,10,0" Focusable="False" Command="{Binding RefreshCommand}">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Source="/Resources/glyphicons-82-refresh.png" Width="18" Height="18" Margin="2,0" VerticalAlignment="Center" />
+                    <TextBlock Text="Refresh" Margin="2" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </ToolBar>
+        <ListView x:Name="listViewTrovesaurusMods" SelectionMode="Single" AlternationCount="2" IsSynchronizedWithCurrentItem="True" Grid.IsSharedSizeScope="True"
+                  ItemsSource="{Binding TrovesaurusModsView}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
+            <ListView.ContextMenu>
+                <ContextMenu DataContext="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource Self}}">
+                    <MenuItem Command="{Binding InstallCommand}">
+                        <MenuItem.Header>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <Binding StringFormat="Download Latest: {0}" Path="LatestDownload" Mode="OneWay" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem Header="Other Downloads" ItemsSource="{Binding Downloads}">
+                        <MenuItem.ItemTemplate>
+                            <DataTemplate>
+                                <MenuItem Header="{Binding}" Command="{Binding DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding FileId}" />
+                            </DataTemplate>
+                        </MenuItem.ItemTemplate>
+                    </MenuItem>
+                    <MenuItem Command="{Binding LaunchModSiteCommand}" Header="View mod page on Trovesaurus"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+            <ListView.View>
+                <GridView AllowsColumnReorder="False" ColumnHeaderTemplate="{DynamicResource SortingColumnHeaderTemplate}">
+                    <GridViewColumn Width="50">
+                        <GridViewColumnHeader IsHitTestVisible="False" Tag="Image"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}" MaxWidth="50" MaxHeight="50">
+                                    <Image.ToolTip>
+                                        <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                            <Image Source="{Binding Source}" MaxHeight="300" MaxWidth="300" />
+                                        </ToolTip>
+                                    </Image.ToolTip>
+                                </Image>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="300">
+                        <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="Name" Tag="Name"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0">
+                                        <Hyperlink Command="{Binding LaunchModSiteCommand}"><TextBlock Text="{Binding Name}"/></Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Author, Converter={StaticResource MultiLineStringConverter}}" Grid.Row="1" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="65">
+                        <GridViewColumnHeader Tag="Install" IsHitTestVisible="False"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding InstallCommand}">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsInstalled}" Value="False">
+                                                    <Setter Property="Content" Value="Install" />
+                                                    <Setter Property="IsEnabled" Value="True" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsInstalled}" Value="True">
+                                                    <Setter Property="Content" Value="Installed" />
+                                                    <Setter Property="IsEnabled" Value="False" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120">
+                        <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="Type" Tag="Type"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="{Binding Type}" Grid.Row="0" />
+                                    <TextBlock Grid.Row="1">
+                                        <TextBlock Text="{Binding SubType}" />
+                                        <TextBlock Text="{Binding Replaces}" />
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="85">
+                        <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="TotalDownloads" Tag="Downloads"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ContentPresenter Content="{Binding TotalDownloads}" ContentStringFormat="N0"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding TrovesaurusStatus}">
+                        <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="TrovesaurusStatus" Tag="Status"/>
+                    </GridViewColumn>
+                    <GridViewColumn Width="130">
+                        <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="LastUpdated" Tag="Last Updated"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ContentPresenter Content="{Binding LastUpdated}" ContentStringFormat="g"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
+</UserControl>

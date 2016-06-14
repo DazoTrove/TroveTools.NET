@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="TroveTools.NET.View.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vw="clr-namespace:TroveTools.NET.View"
+             xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignWidth="700" d:DesignHeight="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml"/>
+                <ResourceDictionary>
+                    <CollectionViewSource x:Key="LocationsView" Source="{Binding Locations}" />
+                    <Style TargetType="{x:Type TextBox}">
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Margin" Value="0,2,40,2" />
+                        <Setter Property="Validation.ErrorTemplate">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <DockPanel LastChildFill="true">
+                                        <Border Background="Red" DockPanel.Dock="right" Margin="5,0,0,0" Width="20" Height="20" CornerRadius="10"
+                                                ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}">
+                                            <TextBlock Text="!" VerticalAlignment="center" HorizontalAlignment="center" FontWeight="Bold" Foreground="white" />
+                                        </Border>
+                                        <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
+                                            <Border BorderBrush="red" BorderThickness="1" />
+                                        </AdornedElementPlaceholder>
+                                    </DockPanel>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <GroupBox Header="Location Settings" Padding="5" Grid.Row="0">
+            <DockPanel>
+                <ToolBar x:Name="toolBar" ToolBarTray.IsLocked="True" DockPanel.Dock="Top">
+                    <Button x:Name="btnAddLocation" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btnAddLocation_Click" Focusable="False">
+                        <StackPanel>
+                            <Image Source="/Resources/glyphicons-191-plus-sign.png" Width="26" Height="26" Stretch="None" />
+                            <TextBlock Text="Add Location" VerticalAlignment="Center" Margin="2" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="btnRemoveLocation" HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False"
+                            Command="{Binding RemoveLocationCommand}" CommandParameter="{Binding Source={StaticResource LocationsView}, Path=/}">
+                        <StackPanel>
+                            <Image Source="/Resources/glyphicons-198-remove-circle.png" Width="26" Height="26" Stretch="None" />
+                            <TextBlock Text="Remove Location" VerticalAlignment="Center" Margin="2" />
+                        </StackPanel>
+                    </Button>
+                </ToolBar>
+                <ListView x:Name="listViewLocations" Grid.IsSharedSizeScope="True" IsSynchronizedWithCurrentItem="True"
+                          ItemsSource="{Binding Source={StaticResource LocationsView}}">
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="False">
+                            <GridViewColumn Width="200">
+                                <GridViewColumnHeader Content="Location Name"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition SharedSizeGroup="Enabled" />
+                                                <ColumnDefinition SharedSizeGroup="Location Name" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <CheckBox IsChecked="{Binding Path=Enabled, UpdateSourceTrigger=PropertyChanged}" ToolTip="Enabled" VerticalAlignment="Center" Grid.Column="0" />
+                                            <TextBox Text="{Binding LocationName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true, Delay=2000}"
+                                                     Width="165" Margin="6,0,0,0" VerticalAlignment="Center" Grid.Column="1" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="450" Header="Location Path" DisplayMemberBinding="{Binding LocationPath}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </DockPanel>
+        </GroupBox>
+        <GroupBox Header="Application Settings" Padding="5" Grid.Row="1">
+            <StackPanel>
+                <CheckBox x:Name="chkTroveUriHandler" Content="Trove:// URI Handler for Trovesaurus mod installation links" IsChecked="{Binding TroveUriEnabled}" />
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>
