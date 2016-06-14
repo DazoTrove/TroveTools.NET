@@ -1,0 +1,6 @@
+{
+  "name": "TroveTools.NET",
+  "tagline": "TroveTools.NET allows easy installation of Trove modifications by searching and downloading from the Trovesaurus mod repository. This application creates the necessary override folders such that the files are not removed by the Glyph client when updating Trove.",
+  "body": "# TroveTools.NET\r\nTroveTools.NET by Dazo (@DazoTrove) allows easy installation of Trove modifications by searching and downloading from the Trovesaurus mod repository. This application creates the necessary override folders such that the files are not removed by the Glyph client when updating Trove.\r\n\r\n[Report issues or request features here](https://github.com/DazoTrove/TroveTools.NET/issues)\r\n\r\n![TroveTools.NET Settings](https://github.com/DazoTrove/TroveTools.NET/raw/master/Screenshots/TroveTools.NET-v1.0-Settings.png)\r\n![TroveTools.NET My Mods](https://github.com/DazoTrove/TroveTools.NET/raw/master/Screenshots/TroveTools.NET-v1.0-MyMods.png)\r\n![TroveTools.NET Get More Mods](https://github.com/DazoTrove/TroveTools.NET/raw/master/Screenshots/TroveTools.NET-v1.0-GetMoreMods.png)",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
