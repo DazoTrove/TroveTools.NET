@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Deployment.Application;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -37,6 +38,7 @@ namespace TroveTools.NET.ViewModel
 
         private object GetCurrentVersion()
         {
+            if (ApplicationDeployment.IsNetworkDeployed) return ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
             return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
         #endregion // Constructors
