@@ -77,9 +77,12 @@ namespace TroveTools.NET.Model
             [JsonProperty("date")]
             public string Date { get; set; }
 
+            [JsonProperty("downloads")]
+            public int Downloads { get; set; }
+
             public override string ToString()
             {
-                return string.Format(Strings.TroveMod_Download_ToStringFormat, Version, UnixTimeSecondsToDateTimeConverter.GetLocalDateTime(Date), FileId);
+                return string.Format(Strings.TroveMod_Download_ToStringFormat, Version, UnixTimeSecondsToDateTimeConverter.GetLocalDateTime(Date), FileId, Downloads);
             }
         }
 
@@ -99,6 +102,12 @@ namespace TroveTools.NET.Model
         [JsonProperty("subtype")]
         public string SubType { get; set; }
 
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("date")]
+        public string DateCreated { get; set; }
+
         [JsonProperty("status2")]
         public string TrovesaurusStatus { get; set; }
 
@@ -111,8 +120,8 @@ namespace TroveTools.NET.Model
         [JsonProperty("votes")]
         public int Votes { get; set; }
 
-        [JsonProperty("rating")]
-        public int Rating { get; set; }
+        [JsonProperty("views")]
+        public int Views { get; set; }
 
         [JsonProperty("downloads")]
         public List<Download> Downloads { get; set; }
@@ -458,11 +467,13 @@ namespace TroveTools.NET.Model
                 Author = mod.Author;
                 Type = mod.Type;
                 SubType = mod.SubType;
+                Description = mod.Description;
+                DateCreated = mod.DateCreated;
                 TrovesaurusStatus = mod.TrovesaurusStatus;
                 Replaces = mod.Replaces;
                 TotalDownloads = mod.TotalDownloads;
                 Votes = mod.Votes;
-                Rating = mod.Rating;
+                Views = mod.Views;
                 Downloads = new List<Download>(mod.Downloads);
                 ImagePath = mod.ImagePath;
             }
@@ -508,7 +519,7 @@ namespace TroveTools.NET.Model
             {
                 if (_myMods == null)
                 {
-                    _myMods = SettingsDataProvider.GetMyMods();
+                    _myMods = SettingsDataProvider.MyMods;
 
                     // Attempt to auto-detect mods if none were loaded
                     if (_myMods.Count == 0) DetectMyMods(_myMods);
@@ -520,7 +531,7 @@ namespace TroveTools.NET.Model
         public static void SaveMyMods(List<TroveMod> myMods)
         {
             _myMods = myMods;
-            SettingsDataProvider.SaveMyMods(_myMods);
+            SettingsDataProvider.MyMods = _myMods;
         }
 
         public static string FilterModFilename(string name)

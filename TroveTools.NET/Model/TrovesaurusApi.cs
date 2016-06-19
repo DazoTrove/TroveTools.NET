@@ -18,17 +18,20 @@ namespace TroveTools.NET.Model
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public const string TrovesaursBaseUrl = "https://www.trovesaurus.com/";
-        public const string ModListUrl = TrovesaursBaseUrl + "modsapi.php?mode=list";
-        public const string ModDownloadUrl = TrovesaursBaseUrl + "mod.php?id={0}&download={1}";
-        public const string ModViewUrl = TrovesaursBaseUrl + "mod.php?id={0}";
-        public const string CalendarUrl = TrovesaursBaseUrl + "toolbox/calendar.php";
-        public const string NewsUrl = TrovesaursBaseUrl + "feeds/news.php";
-        public const string ServerStatusUrl = TrovesaursBaseUrl + "statusjson.php";
-        public const string CommandsUrl = TrovesaursBaseUrl + "toolbox/page.php?id=262";
-        public const string TroveLaunchUrl = TrovesaursBaseUrl + "toolbox/ping.php?id={0}&action=launch";
-        public const string TroveCloseUrl = TrovesaursBaseUrl + "toolbox/ping.php?id={0}&action=close";
-        public const string MailCountUrl = TrovesaursBaseUrl + "toolbox/mailcount.php?key={0}";
+        public const string TrovesaurusBaseUrl = "https://www.trovesaurus.com/";
+        public const string ModListUrl = TrovesaurusBaseUrl + "modsapi.php?mode=list";
+        public const string ModDownloadUrl = TrovesaurusBaseUrl + "mod.php?id={0}&download={1}";
+        public const string ModViewUrl = TrovesaurusBaseUrl + "mod.php?id={0}";
+        public const string CalendarUrl = TrovesaurusBaseUrl + "toolbox/calendar.php";
+        public const string NewsUrl = TrovesaurusBaseUrl + "feeds/news.php";
+        public const string NewsPageUrl = TrovesaurusBaseUrl + "toolbox/page.php?id={0}";
+        public const string ServerStatusUrl = TrovesaurusBaseUrl + "statusjson.php";
+        public const string CommandsUrl = TrovesaurusBaseUrl + "toolbox/page.php?id=262";
+        public const string TwitchStreamsUrl = TrovesaurusBaseUrl + "feeds/onlinestreams.php";
+        public const string TroveLaunchUrl = TrovesaurusBaseUrl + "toolbox/ping.php?id={0}&action=launch";
+        public const string TroveCloseUrl = TrovesaurusBaseUrl + "toolbox/ping.php?id={0}&action=close";
+        public const string MailCountUrl = TrovesaurusBaseUrl + "toolbox/mailcount.php?key={0}";
+        public const string ModInfoUrl = TrovesaurusBaseUrl + "toolbox/modinfo.php?id={0}";
 
         private static List<TroveMod> _modList = null;
 
@@ -84,7 +87,16 @@ namespace TroveTools.NET.Model
         public static void LaunchTrovesaurus()
         {
             // Launch site in default browser
-            Process.Start(TrovesaursBaseUrl);
+            Process.Start(TrovesaurusBaseUrl);
+        }
+
+        public static string UpdateTroveGameStatus(string accountLinkKey, bool online)
+        {
+            using (WebClient client = new WebClient())
+            {
+                string url = online ? string.Format(TroveLaunchUrl, accountLinkKey) : string.Format(TroveCloseUrl, accountLinkKey);
+                return client.DownloadString(url);
+            }
         }
     }
 }

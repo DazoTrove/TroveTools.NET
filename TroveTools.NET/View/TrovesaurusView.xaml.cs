@@ -12,25 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TroveTools.NET.ViewModel;
 
 namespace TroveTools.NET.View
 {
     /// <summary>
-    /// Interaction logic for GetMoreModsView.xaml
+    /// Interaction logic for TrovesaurusView.xaml
     /// </summary>
-    public partial class GetMoreModsView : UserControl
+    public partial class TrovesaurusView : UserControl
     {
-        public GetMoreModsView()
+        public TrovesaurusView()
         {
             InitializeComponent();
-        }
-
-        public void ListBoxItem_MouseDoubleClick(object sender, RoutedEventArgs e)
-        {
-            Control control = sender as Control;
-            TroveModViewModel vm = control.DataContext as TroveModViewModel;
-            vm.InstallCommand.Execute(null);
         }
     }
 }

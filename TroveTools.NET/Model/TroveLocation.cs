@@ -89,7 +89,7 @@ namespace TroveTools.NET.Model
             {
                 if (_locations == null)
                 {
-                    _locations = SettingsDataProvider.GetLocations();
+                    _locations = SettingsDataProvider.Locations;
 
                     // Attempt to auto-detect locations if none were loaded
                     if (_locations.Count == 0) DetectLocations(_locations);
@@ -99,7 +99,7 @@ namespace TroveTools.NET.Model
             set
             {
                 _locations = value;
-                SettingsDataProvider.SaveLocations(_locations);
+                SettingsDataProvider.Locations = _locations;
             }
         }
 

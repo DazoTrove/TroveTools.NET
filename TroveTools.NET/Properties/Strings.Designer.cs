@@ -61,6 +61,15 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string AboutViewModel_DisplayName {
+            get {
+                return ResourceManager.GetString("AboutViewModel_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Subtypes.
         /// </summary>
         internal static string GetMoreModsViewModel_AllSubTypes {
@@ -178,7 +187,7 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} (updated {1:g}, file ID {2}).
+        ///   Looks up a localized string similar to Version {0} ({3:N0} downloads, updated {1:d}, file ID {2}).
         /// </summary>
         internal static string TroveMod_Download_ToStringFormat {
             get {
@@ -228,6 +237,15 @@ namespace TroveTools.NET.Properties {
         internal static string TroveMod_Status_UpToDate {
             get {
                 return ResourceManager.GetString("TroveMod_Status_UpToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trovesaurus.
+        /// </summary>
+        internal static string TrovesaurusViewModel_DisplayName {
+            get {
+                return ResourceManager.GetString("TrovesaurusViewModel_DisplayName", resourceCulture);
             }
         }
     }

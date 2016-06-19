@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AboutViewModel_DisplayName" xml:space="preserve">
+    <value>About</value>
+    <comment>The display name of the AboutViewModel object</comment>
+  </data>
   <data name="GetMoreModsViewModel_AllSubTypes" xml:space="preserve">
     <value>All Subtypes</value>
     <comment>All Subtypes text for the Get More Mods view</comment>
@@ -170,7 +174,7 @@
     <comment>Error messgae for when Trove Location path is missing</comment>
   </data>
   <data name="TroveMod_Download_ToStringFormat" xml:space="preserve">
-    <value>{0} (updated {1:g}, file ID {2})</value>
+    <value>Version {0} ({3:N0} downloads, updated {1:d}, file ID {2})</value>
     <comment>String Formatting for a TroveMod Download object</comment>
   </data>
   <data name="TroveMod_Status_Downloading" xml:space="preserve">
@@ -192,5 +196,9 @@
   <data name="TroveMod_Status_UpToDate" xml:space="preserve">
     <value>Up To Date</value>
     <comment>Up to date status for the TroveMod object</comment>
+  </data>
+  <data name="TrovesaurusViewModel_DisplayName" xml:space="preserve">
+    <value>Trovesaurus</value>
+    <comment>The display name of the TrovesaurusViewModel object</comment>
   </data>
 </root>

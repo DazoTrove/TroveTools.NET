@@ -38,46 +38,80 @@ namespace TroveTools.NET.DataAccess
             }
         }
 
-        public static List<TroveLocation> GetLocations()
+        public static List<TroveLocation> Locations
         {
-            Settings.Default.Reload();
-            if (string.IsNullOrEmpty(Settings.Default.LocationsJson))
-                return new List<TroveLocation>();
-            else
-                return JsonConvert.DeserializeObject<List<TroveLocation>>(Settings.Default.LocationsJson);
+            get
+            {
+                Settings.Default.Reload();
+                if (string.IsNullOrEmpty(Settings.Default.LocationsJson))
+                    return new List<TroveLocation>();
+                else
+                    return JsonConvert.DeserializeObject<List<TroveLocation>>(Settings.Default.LocationsJson);
+            }
+            set
+            {
+                Settings.Default.LocationsJson = JsonConvert.SerializeObject(value, jsonSettings);
+                Settings.Default.Save();
+            }
         }
 
-        public static void SaveLocations(List<TroveLocation> locations)
+        public static List<TroveMod> MyMods
         {
-            Settings.Default.LocationsJson = JsonConvert.SerializeObject(locations, jsonSettings);
-            Settings.Default.Save();
+            get
+            {
+                Settings.Default.Reload();
+                if (string.IsNullOrEmpty(Settings.Default.MyModsJson))
+                    return new List<TroveMod>();
+                else
+                    return JsonConvert.DeserializeObject<List<TroveMod>>(Settings.Default.MyModsJson);
+            }
+            set
+            {
+                Settings.Default.MyModsJson = JsonConvert.SerializeObject(value, jsonSettings);
+                Settings.Default.Save();
+            }
         }
 
-        public static List<TroveMod> GetMyMods()
+        public static string LastAddModLocation
         {
-            Settings.Default.Reload();
-            if (string.IsNullOrEmpty(Settings.Default.MyModsJson))
-                return new List<TroveMod>();
-            else
-                return JsonConvert.DeserializeObject<List<TroveMod>>(Settings.Default.MyModsJson);
+            get
+            {
+                Settings.Default.Reload();
+                return Settings.Default.LastAddModLocation;
+            }
+            set
+            {
+                Settings.Default.LastAddModLocation = value;
+                Settings.Default.Save();
+            }
         }
 
-        public static void SaveMyMods(List<TroveMod> myMods)
+        public static string TrovesaurusAccountLinkKey
         {
-            Settings.Default.MyModsJson = JsonConvert.SerializeObject(myMods, jsonSettings);
-            Settings.Default.Save();
+            get
+            {
+                Settings.Default.Reload();
+                return Settings.Default.TrovesaurusAccountLinkKey;
+            }
+            set
+            {
+                Settings.Default.TrovesaurusAccountLinkKey = value;
+                Settings.Default.Save();
+            }
         }
 
-        public static string GetLastAddModLocation()
+        public static bool UpdateTroveGameStatus
         {
-            Settings.Default.Reload();
-            return Settings.Default.LastAddModLocation;
-        }
-
-        public static void SaveLastAddModLocation(string value)
-        {
-            Settings.Default.LastAddModLocation = value;
-            Settings.Default.Save();
+            get
+            {
+                Settings.Default.Reload();
+                return Settings.Default.UpdateTroveGameStatus;
+            }
+            set
+            {
+                Settings.Default.UpdateTroveGameStatus = value;
+                Settings.Default.Save();
+            }
         }
 
         /// <summary>

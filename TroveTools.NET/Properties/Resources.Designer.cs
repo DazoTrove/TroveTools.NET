@@ -59,5 +59,15 @@ namespace TroveTools.NET.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version 1.0.0.1
+        ///.
+        /// </summary>
+        internal static string VersionHistory {
+            get {
+                return ResourceManager.GetString("VersionHistory", resourceCulture);
+            }
+        }
     }
 }

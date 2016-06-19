@@ -7,6 +7,7 @@
              xmlns:vw="clr-namespace:TroveTools.NET.View"
              xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
              xmlns:sd="clr-namespace:TroveTools.NET.SampleData"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignWidth="900" d:DesignHeight="650">
     <UserControl.Resources>
@@ -22,6 +23,7 @@
                         <Setter Property="VerticalAlignment" Value="Center" />
                         <Setter Property="Margin" Value="0,0,10,0" />
                     </Style>
+
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -50,7 +52,12 @@
             </Button>
         </ToolBar>
         <ListView x:Name="listViewTrovesaurusMods" SelectionMode="Single" AlternationCount="2" IsSynchronizedWithCurrentItem="True" Grid.IsSharedSizeScope="True"
-                  ItemsSource="{Binding TrovesaurusModsView}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
+                  ItemsSource="{Binding TrovesaurusModsView}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource ListViewItemStyle}">
+                    <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.ContextMenu>
                 <ContextMenu DataContext="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource Self}}">
                     <MenuItem Command="{Binding InstallCommand}">
@@ -88,7 +95,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="300">
+                    <GridViewColumn Width="275">
                         <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="Name" Tag="Name"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -140,10 +147,7 @@
                                     </Grid.RowDefinitions>
 
                                     <TextBlock Text="{Binding Type}" Grid.Row="0" />
-                                    <TextBlock Grid.Row="1">
-                                        <TextBlock Text="{Binding SubType}" />
-                                        <TextBlock Text="{Binding Replaces}" />
-                                    </TextBlock>
+                                    <TextBlock Text="{Binding SubType}" Grid.Row="1" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -156,7 +160,15 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding TrovesaurusStatus}">
+                    <GridViewColumn Width="55">
+                        <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="Views" Tag="Views"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ContentPresenter Content="{Binding Views}" ContentStringFormat="N0"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="115" DisplayMemberBinding="{Binding TrovesaurusStatus}">
                         <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="TrovesaurusStatus" Tag="Status"/>
                     </GridViewColumn>
                     <GridViewColumn Width="130">

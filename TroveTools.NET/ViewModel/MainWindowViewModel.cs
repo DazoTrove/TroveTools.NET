@@ -28,12 +28,15 @@ namespace TroveTools.NET.ViewModel
         {
             DisplayName = string.Format(Strings.MainWindowViewModel_DisplayName, GetCurrentVersion());
 
+            LogAppender = NotifyAppender.Appender;
+
             Settings = new SettingsViewModel();
             MyMods = new MyModsViewModel();
             GetMoreMods = new GetMoreModsViewModel();
-            LogAppender = NotifyAppender.Appender;
+            About = new AboutViewModel();
+            Trovesaurus = new TrovesaurusViewModel();
 
-            Workspaces = new ObservableCollection<ViewModelBase>() { Settings, MyMods, GetMoreMods };
+            Workspaces = new ObservableCollection<ViewModelBase>() { /*Trovesaurus,*/ Settings, MyMods, GetMoreMods, About };
         }
 
         private object GetCurrentVersion()
@@ -54,6 +57,8 @@ namespace TroveTools.NET.ViewModel
         public SettingsViewModel Settings { get; }
         public MyModsViewModel MyMods { get; }
         public GetMoreModsViewModel GetMoreMods { get; }
+        public AboutViewModel About { get; }
+        public TrovesaurusViewModel Trovesaurus { get; }
         public NotifyAppender LogAppender { get; }
 
         #region Commands

@@ -18,9 +18,9 @@ namespace TroveTools.NET.ViewModel
     class SettingsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        DelegateCommand<TroveLocationViewModel> _removeLocationCommand;
-        DelegateCommand<string> _addLocationCommand;
-        bool canSaveData = true;
+        private DelegateCommand<TroveLocationViewModel> _removeLocationCommand;
+        private DelegateCommand<string> _addLocationCommand;
+        private bool canSaveData = true;
 
         #region Constructor
 
@@ -52,6 +52,9 @@ namespace TroveTools.NET.ViewModel
                     Locations.Add(new TroveLocationViewModel(loc));
                 }
 
+                // Start Trove game status timer on load if setting is enabled
+                if (UpdateTroveGameStatus) TroveGameStatus.StartTimer(TrovesaurusAccountLinkKey);
+
                 canSaveData = true;
                 SaveLocationSettings();
             }
@@ -65,22 +68,9 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
-        private void SaveLocationSettings(object sender = null, PropertyChangedEventArgs e = null)
-        {
-            if (canSaveData)
-            {
-                try
-                {
-                    log.Info("Saving location settings");
-                    TroveLocation.Locations = (from loc in Locations
-                                               select loc.DataObject).ToList();
-                }
-                catch (Exception ex) { log.Error("Error saving location settings", ex); }
-            }
-        }
-
+        #region Properties
         public ObservableCollection<TroveLocationViewModel> Locations { get; } = new ObservableCollection<TroveLocationViewModel>();
-        
+
         public bool TroveUriEnabled
         {
             get { return RegistrySettings.IsTroveUrlProtocolRegistered; }
@@ -94,6 +84,32 @@ namespace TroveTools.NET.ViewModel
                 RaisePropertyChanged("TroveUriEnabled");
             }
         }
+
+        public bool UpdateTroveGameStatus
+        {
+            get { return SettingsDataProvider.UpdateTroveGameStatus; }
+            set
+            {
+                SettingsDataProvider.UpdateTroveGameStatus = value;
+                RaisePropertyChanged("UpdateTroveGameStatus");
+
+                if (value)
+                    TroveGameStatus.StartTimer(TrovesaurusAccountLinkKey);
+                else
+                    TroveGameStatus.StopTimer();
+            }
+        }
+
+        public string TrovesaurusAccountLinkKey
+        {
+            get { return SettingsDataProvider.TrovesaurusAccountLinkKey; }
+            set
+            {
+                SettingsDataProvider.TrovesaurusAccountLinkKey = value;
+                RaisePropertyChanged("TrovesaurusAccountLinkKey");
+            }
+        }
+        #endregion
 
         #region Commands
         public DelegateCommand<string> AddLocationCommand
@@ -120,10 +136,26 @@ namespace TroveTools.NET.ViewModel
         }
         #endregion
 
+        #region Private Methods
+        private void SaveLocationSettings(object sender = null, PropertyChangedEventArgs e = null)
+        {
+            if (canSaveData)
+            {
+                try
+                {
+                    log.Info("Saving location settings");
+                    TroveLocation.Locations = (from loc in Locations
+                                               select loc.DataObject).ToList();
+                }
+                catch (Exception ex) { log.Error("Error saving location settings", ex); }
+            }
+        }
+
         private void AddLocation(string folder)
         {
             string locationName = string.Format("Trove {0}", Path.GetFileName(folder));
             Locations.Add(new TroveLocationViewModel(locationName, folder));
         }
+        #endregion
     }
 }

@@ -83,8 +83,12 @@ namespace TroveTools.NET.ViewModel
 
         public string LastAddModLocation
         {
-            get { return SettingsDataProvider.GetLastAddModLocation(); }
-            set { SettingsDataProvider.SaveLastAddModLocation(value); }
+            get { return SettingsDataProvider.LastAddModLocation; }
+            set
+            {
+                SettingsDataProvider.LastAddModLocation = value;
+                RaisePropertyChanged("LastAddModLocation");
+            }
         }
 
         private ListSortDirection _SortDirection;

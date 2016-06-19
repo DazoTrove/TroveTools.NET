@@ -1,0 +1,47 @@
+﻿Upcoming Soon:
+- Trovesaurus tab with news, calendar events and contests, server status, mail messages
+- Settings: minimize to tray option
+- Settings: run on windows startup
+- Settings: auto update mods on application startup and at a configurable interval
+
+Version 1.0.0.2 Beta (6/19/2016)
+- Double-click on a list view item on the Get More Mods tab to install the latest version
+- About tab with version history
+- Get More Mods: removed replaces display in Type/SubType field, plan to implement lower detail pane bound to selected item to display description and other details later
+- Settings: Trovesaurus account link key
+- Settings: Trove game status tracking to Trovesaurus
+
+Version 1.0.0.1 Beta (6/14/2016)
+- Initial public release
+- Settings: manage Trove installation locations
+- Settings: Trove:// URI Schema Handler for mod installation links on Trovesaurus.com
+- My Mods: add mods from local zip files, remove installed mods, check for updates on Trovesaurus, update all with one click, uninstall all mods, and enable/disable individual mods
+- My Mods: customized list view display with mod images (and hover tooltip to see larger image), names, authors, links to mod on Trovesaurus, current status, update button, and last updated date
+- Get More Mods: search Trovesaurus mod listing (auto-filters as you type), mod types dropdown, mod subtypes dropdown, and refresh button to re-download list from Trovesaurus
+- Get More Mods: customized list view display with mod images (and hover tooltip to see larger image), names, authors, link to mod on Trovesaurus, install button, mod types & subtypes, Trovesaurus status, and last updated date
+- Get More Mods: right click to download alternate or previous versions of mods
+- Logging: most commands have logging that is displayed in a status bar at the bottom of the window. This can be clicked to bring up a detailed log of operations completed
+- Application is built with C# in WPF (Windows Presentation Foundation) using the MVVM (Model, View, View Model) design pattern
+- Published application using ClickOnce to allow for easy automatic updates in the future
+- Published to GitHub with full application source code
+- Thanks to Etaew at Trovesaurus.com for providing the JSON web service API for listing mods and hosting files to download, and for providing the Trove pack reward for creating a mod loader application!
+- Thanks to Dusty_Mustard for organizing the creation of mod loaders for the community and providing information about the mod formats!
+- Thanks to Milambit for providing the reward of 101 Megaflux Tanks in Trove!
+
+
+
+TroveTools.NET allows easy installation of Trove mods by searching and downloading from the Trovesaurus mod website.
+Copyright (C) 2016  David Trousdale (aka Dazo: dazo@wizdave.com)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

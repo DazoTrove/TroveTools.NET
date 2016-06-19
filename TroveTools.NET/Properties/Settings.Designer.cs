@@ -58,5 +58,29 @@ namespace TroveTools.NET.Properties {
                 this["MyModsJson"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TrovesaurusAccountLinkKey {
+            get {
+                return ((string)(this["TrovesaurusAccountLinkKey"]));
+            }
+            set {
+                this["TrovesaurusAccountLinkKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UpdateTroveGameStatus {
+            get {
+                return ((bool)(this["UpdateTroveGameStatus"]));
+            }
+            set {
+                this["UpdateTroveGameStatus"] = value;
+            }
+        }
     }
 }

@@ -294,7 +294,7 @@ namespace TroveTools.NET.ViewModel
                 {
                     // Set sort column and initial sort direction
                     SortBy = column;
-                    SortDirection = column == "TotalDownloads" || column == "LastUpdated" ? ListSortDirection.Descending : ListSortDirection.Ascending;
+                    SortDirection = column == "TotalDownloads" || column == "Views" || column == "LastUpdated" ? ListSortDirection.Descending : ListSortDirection.Ascending;
                 }
                 log.InfoFormat("Sorting by {0}, direction: {1}", SortBy, SortDirection);
 

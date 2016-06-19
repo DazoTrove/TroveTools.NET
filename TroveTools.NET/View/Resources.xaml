@@ -33,6 +33,7 @@
         </ContentPresenter>
     </DataTemplate>
 
+    <!-- DataTemplates to bind tab views to view models -->
     <DataTemplate DataType="{x:Type vm:MyModsViewModel}">
         <vw:MyModsView/>
     </DataTemplate>
@@ -43,6 +44,14 @@
 
     <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
         <vw:SettingsView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:AboutViewModel}">
+        <vw:AboutView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:TrovesaurusViewModel}">
+        <vw:TrovesaurusView/>
     </DataTemplate>
 
     <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>

@@ -28,7 +28,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>https://raw.githubusercontent.com/DazoTrove/TroveTools.NET/master/TroveTools.NET/publish/</InstallUrl>
-    <ProductName>TroveTools.NET</ProductName>
+    <ProductName>TroveTools .NET</ProductName>
     <PublisherName>Dazo</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
@@ -120,12 +120,14 @@
     <Compile Include="Converter\UnixTimeSecondsToDateTimeConverter.cs" />
     <Compile Include="DataAccess\RegistrySettings.cs" />
     <Compile Include="DataAccess\SettingsDataProvider.cs" />
-    <Compile Include="DataAccess\TrovesaurusModRepository.cs" />
     <Compile Include="Framework\NotifyAppender.cs" />
+    <Compile Include="Model\AboutTroveTools.cs" />
+    <Compile Include="Model\TroveGameStatus.cs" />
     <Compile Include="Model\TrovesaurusApi.cs" />
     <Compile Include="Framework\ExtensionMethods.cs" />
     <Compile Include="Model\TroveLocation.cs" />
     <Compile Include="Model\TroveMod.cs" />
+    <Compile Include="Model\TrovesaurusNewsItem.cs" />
     <Compile Include="Properties\Strings.Designer.cs">
       <DependentUpon>Strings.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -134,13 +136,18 @@
     <Compile Include="SampleData\TroveModSampleData.cs" />
     <Compile Include="Framework\AffectsPropertyAttribute.cs" />
     <Compile Include="Framework\DelegateCommand.cs" />
+    <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\GetMoreModsViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\MyModsViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\TroveLocationViewModel.cs" />
     <Compile Include="ViewModel\TroveModViewModel.cs" />
+    <Compile Include="ViewModel\TrovesaurusViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\GetMoreModsView.xaml.cs">
       <DependentUpon>GetMoreModsView.xaml</DependentUpon>
     </Compile>
@@ -151,6 +158,13 @@
     <Compile Include="View\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\TrovesaurusView.xaml.cs">
+      <DependentUpon>TrovesaurusView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\GetMoreModsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -176,6 +190,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TrovesaurusView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -260,6 +278,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\VersionHistory.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

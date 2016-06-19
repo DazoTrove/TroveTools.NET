@@ -40,6 +40,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <GroupBox Header="Location Settings" Padding="5" Grid.Row="0">
             <DockPanel>
@@ -72,9 +73,9 @@
                                                 <ColumnDefinition SharedSizeGroup="Location Name" />
                                             </Grid.ColumnDefinitions>
 
-                                            <CheckBox IsChecked="{Binding Path=Enabled, UpdateSourceTrigger=PropertyChanged}" ToolTip="Enabled" VerticalAlignment="Center" Grid.Column="0" />
-                                            <TextBox Text="{Binding LocationName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true, Delay=2000}"
-                                                     Width="165" Margin="6,0,0,0" VerticalAlignment="Center" Grid.Column="1" />
+                                            <CheckBox Grid.Column="0" IsChecked="{Binding Path=Enabled, UpdateSourceTrigger=PropertyChanged}" ToolTip="Enabled" VerticalAlignment="Center" />
+                                            <TextBox Grid.Column="1" Width="165" Margin="6,0,0,0" VerticalAlignment="Center" 
+                                                     Text="{Binding LocationName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true, Delay=2000}" />
                                         </Grid>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -87,8 +88,27 @@
         </GroupBox>
         <GroupBox Header="Application Settings" Padding="5" Grid.Row="1">
             <StackPanel>
-                <CheckBox x:Name="chkTroveUriHandler" Content="Trove:// URI Handler for Trovesaurus mod installation links" IsChecked="{Binding TroveUriEnabled}" />
+                <CheckBox x:Name="chkTroveUriHandler" Content="Trove:// URI Handler for Trovesaurus mod installation links" Margin="0,5,0,0" IsChecked="{Binding TroveUriEnabled}" />
             </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Trovesaurus Settings" Padding="5" Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Account Link Key:" Margin="0,5,0,0"
+                           ToolTip="Account Link Key is found at the bottom of your view profile page on Trovesaurus.com" />
+                <TextBox x:Name="txtAccountLinkKey" Grid.Column="1" Grid.Row="0" Margin="10,5,0,0"
+                         Text="{Binding TrovesaurusAccountLinkKey, UpdateSourceTrigger=PropertyChanged}"
+                         ToolTip="Account Link Key is found at the bottom of your view profile page on Trovesaurus.com" />
+                <CheckBox x:Name="chkUpdateTroveGameStatus" Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" Grid.ColumnSpan="2"
+                          Content="Update Trove Game Online Status" IsChecked="{Binding UpdateTroveGameStatus}" />
+            </Grid>
         </GroupBox>
     </Grid>
 </UserControl>

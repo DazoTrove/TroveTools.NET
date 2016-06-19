@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="TroveTools.NET.View.TrovesaurusView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vw="clr-namespace:TroveTools.NET.View"
+             xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignWidth="700" d:DesignHeight="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml"/>
+                <ResourceDictionary>
+
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <TextBlock HorizontalAlignment="Right" Margin="10">
+            <Hyperlink Foreground="{x:Null}" Command="{Binding LaunchTrovesaurusCommand}">
+                <Image x:Name="imgTrovesaurus" Source="/Resources/TrovesaurusLogo.png" VerticalAlignment="Center" Height="31" Width="200" />
+            </Hyperlink>
+        </TextBlock>
+    </Grid>
+</UserControl>

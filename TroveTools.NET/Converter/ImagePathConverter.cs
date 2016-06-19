@@ -18,14 +18,14 @@ namespace TroveTools.NET.Converter
         {
             string source = value as string;
             if (string.IsNullOrEmpty(source)) return null;
-            return new Uri(new Uri(TrovesaurusApi.TrovesaursBaseUrl), source).ToString();
+            return new Uri(new Uri(TrovesaurusApi.TrovesaurusBaseUrl), source).ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string url = value as string;
             if (string.IsNullOrEmpty(url)) return null;
-            return new Uri(url).MakeRelativeUri(new Uri(TrovesaurusApi.TrovesaursBaseUrl)).ToString();
+            return new Uri(url).MakeRelativeUri(new Uri(TrovesaurusApi.TrovesaurusBaseUrl)).ToString();
         }
     }
 }
