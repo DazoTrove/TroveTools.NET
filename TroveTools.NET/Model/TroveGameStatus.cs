@@ -38,31 +38,42 @@ namespace TroveTools.NET.Model
 
         public static void StopTimer()
         {
+            if (string.IsNullOrEmpty(_AccountLinkKey)) return;
+
             log.InfoFormat("Stopping Trove game status checking");
-            _UpdateTroveGameStatusTimer.Stop();
+            try
+            {
+                _UpdateTroveGameStatusTimer?.Stop();
+                TrovesaurusApi.UpdateTroveGameStatus(_AccountLinkKey, false);
+            }
+            catch (Exception ex) { log.Error("Error stopping Trove game status detection", ex); }
         }
 
         private static void _UpdateTroveGameStatusTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            bool isTroveRunning = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(TroveLocation.TroveExecutableFileName)).Length > 0;
-            if (isTroveRunning)
+            try
             {
-                if (!_Online.HasValue || _Online.Value == false)
+                bool isTroveRunning = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(TroveLocation.TroveExecutableFileName)).Length > 0;
+                if (isTroveRunning)
                 {
-                    _Online = true;
-                    string status = TrovesaurusApi.UpdateTroveGameStatus(_AccountLinkKey, _Online.Value);
-                    log.InfoFormat("Trove game detected running, updated Trovesaurus game status (return value: {0})", status);
+                    if (!_Online.HasValue || _Online.Value == false)
+                    {
+                        _Online = true;
+                        string status = TrovesaurusApi.UpdateTroveGameStatus(_AccountLinkKey, _Online.Value);
+                        log.InfoFormat("Trove game detected running, updated Trovesaurus game status (return value: {0})", status);
+                    }
+                }
+                else
+                {
+                    if (!_Online.HasValue || _Online.Value == true)
+                    {
+                        _Online = false;
+                        string status = TrovesaurusApi.UpdateTroveGameStatus(_AccountLinkKey, _Online.Value);
+                        log.InfoFormat("Trove game detected not running, updated Trovesaurus game status (return value: {0})", status);
+                    }
                 }
             }
-            else
-            {
-                if (!_Online.HasValue || _Online.Value == true)
-                {
-                    _Online = false;
-                    string status = TrovesaurusApi.UpdateTroveGameStatus(_AccountLinkKey, _Online.Value);
-                    log.InfoFormat("Trove game detected not running, updated Trovesaurus game status (return value: {0})", status);
-                }
-            }
+            catch (Exception ex) { log.Error("Error in Trove game status detection", ex); }
         }
     }
 }

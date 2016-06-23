@@ -45,5 +45,10 @@ namespace TroveTools.NET.ViewModel
         {
             get { return AboutTroveTools.VersionHistory; }
         }
+
+        public string Stylesheet
+        {
+            get { return AboutTroveTools.Stylesheet; }
+        }
     }
 }

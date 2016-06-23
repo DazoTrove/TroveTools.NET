@@ -8,6 +8,7 @@
     <c:MultiLineStringConverter x:Key="MultiLineStringConverter" />
     <c:SortColumnToVisibilityConverter x:Key="SortColumnToVisibilityConverter" />
     <c:UnixTimeSecondsToDateTimeConverter x:Key="UnixTimeSecondsToDateTimeConverter" />
+    <c:TimeSpanToUserFriendlyStringConverter x:Key="TimeSpanToUserFriendlyStringConverter" />
 
     <Style TargetType="{x:Type Image}">
         <Style.Triggers>

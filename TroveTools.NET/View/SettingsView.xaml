@@ -87,9 +87,37 @@
             </DockPanel>
         </GroupBox>
         <GroupBox Header="Application Settings" Padding="5" Grid.Row="1">
-            <StackPanel>
-                <CheckBox x:Name="chkTroveUriHandler" Content="Trove:// URI Handler for Trovesaurus mod installation links" Margin="0,5,0,0" IsChecked="{Binding TroveUriEnabled}" />
-            </StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <CheckBox x:Name="chkTroveUriHandler" IsChecked="{Binding TroveUriEnabled}" Content="Trove:// URI Handler for Trovesaurus mod installation links"
+                          Margin="0,5,0,0" Grid.Row="0" Grid.ColumnSpan="3" />
+                <CheckBox x:Name="chkRunAtStartup" IsChecked="{Binding RunAtStartup}" Content="Run at Windows Startup"
+                          Margin="0,5,0,0" Grid.Row="1" Grid.ColumnSpan="3" />
+                <CheckBox x:Name="chkMinimizeToTray" IsChecked="{Binding MinimizeToTray}" Content="Minimize to System Tray"
+                          Margin="0,5,0,0" Grid.Row="2" Grid.Column="0" />
+                
+                <CheckBox x:Name="chkAutoUpdate" IsChecked="{Binding AutoUpdateMods}" Content="Auto Update My Mods"
+                          Margin="0,5,0,0" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
+                <TextBlock Text="Check for updates every" Margin="0,5,5,0" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" />
+                <ComboBox Margin="0,5,0,0" Grid.Row="2" Grid.Column="2" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding AutoUpdateIntervalsView}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource TimeSpanToUserFriendlyStringConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
         </GroupBox>
         <GroupBox Header="Trovesaurus Settings" Padding="5" Grid.Row="2">
             <Grid>

@@ -22,5 +22,10 @@ namespace TroveTools.NET.Model
         {
             get { return Resources.VersionHistory; }
         }
+
+        public static string Stylesheet
+        {
+            get { return Resources.Stylesheet; }
+        }
     }
 }

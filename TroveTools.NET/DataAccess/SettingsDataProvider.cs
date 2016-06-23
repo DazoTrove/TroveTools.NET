@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using log4net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,8 @@ namespace TroveTools.NET.DataAccess
 {
     static class SettingsDataProvider
     {
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private static JsonSerializerSettings jsonSettings = new JsonSerializerSettings()
         {
             NullValueHandling = NullValueHandling.Ignore,
@@ -42,7 +45,6 @@ namespace TroveTools.NET.DataAccess
         {
             get
             {
-                Settings.Default.Reload();
                 if (string.IsNullOrEmpty(Settings.Default.LocationsJson))
                     return new List<TroveLocation>();
                 else
@@ -59,7 +61,6 @@ namespace TroveTools.NET.DataAccess
         {
             get
             {
-                Settings.Default.Reload();
                 if (string.IsNullOrEmpty(Settings.Default.MyModsJson))
                     return new List<TroveMod>();
                 else
@@ -74,11 +75,7 @@ namespace TroveTools.NET.DataAccess
 
         public static string LastAddModLocation
         {
-            get
-            {
-                Settings.Default.Reload();
-                return Settings.Default.LastAddModLocation;
-            }
+            get { return Settings.Default.LastAddModLocation; }
             set
             {
                 Settings.Default.LastAddModLocation = value;
@@ -88,11 +85,7 @@ namespace TroveTools.NET.DataAccess
 
         public static string TrovesaurusAccountLinkKey
         {
-            get
-            {
-                Settings.Default.Reload();
-                return Settings.Default.TrovesaurusAccountLinkKey;
-            }
+            get { return Settings.Default.TrovesaurusAccountLinkKey; }
             set
             {
                 Settings.Default.TrovesaurusAccountLinkKey = value;
@@ -102,14 +95,50 @@ namespace TroveTools.NET.DataAccess
 
         public static bool UpdateTroveGameStatus
         {
-            get
-            {
-                Settings.Default.Reload();
-                return Settings.Default.UpdateTroveGameStatus;
-            }
+            get { return Settings.Default.UpdateTroveGameStatus; }
             set
             {
                 Settings.Default.UpdateTroveGameStatus = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public static bool MinimizeToTray
+        {
+            get { return Settings.Default.MinimizeToTray; }
+            set
+            {
+                Settings.Default.MinimizeToTray = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public static bool IsTroveUrlProtocolRegistered
+        {
+            get { return Settings.Default.IsTroveUrlProtocolRegistered; }
+            set
+            {
+                Settings.Default.IsTroveUrlProtocolRegistered = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public static bool AutoUpdateMods
+        {
+            get { return Settings.Default.AutoUpdateMods; }
+            set
+            {
+                Settings.Default.AutoUpdateMods = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public static TimeSpan AutoUpdateInterval
+        {
+            get { return Settings.Default.AutoUpdateInterval; }
+            set
+            {
+                Settings.Default.AutoUpdateInterval = value;
                 Settings.Default.Save();
             }
         }

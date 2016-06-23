@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Threading;
+using TroveTools.NET.Converter;
 using TroveTools.NET.DataAccess;
 using TroveTools.NET.Framework;
 using TroveTools.NET.Model;
@@ -20,7 +22,8 @@ namespace TroveTools.NET.ViewModel
         private DelegateCommand _RefreshCommand, _UpdateAllCommand, _UninstallAllCommand;
         private DelegateCommand<TroveModViewModel> _RemoveModCommand;
         private DelegateCommand<string> _AddModCommand, _SearchMyModsCommand, _SortCommand;
-        private CollectionViewSource _MyModsView;
+        private CollectionViewSource _MyModsView = new CollectionViewSource();
+        private DispatcherTimer _UpdateTimer = null;
         private bool canSaveData = true;
 
         #region Constructor
@@ -32,6 +35,7 @@ namespace TroveTools.NET.ViewModel
 
         #endregion // Constructor
 
+        #region Public Methods
         public void LoadData()
         {
             // Load data and setup saving MyMods list to settings
@@ -56,8 +60,14 @@ namespace TroveTools.NET.ViewModel
                     MyMods.Add(modVM);
                     modVM.CheckForUpdates();
                 }
-                _MyModsView = new CollectionViewSource();
                 _MyModsView.Source = MyMods;
+
+                // If auto update setting is enabled, update all mods on startup
+                if (SettingsDataProvider.AutoUpdateMods)
+                {
+                    UpdateAllMods();
+                    StartUpdateTimer(SettingsDataProvider.AutoUpdateInterval);
+                }
 
                 canSaveData = true;
                 SaveMyMods();
@@ -74,6 +84,32 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
+        public void StartUpdateTimer(TimeSpan autoUpdateInterval)
+        {
+            try
+            {
+                log.InfoFormat("Starting update timer, checking every {0}", autoUpdateInterval.ToUserFriendlyString());
+                if (_UpdateTimer == null)
+                {
+                    _UpdateTimer = new DispatcherTimer();
+                    _UpdateTimer.Tick += (s, e) => UpdateAllMods();
+                }
+                _UpdateTimer.Interval = autoUpdateInterval;
+                _UpdateTimer.Start();
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error starting update timer", ex);
+            }
+        }
+
+        public void StopUpdateTimer()
+        {
+            _UpdateTimer?.Stop();
+        }
+        #endregion
+
+        #region Public Properties
         public ObservableCollection<TroveModViewModel> MyMods { get; } = new ObservableCollection<TroveModViewModel>();
 
         public ICollectionView MyModsView
@@ -112,6 +148,7 @@ namespace TroveTools.NET.ViewModel
                 RaisePropertyChanged("SortBy");
             }
         }
+        #endregion
 
         #region Commands
         public DelegateCommand RefreshCommand
@@ -207,7 +244,8 @@ namespace TroveTools.NET.ViewModel
                 log.Info("Updating all mods");
                 foreach (dynamic mod in MyMods)
                 {
-                    mod.UpdateMod();
+                    mod.CheckForUpdates();
+                    if (mod.CanUpdateMod) mod.UpdateMod();
                 }
             }
             catch (Exception ex)

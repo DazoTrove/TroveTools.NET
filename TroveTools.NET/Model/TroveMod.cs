@@ -456,8 +456,9 @@ namespace TroveTools.NET.Model
             }
         }
 
-        [AffectsProperty("Id"), AffectsProperty("Name"), AffectsProperty("Author"), AffectsProperty("Type"), AffectsProperty("SubType"), AffectsProperty("TrovesaurusStatus"),
-            AffectsProperty("Replaces"), AffectsProperty("TotalDownloads"), AffectsProperty("Votes"), AffectsProperty("Rating"), AffectsProperty("Downloads"), AffectsProperty("ImagePath")]
+        [AffectsProperty("Id"), AffectsProperty("Name"), AffectsProperty("Author"), AffectsProperty("Type"), AffectsProperty("SubType"), AffectsProperty("Description"),
+            AffectsProperty("DateCreated"), AffectsProperty("TrovesaurusStatus"), AffectsProperty("Replaces"), AffectsProperty("TotalDownloads"), AffectsProperty("Votes"),
+            AffectsProperty("Views"), AffectsProperty("Downloads"), AffectsProperty("ImagePath")]
         public void UpdatePropertiesFromTrovesaurus(TroveMod mod)
         {
             if (mod != null)

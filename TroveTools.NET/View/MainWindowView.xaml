@@ -7,11 +7,17 @@
         xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="{Binding DisplayName}" Width="950" Height="700" Icon="/Resources/TroveTools.ico"
-        DataContext="{Binding Source={x:Static vm:MainWindowViewModel.Instance}}">
+        DataContext="{Binding Source={x:Static vm:MainWindowViewModel.Instance}}"
+        Title="{Binding DisplayName}"
+        Icon="/Resources/TroveTools.ico"
+        Width="950" Height="700" MinWidth="950" MinHeight="500"
+        Closing="Window_Closing">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadDataCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding ClosingCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>

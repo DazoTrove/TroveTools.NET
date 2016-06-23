@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using TroveTools.NET.DataAccess;
 using TroveTools.NET.Framework;
 using TroveTools.NET.Model;
@@ -20,6 +21,8 @@ namespace TroveTools.NET.ViewModel
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private DelegateCommand<TroveLocationViewModel> _removeLocationCommand;
         private DelegateCommand<string> _addLocationCommand;
+        private ObservableCollection<TimeSpan> _AutoUpdateIntervals = new ObservableCollection<TimeSpan>();
+        private CollectionViewSource _AutoUpdateIntervalsView = new CollectionViewSource();
         private bool canSaveData = true;
 
         #region Constructor
@@ -27,9 +30,11 @@ namespace TroveTools.NET.ViewModel
         public SettingsViewModel()
         {
             DisplayName = Strings.SettingsViewModel_DisplayName;
+            _AutoUpdateIntervalsView.Source = _AutoUpdateIntervals;
         }
         #endregion // Constructor
 
+        #region Public Methods
         public void LoadData()
         {
             canSaveData = false;
@@ -55,6 +60,29 @@ namespace TroveTools.NET.ViewModel
                 // Start Trove game status timer on load if setting is enabled
                 if (UpdateTroveGameStatus) TroveGameStatus.StartTimer(TrovesaurusAccountLinkKey);
 
+                // Setup auto update interval options
+                _AutoUpdateIntervals.Add(new TimeSpan(0, 1, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(0, 5, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(0, 10, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(0, 15, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(0, 30, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(0, 45, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(1, 0, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(2, 0, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(3, 0, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(4, 0, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(5, 0, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(6, 0, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(12, 0, 0));
+                _AutoUpdateIntervals.Add(new TimeSpan(1, 0, 0, 0));
+
+                if (_AutoUpdateIntervals.Contains(SettingsDataProvider.AutoUpdateInterval)) AutoUpdateIntervalsView.MoveCurrentTo(SettingsDataProvider.AutoUpdateInterval);
+                AutoUpdateIntervalsView.CurrentChanged += (s, e) =>
+                {
+                    SettingsDataProvider.AutoUpdateInterval = (TimeSpan)AutoUpdateIntervalsView.CurrentItem;
+                    if (AutoUpdateMods) MainWindowViewModel.Instance.MyMods.StartUpdateTimer(SettingsDataProvider.AutoUpdateInterval);
+                };
+
                 canSaveData = true;
                 SaveLocationSettings();
             }
@@ -67,6 +95,12 @@ namespace TroveTools.NET.ViewModel
                 canSaveData = true;
             }
         }
+
+        public void Closing()
+        {
+            if (UpdateTroveGameStatus) TroveGameStatus.StopTimer();
+        }
+        #endregion
 
         #region Properties
         public ObservableCollection<TroveLocationViewModel> Locations { get; } = new ObservableCollection<TroveLocationViewModel>();
@@ -82,6 +116,40 @@ namespace TroveTools.NET.ViewModel
                     RegistrySettings.UnregisterTroveUrlProtocol();
 
                 RaisePropertyChanged("TroveUriEnabled");
+            }
+        }
+
+        public bool RunAtStartup
+        {
+            get { return RegistrySettings.RunAtStartup; }
+            set
+            {
+                RegistrySettings.RunAtStartup = value;
+                RaisePropertyChanged("RunAtStartup");
+            }
+        }
+
+        public bool MinimizeToTray
+        {
+            get { return SettingsDataProvider.MinimizeToTray; }
+            set
+            {
+                SettingsDataProvider.MinimizeToTray = value;
+                RaisePropertyChanged("MinimizeToTray");
+            }
+        }
+
+        public bool AutoUpdateMods
+        {
+            get { return SettingsDataProvider.AutoUpdateMods; }
+            set
+            {
+                SettingsDataProvider.AutoUpdateMods = value;
+                if (value)
+                    MainWindowViewModel.Instance.MyMods.StartUpdateTimer(SettingsDataProvider.AutoUpdateInterval);
+                else
+                    MainWindowViewModel.Instance.MyMods.StopUpdateTimer();
+                RaisePropertyChanged("AutoUpdateMods");
             }
         }
 
@@ -109,6 +177,12 @@ namespace TroveTools.NET.ViewModel
                 RaisePropertyChanged("TrovesaurusAccountLinkKey");
             }
         }
+
+        public ICollectionView AutoUpdateIntervalsView
+        {
+            get { return _AutoUpdateIntervalsView.View; }
+        }
+
         #endregion
 
         #region Commands

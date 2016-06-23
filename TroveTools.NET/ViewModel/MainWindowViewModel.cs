@@ -2,14 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Deployment.Application;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using TroveTools.NET.Framework;
+using TroveTools.NET.Model;
 using TroveTools.NET.Properties;
 
 namespace TroveTools.NET.ViewModel
@@ -19,14 +18,14 @@ namespace TroveTools.NET.ViewModel
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly MainWindowViewModel instance = new MainWindowViewModel();
 
-        DelegateCommand _loadDataCommand;
+        private DelegateCommand _LoadDataCommand, _ClosingCommand;
 
         #region Constructors
         static MainWindowViewModel() { } // Static constructor for singleton instance pattern
 
         private MainWindowViewModel()
         {
-            DisplayName = string.Format(Strings.MainWindowViewModel_DisplayName, GetCurrentVersion());
+            DisplayName = string.Format(Strings.MainWindowViewModel_DisplayName, ApplicationDetails.GetCurrentVersion());
 
             LogAppender = NotifyAppender.Appender;
 
@@ -38,14 +37,9 @@ namespace TroveTools.NET.ViewModel
 
             Workspaces = new ObservableCollection<ViewModelBase>() { /*Trovesaurus,*/ Settings, MyMods, GetMoreMods, About };
         }
-
-        private object GetCurrentVersion()
-        {
-            if (ApplicationDeployment.IsNetworkDeployed) return ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
-            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        }
         #endregion // Constructors
 
+        #region Public Properties
         /// <summary>
         /// Returns the singleton instance of the MainWindowViewModel class
         /// </summary>
@@ -55,23 +49,41 @@ namespace TroveTools.NET.ViewModel
         }
 
         public SettingsViewModel Settings { get; }
+
         public MyModsViewModel MyMods { get; }
+
         public GetMoreModsViewModel GetMoreMods { get; }
+
         public AboutViewModel About { get; }
+
         public TrovesaurusViewModel Trovesaurus { get; }
+
         public NotifyAppender LogAppender { get; }
+
+        public ObservableCollection<ViewModelBase> Workspaces { get; }
+        #endregion
 
         #region Commands
         public DelegateCommand LoadDataCommand
         {
             get
             {
-                if (_loadDataCommand == null) _loadDataCommand = new DelegateCommand(LoadData);
-                return _loadDataCommand;
+                if (_LoadDataCommand == null) _LoadDataCommand = new DelegateCommand(LoadData);
+                return _LoadDataCommand;
+            }
+        }
+
+        public DelegateCommand ClosingCommand
+        {
+            get
+            {
+                if (_ClosingCommand == null) _ClosingCommand = new DelegateCommand(Closing);
+                return _ClosingCommand;
             }
         }
         #endregion
 
+        #region Public Methods
         public void LoadData(object param = null)
         {
             // Load data for each of the workspaces
@@ -79,31 +91,24 @@ namespace TroveTools.NET.ViewModel
             GetMoreMods.LoadData();
             MyMods.LoadData();
 
-            TroveUriInstallMod(Environment.GetCommandLineArgs());
+            var args = ApplicationDetails.GetApplicationArguments();
+            if (args != null) TroveUriInstallMod(args.ModId, args.FileId);
         }
 
-        /// <summary>
-        /// Parses command line arguments to install the given mod and file from Trovesaurus
-        /// </summary>
-        public void TroveUriInstallMod(string[] args)
+        public void Closing(object param = null)
         {
-            if (args.Length > 1)
-            {
-                // Install mod from link (ex: trove://6;12)
-                Match m = Regex.Match(args[1], @"trove:(?://)?(?<ModId>\d+);(?<FileId>\d+)", RegexOptions.IgnoreCase);
-                if (m.Success)
-                {
-                    string id = m.Groups["ModId"].Value;
-                    string fileId = m.Groups["FileId"].Value;
-                    var modVm = GetMoreMods.TrovesaurusMods.Where(mod => mod.DataObject.Id == id).FirstOrDefault();
-                    modVm.InstallCommand.Execute(fileId);
-                }
-                else
-                    log.WarnFormat("Unknown command line argument: [{0}]", args[1]);
-            }
+            Settings.Closing();
         }
 
-        public ObservableCollection<ViewModelBase> Workspaces { get; }
+        public void TroveUriInstallMod(string modId, string fileId)
+        {
+            log.InfoFormat("Installing mod id [{0}], file id [{1}] from Trove URI argument", modId, fileId);
+            var modVm = GetMoreMods.TrovesaurusMods.Where(mod => mod.DataObject.Id == modId).FirstOrDefault();
+            if (modVm != null)
+                modVm.InstallCommand.Execute(fileId);
+            else
+                log.WarnFormat("Mod ID [{0}] not found", modId);
+        }
 
         public void SetActiveWorkspace(ViewModelBase workspace)
         {
@@ -119,5 +124,6 @@ namespace TroveTools.NET.ViewModel
         {
             get { return CollectionViewSource.GetDefaultView(Workspaces).CurrentItem as ViewModelBase; }
         }
+        #endregion
     }
 }

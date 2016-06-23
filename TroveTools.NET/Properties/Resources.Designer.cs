@@ -61,8 +61,45 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version 1.0.0.1
-        ///.
+        ///   Looks up a localized string similar to /*******************************************************************************
+        ///Slate Theme for GitHub Pages
+        ///by Jason Costello, @jsncostello
+        ///*******************************************************************************/
+        ///
+        ///
+        ////*******************************************************************************
+        ///MeyerWeb Reset
+        ///*******************************************************************************/
+        ///
+        ///html, body, div, span, applet, object, iframe,
+        ///h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        ///a, abb [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Stylesheet {
+            get {
+                return ResourceManager.GetString("Stylesheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///
+        ///&lt;head&gt;
+        ///&lt;title&gt;TroveTools.NET: version 1.0.0.3 Beta - Created by Dazo&lt;/title&gt;
+        ///&lt;link href=&quot;stylesheet.css&quot; rel=&quot;stylesheet&quot; /&gt;
+        ///&lt;/head&gt;
+        ///
+        ///&lt;body lang=EN-US link=blue vlink=purple&gt;
+        ///
+        ///    &lt;h2&gt;Coming Soon:&lt;/h2&gt;
+        ///    &lt;ul&gt;
+        ///        &lt;li&gt;Trovesaurus tab with news, calendar events and contests, server status, mail messages&lt;/li&gt;
+        ///        &lt;li&gt;Mod detail pane for selected mod&lt;/li&gt;
+        ///    &lt;/ul&gt;
+        ///    &lt;h2&gt;Version 1.0.0.3 Beta (6/23/2016)&lt;/h2&gt;
+        ///    &lt;ul&gt;
+        ///        &lt;li&gt;Settings: run on windows startup option&lt;/li&gt;
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string VersionHistory {
             get {

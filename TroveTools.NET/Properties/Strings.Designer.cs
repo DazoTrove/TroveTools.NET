@@ -97,6 +97,24 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TroveTools.NET will continue running in the background while minimized.
+        /// </summary>
+        internal static string MainWindowView_MinimizeBalloonTipText {
+            get {
+                return ResourceManager.GetString("MainWindowView_MinimizeBalloonTipText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TroveTools.NET.
+        /// </summary>
+        internal static string MainWindowView_MinimizeBalloonTipTitle {
+            get {
+                return ResourceManager.GetString("MainWindowView_MinimizeBalloonTipTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TroveTools.NET: version {0} Beta - created by Dazo.
         /// </summary>
         internal static string MainWindowViewModel_DisplayName {

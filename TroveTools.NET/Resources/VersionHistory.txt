@@ -1,8 +1,12 @@
-﻿Upcoming Soon:
+﻿Coming Soon:
 - Trovesaurus tab with news, calendar events and contests, server status, mail messages
+
+Version 1.0.0.3 Beta (6/22/2016)
+- Settings: run on windows startup option
 - Settings: minimize to tray option
-- Settings: run on windows startup
 - Settings: auto update mods on application startup and at a configurable interval
+- Settings: updates to Trove:// URI Schema Handler to automatically re-register after ClickOnce application updates
+- Settings: changed Trove:// URI Schema Handler to be handled per user rather than all users since the executable is located in an individual user's application data folder
 
 Version 1.0.0.2 Beta (6/19/2016)
 - Double-click on a list view item on the Get More Mods tab to install the latest version
@@ -24,7 +28,7 @@ Version 1.0.0.1 Beta (6/14/2016)
 - Application is built with C# in WPF (Windows Presentation Foundation) using the MVVM (Model, View, View Model) design pattern
 - Published application using ClickOnce to allow for easy automatic updates in the future
 - Published to GitHub with full application source code
-- Thanks to Etaew at Trovesaurus.com for providing the JSON web service API for listing mods and hosting files to download, and for providing the Trove pack reward for creating a mod loader application!
+- Thanks to Etaew at Trovesaurus.com for providing the JSON web service API for listing mods, hosting files to download, and for providing the Trove pack reward for creating a mod loader application!
 - Thanks to Dusty_Mustard for organizing the creation of mod loaders for the community and providing information about the mod formats!
 - Thanks to Milambit for providing the reward of 101 Megaflux Tanks in Trove!
 

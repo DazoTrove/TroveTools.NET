@@ -19,7 +19,7 @@ namespace TroveTools.NET.ViewModel
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private DelegateCommand _refreshCommand, _clearSearchCommand, _launchTrovesaurusCommand;
         private DelegateCommand<string> _sortCommand;
-        private CollectionViewSource _modsView, _typesView, _subTypesView;
+        private CollectionViewSource _modsView = new CollectionViewSource(), _typesView = new CollectionViewSource(), _subTypesView = new CollectionViewSource();
 
         #region Constructor
         public GetMoreModsViewModel()
@@ -54,12 +54,9 @@ namespace TroveTools.NET.ViewModel
                                                                                     orderby g.First().SubType
                                                                                     select textInfo.ToTitleCase(g.First().SubType.ToLower())));
 
-                // Create Collection View Source for collections for current item tracking, sorting, and filtering
-                _modsView = new CollectionViewSource();
+                // Set Collection View Source for collections for current item tracking, sorting, and filtering
                 _modsView.Source = TrovesaurusMods;
-                _typesView = new CollectionViewSource();
                 _typesView.Source = Types;
-                _subTypesView = new CollectionViewSource();
                 _subTypesView.Source = SubTypes;
 
                 // Setup current item changing events

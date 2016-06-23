@@ -82,5 +82,53 @@ namespace TroveTools.NET.Properties {
                 this["UpdateTroveGameStatus"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsTroveUrlProtocolRegistered {
+            get {
+                return ((bool)(this["IsTroveUrlProtocolRegistered"]));
+            }
+            set {
+                this["IsTroveUrlProtocolRegistered"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool MinimizeToTray {
+            get {
+                return ((bool)(this["MinimizeToTray"]));
+            }
+            set {
+                this["MinimizeToTray"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoUpdateMods {
+            get {
+                return ((bool)(this["AutoUpdateMods"]));
+            }
+            set {
+                this["AutoUpdateMods"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:15:00")]
+        public global::System.TimeSpan AutoUpdateInterval {
+            get {
+                return ((global::System.TimeSpan)(this["AutoUpdateInterval"]));
+            }
+            set {
+                this["AutoUpdateInterval"] = value;
+            }
+        }
     }
 }

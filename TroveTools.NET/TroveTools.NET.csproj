@@ -33,7 +33,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -79,6 +79,14 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlRenderer, Version=1.5.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlRenderer.Core.1.5.0.5\lib\net45\HtmlRenderer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlRenderer.WPF, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlRenderer.WPF.1.5.0.6\lib\net45\HtmlRenderer.WPF.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -91,9 +99,11 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -117,11 +127,13 @@
     </ApplicationDefinition>
     <Compile Include="Converter\MultiLineStringConverter.cs" />
     <Compile Include="Converter\SortColumnToVisibilityConverter.cs" />
+    <Compile Include="Converter\TimeSpanToUserFriendlyStringConverter.cs" />
     <Compile Include="Converter\UnixTimeSecondsToDateTimeConverter.cs" />
     <Compile Include="DataAccess\RegistrySettings.cs" />
     <Compile Include="DataAccess\SettingsDataProvider.cs" />
     <Compile Include="Framework\NotifyAppender.cs" />
     <Compile Include="Model\AboutTroveTools.cs" />
+    <Compile Include="Model\ApplicationDetails.cs" />
     <Compile Include="Model\TroveGameStatus.cs" />
     <Compile Include="Model\TrovesaurusApi.cs" />
     <Compile Include="Framework\ExtensionMethods.cs" />
@@ -232,7 +244,9 @@
     <Resource Include="Resources\orbitron-light.otf" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\TrovesaurusLogo.png" />
@@ -281,6 +295,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\VersionHistory.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\VersionHistory.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Stylesheet.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
