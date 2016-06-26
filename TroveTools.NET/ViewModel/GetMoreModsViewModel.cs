@@ -20,11 +20,17 @@ namespace TroveTools.NET.ViewModel
         private DelegateCommand _refreshCommand, _clearSearchCommand, _launchTrovesaurusCommand;
         private DelegateCommand<string> _sortCommand;
         private CollectionViewSource _modsView = new CollectionViewSource(), _typesView = new CollectionViewSource(), _subTypesView = new CollectionViewSource();
+        private DateTime lastUpdated = DateTime.MinValue;
 
         #region Constructor
         public GetMoreModsViewModel()
         {
             DisplayName = Strings.GetMoreModsViewModel_DisplayName;
+
+            // Set Collection View Source for collections for current item tracking, sorting, and filtering
+            _modsView.Source = TrovesaurusMods;
+            _typesView.Source = Types;
+            _subTypesView.Source = SubTypes;
         }
         #endregion // Constructor
 
@@ -39,25 +45,7 @@ namespace TroveTools.NET.ViewModel
 
                 // Build Type and SubTypes lists using LINQ groupby queries
                 IsLoading = true;
-                var textInfo = CultureInfo.CurrentCulture.TextInfo;
-
-                Types = new ObservableCollection<string>(
-                    new string[] { Strings.GetMoreModsViewModel_AllTypes }.Union(from m in TrovesaurusApi.ModList
-                                                                                 group m by m.Type into g
-                                                                                 orderby g.First().Type
-                                                                                 select textInfo.ToTitleCase(g.First().Type.ToLower())));
-
-                SubTypes = new ObservableCollection<string>(
-                    new string[] { Strings.GetMoreModsViewModel_AllSubTypes }.Union(from m in TrovesaurusApi.ModList
-                                                                                    where !string.IsNullOrEmpty(m.SubType)
-                                                                                    group m by m.SubType into g
-                                                                                    orderby g.First().SubType
-                                                                                    select textInfo.ToTitleCase(g.First().SubType.ToLower())));
-
-                // Set Collection View Source for collections for current item tracking, sorting, and filtering
-                _modsView.Source = TrovesaurusMods;
-                _typesView.Source = Types;
-                _subTypesView.Source = SubTypes;
+                BuildTypesCollections();
 
                 // Setup current item changing events
                 TypesView.CurrentChanged += (s, e) => TypeFilter = TypesView.CurrentItem as string;
@@ -79,12 +67,38 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
+        protected void BuildTypesCollections()
+        {
+            var textInfo = CultureInfo.CurrentCulture.TextInfo;
+
+            Types.Clear();
+            Types.Add(Strings.GetMoreModsViewModel_AllTypes);
+            foreach (var type in from m in TrovesaurusMods
+                                 group m by m.DataObject.Type into g
+                                 orderby g.First().DataObject.Type
+                                 select textInfo.ToTitleCase(g.First().DataObject.Type.ToLower()))
+            {
+                Types.Add(type);
+            }
+
+            SubTypes.Clear();
+            SubTypes.Add(Strings.GetMoreModsViewModel_AllSubTypes);
+            foreach (var subtype in from m in TrovesaurusMods
+                                    where !string.IsNullOrEmpty(m.DataObject.SubType)
+                                    group m by m.DataObject.SubType into g
+                                    orderby g.First().DataObject.SubType
+                                    select textInfo.ToTitleCase(g.First().DataObject.SubType.ToLower()))
+            {
+                SubTypes.Add(subtype);
+            }
+        }
+
         #region Properties
         public ObservableCollection<TroveModViewModel> TrovesaurusMods { get; } = new ObservableCollection<TroveModViewModel>();
 
-        public ObservableCollection<string> Types { get; set; }
+        public ObservableCollection<string> Types { get; set; } = new ObservableCollection<string>();
 
-        public ObservableCollection<string> SubTypes { get; set; }
+        public ObservableCollection<string> SubTypes { get; set; } = new ObservableCollection<string>();
 
         public ICollectionView TrovesaurusModsView
         {
@@ -234,15 +248,20 @@ namespace TroveTools.NET.ViewModel
         {
             try
             {
-                IsLoading = true;
-                log.Info("Loading mods from Trovesaurus API");
-                TrovesaurusApi.RefreshModList();
-                TrovesaurusMods.Clear();
-                foreach (TroveMod mod in TrovesaurusApi.ModList)
+                // Refresh only if last updated more than 30 seconds ago
+                if (lastUpdated < DateTime.Now.AddSeconds(-30))
                 {
-                    TrovesaurusMods.Add(new TroveModViewModel(mod));
+                    IsLoading = true;
+                    log.Info("Loading mods from Trovesaurus API");
+                    TrovesaurusApi.RefreshModList();
+                    TrovesaurusMods.Clear();
+                    foreach (TroveMod mod in TrovesaurusApi.ModList)
+                    {
+                        TrovesaurusMods.Add(new TroveModViewModel(mod));
+                    }
+                    lastUpdated = DateTime.Now;
+                    log.Info("Loading mod list complete");
                 }
-                log.Info("Loading mod list complete");
             }
             catch (Exception ex)
             {
@@ -291,7 +310,7 @@ namespace TroveTools.NET.ViewModel
                 {
                     // Set sort column and initial sort direction
                     SortBy = column;
-                    SortDirection = column == "TotalDownloads" || column == "Views" || column == "LastUpdated" ? ListSortDirection.Descending : ListSortDirection.Ascending;
+                    SortDirection = column == "TotalDownloads" || column == "Views" || column == "Votes" || column == "LastUpdated" ? ListSortDirection.Descending : ListSortDirection.Ascending;
                 }
                 log.InfoFormat("Sorting by {0}, direction: {1}", SortBy, SortDirection);
 

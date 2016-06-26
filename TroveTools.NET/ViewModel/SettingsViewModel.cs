@@ -129,6 +129,16 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
+        public bool StartMinimized
+        {
+            get { return SettingsDataProvider.StartMinimized; }
+            set
+            {
+                SettingsDataProvider.StartMinimized = value;
+                RaisePropertyChanged("StartMinimized");
+            }
+        }
+
         public bool MinimizeToTray
         {
             get { return SettingsDataProvider.MinimizeToTray; }

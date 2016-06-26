@@ -31,6 +31,7 @@ namespace TroveTools.NET.ViewModel
         public MyModsViewModel()
         {
             DisplayName = Strings.MyModsViewModel_DisplayName;
+            _MyModsView.Source = MyMods;
         }
 
         #endregion // Constructor
@@ -60,7 +61,6 @@ namespace TroveTools.NET.ViewModel
                     MyMods.Add(modVM);
                     modVM.CheckForUpdates();
                 }
-                _MyModsView.Source = MyMods;
 
                 // If auto update setting is enabled, update all mods on startup
                 if (SettingsDataProvider.AutoUpdateMods)
@@ -240,8 +240,12 @@ namespace TroveTools.NET.ViewModel
         {
             try
             {
-                // Update all mods
                 log.Info("Updating all mods");
+
+                // Refresh mod list
+                MainWindowViewModel.Instance.GetMoreMods.RefreshCommand.Execute(null);
+
+                // Update all mods
                 foreach (dynamic mod in MyMods)
                 {
                     mod.CheckForUpdates();

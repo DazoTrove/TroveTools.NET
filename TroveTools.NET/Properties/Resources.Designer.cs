@@ -61,6 +61,56 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;id&quot;: &quot;6&quot;,
+        ///  &quot;name&quot;: &quot;Display No Clouds&quot;,
+        ///  &quot;author&quot;: &quot;Ocgineer&quot;,
+        ///  &quot;type&quot;: &quot;UTILITY&quot;,
+        ///  &quot;subtype&quot;: &quot;&quot;,
+        ///  &quot;description&quot;: &quot;&amp;lt;p&amp;gt;This is a simple vfx mod that removes the clouds in the sky.&amp;lt;br /&amp;gt;This would be extremely useful for those that like gliding or build at great heights!&amp;lt;/p&amp;gt;&quot;,
+        ///  &quot;date&quot;: &quot;1423870377&quot;,
+        ///  &quot;status2&quot;: &quot;Completed&quot;,
+        ///  &quot;replaces&quot;: &quot;&quot;,
+        ///  &quot;totaldownloads&quot;: 8884,
+        ///  &quot;votes&quot;: 7,
+        ///  &quot;views&quot;: 12782,
+        ///  &quot;downloads&quot;: [
+        ///    {
+        ///      &quot;fileid&quot;: &quot;12&quot;,
+        ///      &quot;version&quot;: &quot;12 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DesignTimeTroveMod {
+            get {
+                return ResourceManager.GetString("DesignTimeTroveMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [
+        ///  {
+        ///    &quot;id&quot;: &quot;6&quot;,
+        ///    &quot;name&quot;: &quot;Display No Clouds&quot;,
+        ///    &quot;author&quot;: &quot;Ocgineer&quot;,
+        ///    &quot;type&quot;: &quot;UTILITY&quot;,
+        ///    &quot;subtype&quot;: &quot;&quot;,
+        ///    &quot;description&quot;: &quot;&amp;lt;p&amp;gt;This is a simple vfx mod that removes the clouds in the sky.&amp;lt;br /&amp;gt;This would be extremely useful for those that like gliding or build at great heights!&amp;lt;/p&amp;gt;&quot;,
+        ///    &quot;date&quot;: &quot;1423870377&quot;,
+        ///    &quot;status2&quot;: &quot;Completed&quot;,
+        ///    &quot;replaces&quot;: &quot;&quot;,
+        ///    &quot;totaldownloads&quot;: 8884,
+        ///    &quot;votes&quot;: 7,
+        ///    &quot;views&quot;: 12782,
+        ///    &quot;downloads&quot;: [
+        ///      {
+        ///        &quot;f [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DesignTimeTroveMods {
+            get {
+                return ResourceManager.GetString("DesignTimeTroveMods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /*******************************************************************************
         ///Slate Theme for GitHub Pages
         ///by Jason Costello, @jsncostello
@@ -82,24 +132,16 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;html&gt;
+        ///   Looks up a localized string similar to &lt;div id=&quot;main_content_wrap&quot; class=&quot;outer&quot;&gt;&lt;section id=&quot;main_content&quot; class=&quot;inner&quot;&gt;
         ///
-        ///&lt;head&gt;
-        ///&lt;title&gt;TroveTools.NET: version 1.0.0.3 Beta - Created by Dazo&lt;/title&gt;
-        ///&lt;link href=&quot;stylesheet.css&quot; rel=&quot;stylesheet&quot; /&gt;
-        ///&lt;/head&gt;
+        ///## Coming Soon:
+        ///- Trovesaurus tab with news, calendar events and contests, server status, mail messages
+        ///- Mod detail pane for selected mod
         ///
-        ///&lt;body lang=EN-US link=blue vlink=purple&gt;
-        ///
-        ///    &lt;h2&gt;Coming Soon:&lt;/h2&gt;
-        ///    &lt;ul&gt;
-        ///        &lt;li&gt;Trovesaurus tab with news, calendar events and contests, server status, mail messages&lt;/li&gt;
-        ///        &lt;li&gt;Mod detail pane for selected mod&lt;/li&gt;
-        ///    &lt;/ul&gt;
-        ///    &lt;h2&gt;Version 1.0.0.3 Beta (6/23/2016)&lt;/h2&gt;
-        ///    &lt;ul&gt;
-        ///        &lt;li&gt;Settings: run on windows startup option&lt;/li&gt;
-        ///  [rest of string was truncated]&quot;;.
+        ///## Version 1.0.0.4 Beta (6/25/2016)
+        ///- Settings: auto update mods now refreshes the Trovesaurus API mod list on every update (rather than only the first)
+        ///- Settings: new start minimized option
+        ///- About: updated format of version history to be Markdown to match GitHub release deta [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string VersionHistory {
             get {

@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using CommonMark;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,19 +32,18 @@ namespace TroveTools.NET.ViewModel
 
         private void LaunchFeedback(object param = null)
         {
-            try
-            {
-                AboutTroveTools.LaunchFeedback();
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error launching feeback", ex);
-            }
+            try { AboutTroveTools.LaunchFeedback(); }
+            catch (Exception ex) { log.Error("Error launching feeback", ex); }
         }
 
         public string VersionHistory
         {
-            get { return AboutTroveTools.VersionHistory; }
+            get
+            {
+                try { return CommonMarkConverter.Convert(AboutTroveTools.VersionHistory); }
+                catch (Exception ex) { log.Error("Error converting version history from Markdown to HTML", ex); }
+                return null;
+            }
         }
 
         public string Stylesheet

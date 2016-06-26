@@ -33,7 +33,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -79,8 +79,12 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlRenderer, Version=1.5.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlRenderer.Core.1.5.0.5\lib\net45\HtmlRenderer.dll</HintPath>
+    <Reference Include="CommonMark, Version=0.1.0.0, Culture=neutral, PublicKeyToken=001ef8810438905d, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonMark.NET.0.12.0\lib\net45\CommonMark.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlRenderer, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlRenderer.Core.1.5.0.6\lib\net45\HtmlRenderer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="HtmlRenderer.WPF, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
@@ -125,6 +129,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\EmptyStringConverter.cs" />
     <Compile Include="Converter\MultiLineStringConverter.cs" />
     <Compile Include="Converter\SortColumnToVisibilityConverter.cs" />
     <Compile Include="Converter\TimeSpanToUserFriendlyStringConverter.cs" />
@@ -145,9 +150,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="SampleData\TroveModSampleData.cs" />
     <Compile Include="Framework\AffectsPropertyAttribute.cs" />
     <Compile Include="Framework\DelegateCommand.cs" />
+    <Compile Include="SampleData\DesignTimeGetMoreModsViewModel.cs" />
+    <Compile Include="SampleData\DesignTimeTroveModViewModel.cs" />
+    <Compile Include="SampleData\DesignTimeMyModsViewModel.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\GetMoreModsViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
@@ -169,6 +176,9 @@
     </Compile>
     <Compile Include="View\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TroveModDetailView.xaml.cs">
+      <DependentUpon>TroveModDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TrovesaurusView.xaml.cs">
       <DependentUpon>TrovesaurusView.xaml</DependentUpon>
@@ -202,6 +212,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TroveModDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -239,6 +253,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\VersionHistory.md" />
+    <Resource Include="SampleData\DesignTimeTroveMod.json" />
+    <Resource Include="SampleData\DesignTimeTroveMods.json" />
     <None Include="TroveTools.NET_TemporaryKey.pfx" />
     <Resource Include="Resources\orbitron-bold.otf" />
     <Resource Include="Resources\orbitron-light.otf" />
@@ -294,14 +311,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\VersionHistory.txt" />
+    <Resource Include="Resources\glyphicons-11-envelope.png" />
+    <Resource Include="Resources\Stylesheet.css" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\VersionHistory.htm" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\Stylesheet.css" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

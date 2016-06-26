@@ -6,7 +6,7 @@
              xmlns:vw="clr-namespace:TroveTools.NET.View"
              xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
              mc:Ignorable="d" 
-             d:DesignWidth="700" d:DesignHeight="500">
+             d:DesignWidth="890" d:DesignHeight="450">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -101,9 +101,11 @@
                 </Grid.ColumnDefinitions>
                 
                 <CheckBox x:Name="chkTroveUriHandler" IsChecked="{Binding TroveUriEnabled}" Content="Trove:// URI Handler for Trovesaurus mod installation links"
-                          Margin="0,5,0,0" Grid.Row="0" Grid.ColumnSpan="3" />
+                          Margin="0,5,0,0" Grid.Row="0" Grid.Column="0" />
                 <CheckBox x:Name="chkRunAtStartup" IsChecked="{Binding RunAtStartup}" Content="Run at Windows Startup"
-                          Margin="0,5,0,0" Grid.Row="1" Grid.ColumnSpan="3" />
+                          Margin="0,5,0,0" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" />
+                <CheckBox x:Name="chkStartMinimized" IsChecked="{Binding StartMinimized}" Content="Start Minimized"
+                          Margin="0,5,0,0" Grid.Row="1" Grid.Column="0" />
                 <CheckBox x:Name="chkMinimizeToTray" IsChecked="{Binding MinimizeToTray}" Content="Minimize to System Tray"
                           Margin="0,5,0,0" Grid.Row="2" Grid.Column="0" />
                 

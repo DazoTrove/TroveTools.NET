@@ -8,19 +8,19 @@
              xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
              xmlns:sd="clr-namespace:TroveTools.NET.SampleData"
              mc:Ignorable="d" 
-             d:DesignWidth="700" d:DesignHeight="500">
+             d:DesignWidth="895" d:DesignHeight="650"
+             d:DataContext="{d:DesignInstance Type=sd:DesignTimeMyModsViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources.xaml"/>
-                <ResourceDictionary>
-                    <!--<CollectionViewSource x:Key="MyModsView" Source="{Binding MyMods}" d:Source="{d:DesignInstance Type=sd:TroveModSampleData, IsDesignTimeCreatable=True}" />-->
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <ResourceDictionary Source="Resources.xaml"/>
     </UserControl.Resources>
-    <DockPanel>
-        <ToolBar x:Name="toolBar" ToolBarTray.IsLocked="True" DockPanel.Dock="Top">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="250"/>
+        </Grid.RowDefinitions>
+        <ToolBar x:Name="toolBar" ToolBarTray.IsLocked="True" Grid.Row="0">
             <Button x:Name="btnAddMods" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btnAddMods_Click" Focusable="False">
                 <StackPanel>
                     <Image Source="/Resources/glyphicons-191-plus-sign.png" Width="26" Height="26" Stretch="None" />
@@ -54,7 +54,7 @@
             </Button>
         </ToolBar>
         <ListView x:Name="listViewMyMods" SelectionMode="Single" AlternationCount="2" IsSynchronizedWithCurrentItem="True" Grid.IsSharedSizeScope="True"
-                  ItemsSource="{Binding MyModsView}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
+                  ItemsSource="{Binding MyModsView}" ItemContainerStyle="{StaticResource ListViewItemStyle}" Grid.Row="1">
             <ListView.View>
                 <GridView AllowsColumnReorder="False" ColumnHeaderTemplate="{DynamicResource SortingColumnHeaderTemplate}">
                     <GridViewColumn Width="50">
@@ -140,5 +140,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-    </DockPanel>
+        <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" />
+        <vw:TroveModDetailView DataContext="{Binding SelectedItem, ElementName=listViewMyMods}" Grid.Row="3" />
+    </Grid>
 </UserControl>

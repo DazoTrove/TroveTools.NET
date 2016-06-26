@@ -5,6 +5,7 @@
                     xmlns:vm="clr-namespace:TroveTools.NET.ViewModel">
     
     <c:ImagePathConverter x:Key="ImagePathConverter" />
+    <c:EmptyStringConverter x:Key="EmptyStringConverter" />
     <c:MultiLineStringConverter x:Key="MultiLineStringConverter" />
     <c:SortColumnToVisibilityConverter x:Key="SortColumnToVisibilityConverter" />
     <c:UnixTimeSecondsToDateTimeConverter x:Key="UnixTimeSecondsToDateTimeConverter" />

@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:c="clr-namespace:TroveTools.NET.Converter"
              xmlns:vw="clr-namespace:TroveTools.NET.View"
              xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
              xmlns:sd="clr-namespace:TroveTools.NET.SampleData"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
-             d:DesignWidth="900" d:DesignHeight="650">
+             d:DesignWidth="895" d:DesignHeight="650"
+             d:DataContext="{d:DesignInstance Type=sd:DesignTimeGetMoreModsViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -28,8 +29,14 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <DockPanel>
-        <ToolBar x:Name="toolBar" ToolBarTray.IsLocked="True" DockPanel.Dock="Top">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="250"/>
+        </Grid.RowDefinitions>
+        <ToolBar x:Name="toolBar" ToolBarTray.IsLocked="True"  Grid.Row="0">
             <Hyperlink Foreground="{x:Null}" Command="{Binding LaunchTrovesaurusCommand}">
                 <Image x:Name="imgTrovesaurus" Source="/Resources/TrovesaurusLogo.png" VerticalAlignment="Center" Height="31" Width="200" Margin="0,0,10,0" />
             </Hyperlink>
@@ -51,11 +58,12 @@
                 </StackPanel>
             </Button>
         </ToolBar>
-        <ListView x:Name="listViewTrovesaurusMods" SelectionMode="Single" AlternationCount="2" IsSynchronizedWithCurrentItem="True" Grid.IsSharedSizeScope="True"
+        <ListView x:Name="listViewTrovesaurusMods" SelectionMode="Single" AlternationCount="2" IsSynchronizedWithCurrentItem="True" Grid.Row="1" Grid.IsSharedSizeScope="True"
                   ItemsSource="{Binding TrovesaurusModsView}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource ListViewItemStyle}">
                     <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ContextMenu>
@@ -95,7 +103,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="275">
+                    <GridViewColumn Width="265">
                         <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="Name" Tag="Name"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -106,7 +114,7 @@
                                     </Grid.RowDefinitions>
 
                                     <TextBlock Grid.Row="0">
-                                        <Hyperlink Command="{Binding LaunchModSiteCommand}"><TextBlock Text="{Binding Name}"/></Hyperlink>
+                                        <Hyperlink Command="{Binding LaunchModSiteCommand}"><Run Text="{Binding Name}"/></Hyperlink>
                                     </TextBlock>
                                     <TextBlock Text="{Binding Author, Converter={StaticResource MultiLineStringConverter}}" Grid.Row="1" />
                                 </Grid>
@@ -117,7 +125,7 @@
                         <GridViewColumnHeader Tag="Install" IsHitTestVisible="False"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding InstallCommand}">
+                                <Button VerticalAlignment="Center" Command="{Binding InstallCommand}">
                                     <Button.Style>
                                         <Style TargetType="Button">
                                             <Style.Triggers>
@@ -136,7 +144,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="120">
+                    <GridViewColumn Width="100">
                         <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="Type" Tag="Type"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -156,7 +164,7 @@
                         <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="TotalDownloads" Tag="Downloads"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ContentPresenter Content="{Binding TotalDownloads}" ContentStringFormat="N0"/>
+                                <TextBlock Text="{Binding TotalDownloads, StringFormat=N0}" HorizontalAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -164,23 +172,38 @@
                         <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="Views" Tag="Views"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ContentPresenter Content="{Binding Views}" ContentStringFormat="N0"/>
+                                <TextBlock Text="{Binding Views, StringFormat=N0}" HorizontalAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="115" DisplayMemberBinding="{Binding TrovesaurusStatus}">
-                        <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="TrovesaurusStatus" Tag="Status"/>
+                    <GridViewColumn Width="50">
+                        <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="Votes" Tag="Likes"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Votes, StringFormat=N0}" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="130">
+                    <GridViewColumn Width="105">
+                        <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="TrovesaurusStatus" Tag="Status"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding TrovesaurusStatus}" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="110">
                         <GridViewColumnHeader Command="{Binding SortCommand}" CommandParameter="LastUpdated" Tag="Last Updated"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ContentPresenter Content="{Binding LastUpdated}" ContentStringFormat="g"/>
+                                <TextBlock Text="{Binding LastUpdated, StringFormat=M/d/yy h:mm tt}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
-    </DockPanel>
+        <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" />
+        <vw:TroveModDetailView DataContext="{Binding SelectedItem, ElementName=listViewTrovesaurusMods}" Grid.Row="3" />
+    </Grid>
 </UserControl>

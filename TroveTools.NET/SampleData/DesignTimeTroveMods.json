@@ -1,0 +1,140 @@
+﻿[
+  {
+    "id": "6",
+    "name": "Display No Clouds",
+    "author": "Ocgineer",
+    "type": "UTILITY",
+    "subtype": "",
+    "description": "&lt;p&gt;This is a simple vfx mod that removes the clouds in the sky.&lt;br /&gt;This would be extremely useful for those that like gliding or build at great heights!&lt;/p&gt;",
+    "date": "1423870377",
+    "status2": "Completed",
+    "replaces": "",
+    "totaldownloads": 8884,
+    "votes": 7,
+    "views": 12782,
+    "downloads": [
+      {
+        "fileid": "12",
+        "version": "12",
+        "date": "1431713613",
+        "downloads": 8884
+      }
+    ],
+    "image": "https://www.trovesaurus.com/images/uploads/205.jpg",
+    "FilePath": "C:\\Users\\David\\AppData\\Roaming\\TroveTools.NET\\mods\\Display No Clouds+1431713613.zip",
+    "Status": "Up To Date",
+    "Enabled": true,
+    "UnixTimeSeconds": 1431713613
+  },
+  {
+    "id": "2319",
+    "name": "Quadcopter drones",
+    "author": "B_Y3LL0W",
+    "type": "ALLY",
+    "subtype": "",
+    "description": "",
+    "date": "1465883519",
+    "status2": "Work in Progress",
+    "replaces": "&lt;ul&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_copphone\"&gt;Petite Auto-Patroller&lt;/a&gt;&lt;/li&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_snapshot\"&gt;Click-Happy Camerabot&lt;/a&gt;&lt;/li&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_cookieoven\"&gt;Cookie Bakerbot&lt;/a&gt;&lt;/li&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_toaster\"&gt;Patient Toast-Popper&lt;/a&gt;&lt;/li&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_cucklock\"&gt;Ticking Timekeeper&lt;/a&gt;&lt;/li&gt;\r\n&lt;/ul&gt;",
+    "totaldownloads": 96,
+    "votes": 3,
+    "views": 381,
+    "downloads": [
+      {
+        "fileid": "2428",
+        "version": "2428",
+        "date": "1465883619",
+        "downloads": 96
+      }
+    ],
+    "image": "https://www.trovesaurus.com/images/uploads/3357.png",
+    "FilePath": "C:\\Users\\David\\AppData\\Roaming\\TroveTools.NET\\mods\\Quadcopter drones+1465883619.zip",
+    "Status": "Up To Date",
+    "Enabled": false,
+    "UnixTimeSeconds": 1465883619
+  },
+  {
+    "id": "801",
+    "name": "Neon Rezonance",
+    "author": "CryoGX",
+    "type": "WINGS",
+    "subtype": "",
+    "description": "<p>Fly around as a true neonic DJ as sound waves flow out of you!</p>",
+    "date": "1436058201",
+    "views": "15637",
+    "status2": "Work in Progress",
+    "replaces": "<p>Neophyte Wings</p>",
+    "totaldownloads": "7073",
+    "downloads": [
+      {
+        "fileid": "1446",
+        "version": "X",
+        "date": "1450555472",
+        "downloads": "2958"
+      },
+      {
+        "fileid": "1445",
+        "version": "X ERA ORANGE",
+        "date": "1450555159",
+        "downloads": "71"
+      },
+      {
+        "fileid": "1444",
+        "version": "X ERA GREEN",
+        "date": "1450554949",
+        "downloads": "84"
+      },
+      {
+        "fileid": "262",
+        "version": "1.0 - Orange",
+        "date": "1436181827",
+        "downloads": "3397"
+      },
+      {
+        "fileid": "261",
+        "version": "1.0 - Green",
+        "date": "1436181791",
+        "downloads": "563"
+      }
+    ],
+    "votes": "7",
+    "image": "https://www.trovesaurus.com/images/uploads/2576.png",
+    "FilePath": "C:\\Users\\David\\AppData\\Roaming\\TroveTools.NET\\mods\\Neon Rezonance+1450555159.zip",
+    "Status": "New Version Available",
+    "Enabled": true,
+    "UnixTimeSeconds": 1450555159
+  },
+  {
+    "id": "67",
+    "name": "Sky Swordman",
+    "author": "KtlavskoX",
+    "type": "COSTUME",
+    "subtype": "Neon Ninja",
+    "description": "",
+    "date": "1423950095",
+    "views": "2738",
+    "status2": "Completed",
+    "replaces": "",
+    "totaldownloads": "292",
+    "downloads": [
+      {
+        "fileid": "1386",
+        "version": "1386",
+        "date": "1450148917",
+        "downloads": "256"
+      },
+      {
+        "fileid": "1385",
+        "version": "1385",
+        "date": "1450148904",
+        "downloads": "36"
+      }
+    ],
+    "votes": "0",
+    "image": "https://www.trovesaurus.com/images/uploads/264.png",
+    "FilePath": "C:\\Users\\David\\AppData\\Roaming\\TroveTools.NET\\mods\\Sky Swordman+1450148904.zip",
+    "Status": "New Version Available",
+    "Enabled": false,
+    "UnixTimeSeconds": 1450148904
+  }
+]

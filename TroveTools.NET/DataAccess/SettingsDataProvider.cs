@@ -103,6 +103,16 @@ namespace TroveTools.NET.DataAccess
             }
         }
 
+        public static bool StartMinimized
+        {
+            get { return Settings.Default.StartMinimized; }
+            set
+            {
+                Settings.Default.StartMinimized = value;
+                Settings.Default.Save();
+            }
+        }
+
         public static bool MinimizeToTray
         {
             get { return Settings.Default.MinimizeToTray; }

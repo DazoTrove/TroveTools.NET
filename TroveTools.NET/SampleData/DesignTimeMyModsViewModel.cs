@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 using TroveTools.NET.Properties;
 using TroveTools.NET.Model;
 using TroveTools.NET.ViewModel;
+using Newtonsoft.Json;
 
 namespace TroveTools.NET.SampleData
 {
-    class TroveModSampleData : ObservableCollection<TroveModViewModel>
+    class DesignTimeMyModsViewModel : MyModsViewModel
     {
-        public TroveModSampleData()
+        public DesignTimeMyModsViewModel() : base()
         {
+            /*
             Add(new TroveModViewModel(new TroveMod("Display No Clouds", @"%AppData%\TroveTools.NET\mods\Display No Clouds+1431713613.zip",
                 "images/uploads/205.jpg", Strings.TroveMod_Status_UpToDate, true, 1431713613)));
 
@@ -22,6 +24,12 @@ namespace TroveTools.NET.SampleData
 
             Add(new TroveModViewModel(new TroveMod("Dragon Slayer", @"%AppData%\TroveTools.NET\mods\Dragon Slayer+1431713613.zip",
                 "images/uploads/1230.png", Strings.TroveMod_Status_UpToDate, false, 1433364840)));
+            */
+
+            foreach (TroveMod mod in JsonConvert.DeserializeObject<List<TroveMod>>(Resources.DesignTimeTroveMods))
+            {
+                MyMods.Add(new TroveModViewModel(mod));
+            }
         }
     }
 }

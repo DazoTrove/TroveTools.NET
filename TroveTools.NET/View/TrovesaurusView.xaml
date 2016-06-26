@@ -6,7 +6,7 @@
              xmlns:vw="clr-namespace:TroveTools.NET.View"
              xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
              mc:Ignorable="d" 
-             d:DesignWidth="700" d:DesignHeight="500">
+             d:DesignWidth="890" d:DesignHeight="450">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

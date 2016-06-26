@@ -1,0 +1,27 @@
+﻿{
+  "id": "2319",
+  "name": "Quadcopter drones",
+  "author": "B_Y3LL0W",
+  "type": "ALLY",
+  "subtype": "",
+  "description": "Recently, I was thinking of making a drone ally for my costume mod. Then, I had this in my mind- \"How about making drones for everyone?\" <br>\n<br>\nSo, I made these.<br>\nThe Surveillance Drone. <br>\n<img src=\"http:\/\/i.imgur.com\/Jy69K3y.gif\" border=\"0\" alt=\"\"><br>\n<br>\nThe Companion Drone.<br>\n<img src=\"http:\/\/i.imgur.com\/NDJXq9g.gif\" border=\"0\" alt=\"\"><br>\n<br>\nThe Tactical Military Drone.<br>\n<img src=\"http:\/\/i.imgur.com\/XcRHL9X.gif\" border=\"0\" alt=\"\"><br>\n<br>\nThe Micro Quadcopter.<br>\n<img src=\"http:\/\/i.imgur.com\/tzZ5tdu.gif\" border=\"0\" alt=\"\"><br>\n<br>\nThe Spy Drone.<br>\n<img src=\"http:\/\/i.imgur.com\/PnBZIKW.gif\" border=\"0\" alt=\"\"><br>",
+  "date": "1465883519",
+  "status2": "Work in Progress",
+  "replaces": "&lt;ul&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_copphone\"&gt;Petite Auto-Patroller&lt;/a&gt;&lt;/li&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_snapshot\"&gt;Click-Happy Camerabot&lt;/a&gt;&lt;/li&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_cookieoven\"&gt;Cookie Bakerbot&lt;/a&gt;&lt;/li&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_toaster\"&gt;Patient Toast-Popper&lt;/a&gt;&lt;/li&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_cucklock\"&gt;Ticking Timekeeper&lt;/a&gt;&lt;/li&gt;\r\n&lt;/ul&gt;",
+  "totaldownloads": 96,
+  "votes": 3,
+  "views": 3815,
+  "downloads": [
+    {
+      "fileid": "2428",
+      "version": "2428",
+      "date": "1465883619",
+      "downloads": 96
+    }
+  ],
+  "image": "https://www.trovesaurus.com/images/uploads/3357.png",
+  "FilePath": "C:\\Users\\David\\AppData\\Roaming\\TroveTools.NET\\mods\\Quadcopter drones+1465883619.zip",
+  "Status": "Up To Date",
+  "Enabled": false,
+  "UnixTimeSeconds": 1465883619
+}

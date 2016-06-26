@@ -51,27 +51,34 @@ namespace TroveTools.NET.View
                 WindowState = WindowState.Normal;
                 ShowInTaskbar = true;
             };
+
+            if (MainWindowViewModel.Instance.Settings.StartMinimized)
+            {
+                WindowState = WindowState.Minimized;
+                UpdateTrayIconMinimized();
+            }
         }
 
         protected override void OnStateChanged(EventArgs e)
         {
-            if (WindowState == WindowState.Minimized)
-            {
-                if (MainWindowViewModel.Instance.Settings.MinimizeToTray)
-                {
-                    Hide();
-                    trayIcon.Visible = true;
-                    ShowInTaskbar = false;
-                    if (showBalloonTip)
-                    {
-                        trayIcon.ShowBalloonTip(5000);
-                        showBalloonTip = false;
-                    }
-                }
-                else trayIcon.Visible = false;
-            }
-
+            if (WindowState == WindowState.Minimized) UpdateTrayIconMinimized();
             base.OnStateChanged(e);
+        }
+
+        private void UpdateTrayIconMinimized()
+        {
+            if (MainWindowViewModel.Instance.Settings.MinimizeToTray)
+            {
+                Hide();
+                trayIcon.Visible = true;
+                ShowInTaskbar = false;
+                if (showBalloonTip)
+                {
+                    trayIcon.ShowBalloonTip(5000);
+                    showBalloonTip = false;
+                }
+            }
+            else trayIcon.Visible = false;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
