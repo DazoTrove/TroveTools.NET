@@ -16,12 +16,15 @@ namespace TroveTools.NET.ViewModel
     class MainWindowViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private static readonly MainWindowViewModel instance = new MainWindowViewModel();
+        private static readonly MainWindowViewModel _instance;
 
         private DelegateCommand _LoadDataCommand, _ClosingCommand;
 
         #region Constructors
-        static MainWindowViewModel() { } // Static constructor for singleton instance pattern
+        static MainWindowViewModel()
+        {
+            _instance = new MainWindowViewModel();
+        }
 
         private MainWindowViewModel()
         {
@@ -35,7 +38,7 @@ namespace TroveTools.NET.ViewModel
             About = new AboutViewModel();
             Trovesaurus = new TrovesaurusViewModel();
 
-            Workspaces = new ObservableCollection<ViewModelBase>() { /*Trovesaurus,*/ Settings, MyMods, GetMoreMods, About };
+            Workspaces = new ObservableCollection<ViewModelBase>() { Trovesaurus, Settings, MyMods, GetMoreMods, About };
         }
         #endregion // Constructors
 
@@ -45,7 +48,7 @@ namespace TroveTools.NET.ViewModel
         /// </summary>
         public static MainWindowViewModel Instance
         {
-            get { return instance; }
+            get { return _instance; }
         }
 
         public SettingsViewModel Settings { get; }
@@ -90,6 +93,7 @@ namespace TroveTools.NET.ViewModel
             Settings.LoadData();
             GetMoreMods.LoadData();
             MyMods.LoadData();
+            Trovesaurus.LoadData();
 
             var args = ApplicationDetails.GetApplicationArguments();
             if (args != null) TroveUriInstallMod(args.ModId, args.FileId);
@@ -98,6 +102,8 @@ namespace TroveTools.NET.ViewModel
         public void Closing(object param = null)
         {
             Settings.Closing();
+            MyMods.Closing();
+            Trovesaurus.Closing();
         }
 
         public void TroveUriInstallMod(string modId, string fileId)

@@ -8,8 +8,11 @@
              xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
              xmlns:sd="clr-namespace:TroveTools.NET.SampleData"
              xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
-             mc:Ignorable="d" 
-             d:DesignWidth="890" d:DesignHeight="1500"
+             mc:Ignorable="d"
+             Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+             BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" 
+             Padding="6"
+             d:DesignWidth="890" d:DesignHeight="1550"
              d:DataContext="{d:DesignInstance Type=sd:DesignTimeTroveModViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
         <ResourceDictionary Source="Resources.xaml"/>
@@ -19,7 +22,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -29,10 +32,11 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}" MaxHeight="75" MaxWidth="75" Margin="0,0,5,0">
+            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}" MaxHeight="75" MaxWidth="75" Margin="0,0,6,0">
                 <Image.ToolTip>
                     <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
                         <Image Source="{Binding Source}" MaxHeight="300" MaxWidth="300" />
@@ -61,11 +65,114 @@
             <TextBlock Grid.Row="2" Grid.Column="2">
                 <Bold>Last Updated:</Bold> <Run Text="{Binding LastUpdated, StringFormat=g}"/>
             </TextBlock>
+            <TextBlock Grid.Row="3" Grid.Column="2" Visibility="{Binding FilePath, Converter={StaticResource NullToVisibilityConverter}}" TextWrapping="Wrap">
+                <Bold>Path:</Bold> <Hyperlink Command="{Binding LaunchPathCommand}" CommandParameter="{Binding FilePath}"><Run Text="{Binding FilePath}"/></Hyperlink>
+            </TextBlock>
+
+            <!-- Description -->
             <wpf:HtmlLabel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Description}" AutoSizeHeightOnly="True"/>
-            <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">
+            <!-- Downloads List -->
+            <HeaderedItemsControl Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Grid.IsSharedSizeScope="True" ItemsSource="{Binding Downloads}" Margin="0,5,0,5" Padding="5" HorizontalAlignment="Stretch">
+                <HeaderedItemsControl.Template>
+                    <ControlTemplate TargetType="HeaderedItemsControl">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                            <DockPanel>
+                                <ContentPresenter DockPanel.Dock="Top" ContentSource="Header" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </DockPanel>
+                        </Border>
+                    </ControlTemplate>
+                </HeaderedItemsControl.Template>
+                <HeaderedItemsControl.HeaderTemplate>
+                    <DataTemplate DataType="HeaderedItemsControl">
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Version"/>
+                                    <ColumnDefinition Width="450" SharedSizeGroup="Changes"/>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Downloads"/>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Created"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Version" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
+                                <TextBlock Grid.Column="1" Text="Changes" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
+                                <TextBlock Grid.Column="2" Text="Downloads" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
+                                <TextBlock Grid.Column="3" Text="Created" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
+                            </Grid>
+                    </DataTemplate>
+                </HeaderedItemsControl.HeaderTemplate>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="LightGray" BorderThickness="1">
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Version"/>
+                                    <ColumnDefinition Width="450" SharedSizeGroup="Changes"/>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Downloads"/>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Created"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" Command="{Binding DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding FileId}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="3" Padding="2">
+                                    <TextBlock>v <Run Text="{Binding Version}"/></TextBlock>
+                                </Button>
+                                <wpf:HtmlLabel Grid.Column="1" Text="{Binding Changes}" AutoSizeHeightOnly="True" Margin="3" IsSelectionEnabled="False"/>
+                                <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Downloads, Mode=OneWay, StringFormat=N0}" HorizontalAlignment="Center" Margin="3"/>
+                                <TextBlock Grid.Column="3" VerticalAlignment="Center" FontStyle="Italic" ToolTip="{Binding DateTime, StringFormat=g}"
+                                       Text="{Binding DateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}" Margin="3"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </HeaderedItemsControl>
+            <!--<ListView Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding Downloads}" Margin="0,5,0,5">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource ListViewItemStyle}">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView AllowsColumnReorder="False">
+                        <GridViewColumn Header="Version" Width="150">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding Path=DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Stretch">
+                                        <TextBlock>
+                                            v <Run Text="{Binding Version}"/>
+                                        </TextBlock>
+                                    </Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Changes" Width="450">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <wpf:HtmlLabel Text="{Binding Changes}" AutoSizeHeightOnly="True"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Downloads" Width="80">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Downloads, Mode=OneWay, StringFormat=N0}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Created" Width="150">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontStyle="Italic" Text="{Binding DateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                               ToolTip="{Binding DateTime, StringFormat=g}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>-->
+            <!-- Replaces -->
+            <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3">
                 <Bold>Mod Replaces:</Bold>
             </TextBlock>
-            <wpf:HtmlLabel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Replaces, Converter={StaticResource EmptyStringConverter}, ConverterParameter='Unspecified'}" AutoSizeHeightOnly="True"/>
+            <wpf:HtmlLabel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Replaces, Converter={StaticResource NullValueConverter}, ConverterParameter='Unspecified'}" AutoSizeHeightOnly="True"/>
         </Grid>
     </ScrollViewer>
 </UserControl>

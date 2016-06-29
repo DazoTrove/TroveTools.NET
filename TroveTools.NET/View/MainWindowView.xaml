@@ -23,25 +23,19 @@
     <Window.Resources>
         <ResourceDictionary Source="Resources.xaml" />
     </Window.Resources>
-    <DockPanel>
-        <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem>
-                <ToggleButton Name="btnLogMessages">
-                    <!-- Control Template can be used to remove default toggle button styling, but we would need a different visual clue that the log text is clickable - ->
-                    <ToggleButton.Template>
-                        <ControlTemplate TargetType="ToggleButton">
-                    -->
-                            <TextBlock Margin="10,0" Text="{Binding LogAppender.LastMessage}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
-                    <!--
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                    -->
-                </ToggleButton>
-            </StatusBarItem>
-        </StatusBar>
-        <Popup IsOpen="{Binding IsChecked, ElementName=btnLogMessages}" PlacementTarget="{Binding ElementName=btnLogMessages}" Placement="Top" StaysOpen="False">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="470*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TabControl Name="WorkspaceTabs" ItemsSource="{Binding Workspaces}" ItemTemplate="{StaticResource TabItemTemplate}" IsSynchronizedWithCurrentItem="True" Margin="4,4,4,4" />
+        <Popup IsOpen="{Binding IsChecked, ElementName=LogMessagesButton}" PlacementTarget="{Binding ElementName=LogMessagesButton}" Placement="Top" StaysOpen="False" Grid.ColumnSpan="2">
             <Border BorderBrush="Black" BorderThickness="1" >
-                <RichTextBox Name="rtbLogMessages" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextChanged="rtbLogMessages_TextChanged" Width="{Binding ActualWidth,ElementName=tabControl}" Height="300">
+                <RichTextBox Name="LogMessagesField" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextChanged="LogMessagesField_TextChanged" Width="{Binding ActualWidth,ElementName=WorkspaceTabs}" Height="300">
                     <FlowDocument>
                         <Paragraph>
                             <Run Text="{Binding LogAppender.Messages, Mode=OneWay}" />
@@ -50,6 +44,20 @@
                 </RichTextBox>
             </Border>
         </Popup>
-        <TabControl x:Name="tabControl" ItemsSource="{Binding Workspaces}" ItemTemplate="{StaticResource TabItemTemplate}" IsSynchronizedWithCurrentItem="True" />
-    </DockPanel>
+        <StatusBar Grid.Row="1" Grid.ColumnSpan="2">
+            <StatusBarItem>
+                <ToggleButton Name="LogMessagesButton">
+                    <!-- Control Template can be used to remove default toggle button styling, but we would need a different visual clue that the log text is clickable - ->
+                    <ToggleButton.Template>
+                        <ControlTemplate TargetType="ToggleButton">
+                    -->
+                    <TextBlock Margin="10,1" Text="{Binding LogAppender.LastMessage}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
+                    <!--
+                        </ControlTemplate>
+                    </ToggleButton.Template>
+                    -->
+                </ToggleButton>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
 </Window>

@@ -33,32 +33,32 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="250"/>
         </Grid.RowDefinitions>
-        <ToolBar x:Name="toolBar" ToolBarTray.IsLocked="True"  Grid.Row="0">
+        <ToolBar ToolBarTray.IsLocked="True"  Grid.Row="0">
             <Hyperlink Foreground="{x:Null}" Command="{Binding LaunchTrovesaurusCommand}">
-                <Image x:Name="imgTrovesaurus" Source="/Resources/TrovesaurusLogo.png" VerticalAlignment="Center" Height="31" Width="200" Margin="0,0,10,0" />
+                <Image Source="/Resources/TrovesaurusLogo.png" VerticalAlignment="Center" Height="31" Width="200" Margin="0,0,10,0" />
             </Hyperlink>
             <Image Source="/Resources/glyphicons-28-search.png" Width="18" Height="18" Margin="0,0,5,0" />
             <Grid Background="{StaticResource brushWatermarkBackground}" Style="{StaticResource EntryFieldStyle}">
-                <TextBlock Margin="5,2" Text="Search" Foreground="{StaticResource brushWatermarkForeground}" 
-                       Visibility="{Binding ElementName=txtSearchMods, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <TextBox x:Name="txtSearchMods" Width="200" Background="Transparent" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="5,2" Text="Search" Foreground="{StaticResource brushWatermarkForeground}"
+                           Visibility="{Binding ElementName=SearchModsField, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <TextBox x:Name="SearchModsField" Width="200" Background="Transparent" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}" />
                 <Button Style="{StaticResource BorderlessButton}" HorizontalAlignment="Right" Command="{Binding ClearSearchCommand}">
                     <Image Width="13" Height="13" Source="/Resources/glyphicons-193-remove-sign.png" Margin="0,0,5,0" />
                 </Button>
             </Grid>
-            <ComboBox x:Name="cbTypes" Width="150" Margin="0,0,10,0" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding TypesView}" />
-            <ComboBox x:Name="cbSubTypes" Width="150" Margin="0,0,10,0" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding SubTypesView}" />
-            <Button x:Name="btnRefresh" Margin="0,0,10,0" Focusable="False" Command="{Binding RefreshCommand}">
+            <ComboBox Width="150" Margin="0,0,10,0" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding TypesView}" />
+            <ComboBox Width="150" Margin="0,0,10,0" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding SubTypesView}" />
+            <Button Margin="0,0,10,0" Focusable="False" Command="{Binding RefreshCommand}">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Image Source="/Resources/glyphicons-82-refresh.png" Width="18" Height="18" Margin="2,0" VerticalAlignment="Center" />
                     <TextBlock Text="Refresh" Margin="2" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
         </ToolBar>
-        <ListView x:Name="listViewTrovesaurusMods" SelectionMode="Single" AlternationCount="2" IsSynchronizedWithCurrentItem="True" Grid.Row="1" Grid.IsSharedSizeScope="True"
+        <ListView Name="TrovesaurusModsList" SelectionMode="Single" AlternationCount="2" IsSynchronizedWithCurrentItem="True" Grid.Row="1" Grid.IsSharedSizeScope="True"
                   ItemsSource="{Binding TrovesaurusModsView}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource ListViewItemStyle}">
@@ -203,7 +203,8 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" />
-        <vw:TroveModDetailView DataContext="{Binding SelectedItem, ElementName=listViewTrovesaurusMods}" Grid.Row="3" />
+        <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" Style="{StaticResource HorizontalGridSplitter}" />
+        <vw:TroveModDetailView DataContext="{Binding SelectedItem, ElementName=TrovesaurusModsList}" Grid.Row="3"
+                               Visibility="{Binding SelectedItem, ElementName=TrovesaurusModsList, Converter={StaticResource NullToVisibilityConverter}}" />
     </Grid>
 </UserControl>

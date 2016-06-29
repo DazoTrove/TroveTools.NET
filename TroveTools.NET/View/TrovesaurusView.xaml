@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vw="clr-namespace:TroveTools.NET.View"
              xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
+             xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignWidth="890" d:DesignHeight="450">
     <UserControl.Resources>
@@ -18,10 +20,277 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <TextBlock HorizontalAlignment="Right" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" VerticalScrollBarVisibility="Auto">
+            <StackPanel Orientation="Vertical">
+                <!-- Online Streams -->
+                <StackPanel Orientation="Vertical">
+                    <Border Background="Orange">
+                        <Grid>
+                            <TextBlock HorizontalAlignment="Left" Foreground="White" Style="{StaticResource OribitronFontTextBlock}" FontSize="18" FontWeight="Bold" Padding="3">
+                                <Hyperlink Command="{Binding LaunchTrovesaurusLivestreamsCommand}" Foreground="White">Online Streams</Hyperlink>
+                            </TextBlock>
+                            <TextBlock HorizontalAlignment="Right" Foreground="White" Style="{StaticResource OribitronFontTextBlock}" FontSize="14" FontWeight="Bold" Padding="3">
+                                <Hyperlink Command="{Binding RefreshDataCommand}" Foreground="White">Refresh</Hyperlink>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                        <ItemsControl ItemsSource="{Binding StreamsView}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="LightGray" BorderThickness="1" Margin="3">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock HorizontalAlignment="Stretch" Background="#2B7BBB" Foreground="White" FontSize="14" FontWeight="Bold" Padding="3" VerticalAlignment="Center">
+                                                <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
+                                                           CommandParameter="{Binding Url, Mode=OneWay}" ToolTip="{Binding Url, Mode=OneWay}" Foreground="White">
+                                                    <Hyperlink.Style>
+                                                        <Style TargetType="{x:Type Hyperlink}">
+                                                            <Setter Property="TextBlock.TextDecorations" Value="{x:Null}"/>
+                                                        </Style>
+                                                    </Hyperlink.Style>
+                                                    <Image Height="14" Source="/Resources/glyphicons-44-group.png" />
+                                                    <Run Text="{Binding Viewers, StringFormat=N0, Mode=OneWay}"/> - <Run Text="{Binding Name, Mode=OneWay}"/>
+                                                </Hyperlink>
+                                            </TextBlock>
+                                            <TextBlock Margin="3">
+                                                <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
+                                                           CommandParameter="{Binding Url, Mode=OneWay}" ToolTip="{Binding Url, Mode=OneWay}" Foreground="{x:Null}">
+                                                    <Image MaxWidth="214" MaxHeight="120" Source="{Binding PreviewImage, Converter={StaticResource ImagePathConverter}}">
+                                                        <!--<Image.ToolTip>
+                                                            <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                                                <Image Source="{Binding Source}" MaxWidth="320" MaxHeight="320"/>
+                                                            </ToolTip>
+                                                        </Image.ToolTip>-->
+                                                    </Image>
+                                                </Hyperlink>
+                                            </TextBlock>
+                                            <TextBlock Margin="3" Text="{Binding Status}" FontSize="13" TextTrimming="WordEllipsis" TextWrapping="Wrap" Width="214" Height="35" ToolTip="{Binding Status}"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </StackPanel>
+
+                <!-- Trove News -->
+                <TextBlock HorizontalAlignment="Stretch" Background="Orange" Foreground="White" Style="{StaticResource OribitronFontTextBlock}" FontSize="18" FontWeight="Bold" Padding="3">
+                    <Hyperlink Command="{Binding LaunchTrovesaurusNewCommand}" Foreground="White">Trove News</Hyperlink>
+                </TextBlock>
+                <ItemsControl ItemsSource="{Binding Path=NewsView}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="LightGray" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="235"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="0">
+                                        <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
+                                                   CommandParameter="{Binding Url}" ToolTip="{Binding Url}" Foreground="{x:Null}">
+                                            <Image MaxWidth="225" Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}"/>
+                                        </Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="14" Grid.Row="0" Grid.Column="1" Margin="5">
+                                        <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
+                                                   CommandParameter="{Binding Url}" ToolTip="{Binding Url}">
+                                            <Run Text="{Binding Title}"/>
+                                        </Hyperlink><LineBreak/>
+                                        by <Run FontWeight="Bold" Text="{Binding Author}"/>
+                                        posted <Run FontStyle="Italic" Text="{Binding Date, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                                    ToolTip="{Binding Date, StringFormat=g}"/>
+                                        <LineBreak/>
+                                        <wpf:HtmlLabel Text="{Binding PreviewHtml}" AutoSizeHeightOnly="True"/><LineBreak/>
+                                        <Run FontWeight="Bold" Text="{Binding Views, Converter={StaticResource QuantityToStringConverter}, ConverterParameter='view'}"/>,
+                                        <Run FontWeight="Bold" Text="{Binding Comments, Converter={StaticResource QuantityToStringConverter}, ConverterParameter='comment'}"/><LineBreak/>
+                                        
+                                        <ItemsControl ItemsSource="{Binding Tags}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Margin="0,0,5,0">
+                                                        <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusNewsTagCommand}"
+                                                                   CommandParameter="{Binding Mode=OneWay}"><Run Text="{Binding Mode=OneWay}"/></Hyperlink>
+                                                    </TextBlock>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Trovesaurus Logo -->
+        <TextBlock Grid.Row="0" Grid.Column="1" Margin="5" HorizontalAlignment="Right">
             <Hyperlink Foreground="{x:Null}" Command="{Binding LaunchTrovesaurusCommand}">
-                <Image x:Name="imgTrovesaurus" Source="/Resources/TrovesaurusLogo.png" VerticalAlignment="Center" Height="31" Width="200" />
+                <Image Source="/Resources/TrovesaurusLogo.png" VerticalAlignment="Center" Height="31" Width="200" />
             </Hyperlink>
         </TextBlock>
+
+        <!-- Trove Server Status -->
+        <GroupBox Grid.Row="1" Grid.Column="1" FontSize="14" Margin="5">
+            <GroupBox.Header>
+                <TextBlock FontWeight="Bold" Style="{StaticResource OribitronFontTextBlock}">
+                    <Hyperlink Command="{Binding LaunchServerStatusCommand}">Trove Server Status</Hyperlink>
+                </TextBlock>
+            </GroupBox.Header>
+            <StackPanel>
+                <!-- Live Server Status -->
+                <ContentControl FontSize="14" Margin="5">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=ServerStatus.PTS.Online}" Value="False">
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <TextBlock Foreground="Red">
+                                                    <Bold>Live Server:</Bold> Offline
+                                                    <Image Source="/Resources/glyphicons-193-remove-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
+                                                    <Bold>Since:</Bold> <Run Text="{Binding Path=ServerStatus.PTS.DateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                                                             ToolTip="{Binding Path=ServerStatus.PTS.DateTime, StringFormat=g}"/>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                    <TextBlock Foreground="Green">
+                        <Bold>Live Server:</Bold> Online
+                        <Image Source="/Resources/glyphicons-194-ok-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
+                        <Bold>Since:</Bold> <Run Text="{Binding Path=ServerStatus.PTS.DateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                                 ToolTip="{Binding Path=ServerStatus.PTS.DateTime, StringFormat=g}"/>
+                    </TextBlock>
+                </ContentControl>
+
+                <!-- PTS Server Status -->
+                <ContentControl FontSize="14" Margin="5">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=ServerStatus.Live.Online}" Value="False">
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <TextBlock Foreground="Red">
+                                                    <Bold ToolTip="Public Test Server">PTS:</Bold> Offline
+                                                    <Image Source="/Resources/glyphicons-193-remove-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
+                                                    <Bold>Since:</Bold> <Run Text="{Binding Path=ServerStatus.Live.DateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                                                             ToolTip="{Binding Path=ServerStatus.PTS.DateTime, StringFormat=g}"/>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                    <TextBlock Foreground="Green">
+                        <Bold ToolTip="Public Test Server">PTS:</Bold> Online
+                        <Image Source="/Resources/glyphicons-194-ok-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
+                        <Bold>Since:</Bold> <Run Text="{Binding Path=ServerStatus.Live.DateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                                 ToolTip="{Binding Path=ServerStatus.PTS.DateTime, StringFormat=g}"/>
+                    </TextBlock>
+                </ContentControl>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Trovesaurus Mail -->
+        <GroupBox Grid.Row="2" Grid.Column="1" Margin="5" FontSize="14"
+                  Visibility="{Binding Source={x:Static vm:MainWindowViewModel.Instance}, Path=Settings.TrovesaurusCheckMail, Converter={StaticResource BoolToVisConverter}}">
+            <GroupBox.Header>
+                <TextBlock FontWeight="Bold" Style="{StaticResource OribitronFontTextBlock}">
+                    <Hyperlink Command="{Binding LaunchTrovesaurusMailCommand}">Trovesaurus Mail</Hyperlink>
+                </TextBlock>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0">
+                    <Hyperlink Foreground="{x:Null}" Command="{Binding LaunchTrovesaurusMailCommand}">
+                        <Image Source="/Resources/glyphicons-11-envelope.png" Width="24" Height="16" Margin="5" />
+                    </Hyperlink>
+                </TextBlock>
+                <ContentControl Grid.Column="1" FontSize="14" Margin="5">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=MailCount}" Value="0">
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <TextBlock>No unread messages</TextBlock>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                    <TextBlock Foreground="Green" FontWeight="Bold" Text="{Binding Path=MailCountDisplay, Mode=OneWay}"/>
+                </ContentControl>
+            </Grid>
+        </GroupBox>
+
+        <!-- Events and Contests Calendar -->
+        <GroupBox Grid.Row="3" Grid.Column="1" FontSize="14" Margin="5">
+            <GroupBox.Header>
+                <TextBlock FontWeight="Bold" Style="{StaticResource OribitronFontTextBlock}">
+                    <Hyperlink Command="{Binding LaunchTrovesaurusCalendarCommand}">Events and Contests Calendar</Hyperlink>
+                </TextBlock>
+            </GroupBox.Header>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Path=CalendarView}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="LightGray" BorderThickness="1" Margin="3">
+                                <TextBlock>
+                                    <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
+                                               CommandParameter="{Binding Url}" ToolTip="{Binding Url}">
+                                        <Run FontWeight="Bold" Text="{Binding Name, Mode=OneWay}"/>
+                                    </Hyperlink><LineBreak/>
+                                    Start Date: <Run FontStyle="Italic" Text="{Binding StartDateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                                     ToolTip="{Binding StartDateTime, StringFormat=g}"/><LineBreak/>
+                                    End Date: <Run FontStyle="Italic" Text="{Binding EndDateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                                   ToolTip="{Binding EndDateTime, StringFormat=g}"/>
+                                </TextBlock>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </GroupBox>
     </Grid>
 </UserControl>

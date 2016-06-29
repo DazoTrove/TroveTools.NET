@@ -1,7 +1,20 @@
 ﻿<div id="main_content_wrap" class="outer"><section id="main_content" class="inner">
 
-## Coming Soon:
-- Trovesaurus tab with news, calendar events and contests, server status, mail messages
+## Version 1.0.0.5 Beta (6/29/2016)
+- Trovesaurus tab with Trove news, online streams, mail message count, server status, and events/contests calendar
+- Trovesaurus tab: added full date values as tooltips on friendly values and URLs as tooltips on links
+- Settings: removed auto update every 1 minute option to prevent too many requests to Trovesaurus API (every 5 minutes is sufficient for auto updates)
+- Settings: added check Trovesaurus mail every minute option
+- My Mods: added mod path details
+- My Mods: open mods folder button
+- Added logging to text file in addition to the log messages shown within the application
+- Mod Detail Pane: new downloads table with HTML changes (thanks to Etaew for updating the API to include the download changes data)
+- Hide mod detail pane contents when no item is selected in list
+- Style Updates
+  - Increased margins around main tab control
+  - Increased size of tab controls
+  - Added padding to the mod detail frame
+  - Added drag handle style to mod detail pane divider so that it is more noticeable
 
 ## Version 1.0.0.4 Beta (6/26/2016)
 - Settings: auto update mods now refreshes the Trovesaurus API mod list on every update (rather than only the first)

@@ -17,43 +17,49 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="250"/>
         </Grid.RowDefinitions>
-        <ToolBar x:Name="toolBar" ToolBarTray.IsLocked="True" Grid.Row="0">
-            <Button x:Name="btnAddMods" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btnAddMods_Click" Focusable="False">
+        <ToolBar ToolBarTray.IsLocked="True" Grid.Row="0">
+            <Button Name="AddModsButton" HorizontalAlignment="Left" VerticalAlignment="Top" Click="AddModsButton_Click" Focusable="False">
                 <StackPanel>
                     <Image Source="/Resources/glyphicons-191-plus-sign.png" Width="26" Height="26" Stretch="None" />
                     <TextBlock Text="Add Mods" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
-            <Button x:Name="btnRemoveMod" HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False"
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False"
                     Command="{Binding RemoveModCommand}" CommandParameter="{Binding MyModsView.CurrentItem}">
                 <StackPanel>
                     <Image Source="/TroveTools.NET;component/Resources/glyphicons-193-remove-sign.png" Width="26" Height="26" Stretch="None" />
                     <TextBlock Text="Remove Mod" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
-            <Button x:Name="btnRefresh" HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding RefreshCommand}" Focusable="False">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding RefreshCommand}" Focusable="False">
                 <StackPanel>
                     <Image Source="/TroveTools.NET;component/Resources/glyphicons-82-refresh.png" Width="26" Height="26" Stretch="None" />
                     <TextBlock Text="Refresh" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
-            <Button x:Name="btnUpdateAll" HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding UpdateAllCommand}" Focusable="False">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding UpdateAllCommand}" Focusable="False">
                 <StackPanel>
                     <Image Source="/Resources/glyphicons-182-download-alt.png" Width="26" Height="26" Stretch="None" />
                     <TextBlock Text="Update All" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
-            <Button x:Name="btnUninstallAll" HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding UninstallAllCommand}" Focusable="False">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding UninstallAllCommand}" Focusable="False">
                 <StackPanel>
                     <Image Source="/Resources/glyphicons-198-remove-circle.png" Width="26" Height="26" Stretch="None" />
                     <TextBlock Text="Uninstall All" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding LaunchModsFolderCommand}" Focusable="False">
+                <StackPanel>
+                    <Image Source="/Resources/glyphicons-145-folder-open.png" Width="26" Height="26" Stretch="None" />
+                    <TextBlock Text="Open Mods Folder" VerticalAlignment="Center" Margin="2" />
+                </StackPanel>
+            </Button>
         </ToolBar>
-        <ListView x:Name="listViewMyMods" SelectionMode="Single" AlternationCount="2" IsSynchronizedWithCurrentItem="True" Grid.IsSharedSizeScope="True"
+        <ListView x:Name="MyModsList" SelectionMode="Single" AlternationCount="2" IsSynchronizedWithCurrentItem="True" Grid.IsSharedSizeScope="True"
                   ItemsSource="{Binding MyModsView}" ItemContainerStyle="{StaticResource ListViewItemStyle}" Grid.Row="1">
             <ListView.View>
                 <GridView AllowsColumnReorder="False" ColumnHeaderTemplate="{DynamicResource SortingColumnHeaderTemplate}">
@@ -140,7 +146,8 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" />
-        <vw:TroveModDetailView DataContext="{Binding SelectedItem, ElementName=listViewMyMods}" Grid.Row="3" />
+        <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" Style="{StaticResource HorizontalGridSplitter}" />
+        <vw:TroveModDetailView DataContext="{Binding SelectedItem, ElementName=MyModsList}" Grid.Row="3"
+                               Visibility="{Binding SelectedItem, ElementName=MyModsList, Converter={StaticResource NullToVisibilityConverter}}" />
     </Grid>
 </UserControl>

@@ -80,9 +80,18 @@ namespace TroveTools.NET.Model
             [JsonProperty("downloads")]
             public int Downloads { get; set; }
 
+            [JsonProperty("changes")]
+            public string Changes { get; set; }
+
             public override string ToString()
             {
                 return string.Format(Strings.TroveMod_Download_ToStringFormat, Version, UnixTimeSecondsToDateTimeConverter.GetLocalDateTime(Date), FileId, Downloads);
+            }
+
+            [JsonIgnore]
+            public DateTime DateTime
+            {
+                get { return UnixTimeSecondsToDateTimeConverter.GetLocalDateTime(Date); }
             }
         }
 
@@ -483,7 +492,8 @@ namespace TroveTools.NET.Model
         private TroveMod FindTrovesaurusMod()
         {
             var ic = StringComparison.OrdinalIgnoreCase;
-            var mod = TrovesaurusApi.ModList.Where(m => FilterModFilename(m.Name).Equals(FilterModFilename(Name), ic)).FirstOrDefault();
+            var mod = TrovesaurusApi.ModList.Where(m => m.Id.Equals(Id, ic)).FirstOrDefault();
+            if (mod == null) mod = TrovesaurusApi.ModList.Where(m => FilterModFilename(m.Name).Equals(FilterModFilename(Name), ic)).FirstOrDefault();
             return mod;
         }
         #endregion

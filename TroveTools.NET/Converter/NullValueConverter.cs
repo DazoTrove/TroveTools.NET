@@ -8,12 +8,12 @@ using System.Windows.Data;
 
 namespace TroveTools.NET.Converter
 {
-    class EmptyStringConverter : IValueConverter
+    class NullValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string source = value as string;
-            return string.IsNullOrEmpty(source) ? parameter : source;
+            if (value is string) return string.IsNullOrEmpty(value as string) ? parameter : value;
+            return value == null ? parameter : value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

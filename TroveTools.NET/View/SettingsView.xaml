@@ -44,14 +44,14 @@
         </Grid.RowDefinitions>
         <GroupBox Header="Location Settings" Padding="5" Grid.Row="0">
             <DockPanel>
-                <ToolBar x:Name="toolBar" ToolBarTray.IsLocked="True" DockPanel.Dock="Top">
-                    <Button x:Name="btnAddLocation" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btnAddLocation_Click" Focusable="False">
+                <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top">
+                    <Button x:Name="AddLocationButton" HorizontalAlignment="Left" VerticalAlignment="Top" Click="AddLocationButton_Click" Focusable="False">
                         <StackPanel>
                             <Image Source="/Resources/glyphicons-191-plus-sign.png" Width="26" Height="26" Stretch="None" />
                             <TextBlock Text="Add Location" VerticalAlignment="Center" Margin="2" />
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnRemoveLocation" HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False"
+                    <Button HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False"
                             Command="{Binding RemoveLocationCommand}" CommandParameter="{Binding Source={StaticResource LocationsView}, Path=/}">
                         <StackPanel>
                             <Image Source="/Resources/glyphicons-198-remove-circle.png" Width="26" Height="26" Stretch="None" />
@@ -59,8 +59,7 @@
                         </StackPanel>
                     </Button>
                 </ToolBar>
-                <ListView x:Name="listViewLocations" Grid.IsSharedSizeScope="True" IsSynchronizedWithCurrentItem="True"
-                          ItemsSource="{Binding Source={StaticResource LocationsView}}">
+                <ListView Grid.IsSharedSizeScope="True" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Source={StaticResource LocationsView}}">
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
                             <GridViewColumn Width="200">
@@ -100,22 +99,17 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
-                <CheckBox x:Name="chkTroveUriHandler" IsChecked="{Binding TroveUriEnabled}" Content="Trove:// URI Handler for Trovesaurus mod installation links"
-                          Margin="0,5,0,0" Grid.Row="0" Grid.Column="0" />
-                <CheckBox x:Name="chkRunAtStartup" IsChecked="{Binding RunAtStartup}" Content="Run at Windows Startup"
-                          Margin="0,5,0,0" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" />
-                <CheckBox x:Name="chkStartMinimized" IsChecked="{Binding StartMinimized}" Content="Start Minimized"
-                          Margin="0,5,0,0" Grid.Row="1" Grid.Column="0" />
-                <CheckBox x:Name="chkMinimizeToTray" IsChecked="{Binding MinimizeToTray}" Content="Minimize to System Tray"
-                          Margin="0,5,0,0" Grid.Row="2" Grid.Column="0" />
+                <CheckBox IsChecked="{Binding TroveUriEnabled}" Content="Trove:// URI Handler for Trovesaurus mod installation links" Margin="0,5,0,0" Grid.Row="0" Grid.Column="0" />
+                <CheckBox IsChecked="{Binding RunAtStartup}" Content="Run at Windows Startup" Margin="0,5,0,0" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" />
+                <CheckBox IsChecked="{Binding StartMinimized}" Content="Start Minimized" Margin="0,5,0,0" Grid.Row="1" Grid.Column="0" />
+                <CheckBox IsChecked="{Binding MinimizeToTray}" Content="Minimize to System Tray" Margin="0,5,0,0" Grid.Row="2" Grid.Column="0" />
                 
-                <CheckBox x:Name="chkAutoUpdate" IsChecked="{Binding AutoUpdateMods}" Content="Auto Update My Mods"
-                          Margin="0,5,0,0" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
+                <CheckBox IsChecked="{Binding AutoUpdateMods}" Content="Auto Update My Mods" Margin="0,5,0,0" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
                 <TextBlock Text="Check for updates every" Margin="0,5,5,0" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" />
                 <ComboBox Margin="0,5,0,0" Grid.Row="2" Grid.Column="2" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding AutoUpdateIntervalsView}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource TimeSpanToUserFriendlyStringConverter}}" />
+                            <TextBlock Text="{Binding Converter={StaticResource DateTimeOrTimeSpanStringConverter}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -126,6 +120,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -133,11 +128,10 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Account Link Key:" Margin="0,5,0,0"
                            ToolTip="Account Link Key is found at the bottom of your view profile page on Trovesaurus.com" />
-                <TextBox x:Name="txtAccountLinkKey" Grid.Column="1" Grid.Row="0" Margin="10,5,0,0"
-                         Text="{Binding TrovesaurusAccountLinkKey, UpdateSourceTrigger=PropertyChanged}"
+                <TextBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Margin="10,5,0,0" Text="{Binding TrovesaurusAccountLinkKey, UpdateSourceTrigger=PropertyChanged}"
                          ToolTip="Account Link Key is found at the bottom of your view profile page on Trovesaurus.com" />
-                <CheckBox x:Name="chkUpdateTroveGameStatus" Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" Grid.ColumnSpan="2"
-                          Content="Update Trove Game Online Status" IsChecked="{Binding UpdateTroveGameStatus}" />
+                <CheckBox Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" Grid.ColumnSpan="2" Content="Update Trove Game Online Status" IsChecked="{Binding UpdateTroveGameStatus}" />
+                <CheckBox Grid.Column="2" Grid.Row="1" Margin="0,5,0,0" Content="Check Trovesaurus mail every minute" IsChecked="{Binding TrovesaurusCheckMail}" />
             </Grid>
         </GroupBox>
     </Grid>

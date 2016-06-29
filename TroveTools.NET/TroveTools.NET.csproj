@@ -33,7 +33,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>5</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -91,16 +91,21 @@
       <HintPath>..\packages\HtmlRenderer.WPF.1.5.0.6\lib\net45\HtmlRenderer.WPF.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Humanizer, Version=2.0.1.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Humanizer.Core.2.0.1\lib\dotnet\Humanizer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -129,14 +134,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converter\EmptyStringConverter.cs" />
+    <Compile Include="Converter\JsonBoolConverter.cs" />
     <Compile Include="Converter\MultiLineStringConverter.cs" />
+    <Compile Include="Converter\NullToVisibilityConverter.cs" />
+    <Compile Include="Converter\NullValueConverter.cs" />
+    <Compile Include="Converter\NullValueMultiConverter.cs" />
     <Compile Include="Converter\SortColumnToVisibilityConverter.cs" />
-    <Compile Include="Converter\TimeSpanToUserFriendlyStringConverter.cs" />
+    <Compile Include="Converter\QuantityToStringConverter.cs" />
+    <Compile Include="Converter\DateTimeOrTimeSpanStringConverter.cs" />
     <Compile Include="Converter\UnixTimeSecondsToDateTimeConverter.cs" />
     <Compile Include="DataAccess\RegistrySettings.cs" />
     <Compile Include="DataAccess\SettingsDataProvider.cs" />
     <Compile Include="Framework\NotifyAppender.cs" />
+    <Compile Include="Framework\WebClientExtended.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Model\AboutTroveTools.cs" />
     <Compile Include="Model\ApplicationDetails.cs" />
     <Compile Include="Model\TroveGameStatus.cs" />
@@ -144,7 +156,10 @@
     <Compile Include="Framework\ExtensionMethods.cs" />
     <Compile Include="Model\TroveLocation.cs" />
     <Compile Include="Model\TroveMod.cs" />
+    <Compile Include="Model\TrovesaurusCalendarItem.cs" />
     <Compile Include="Model\TrovesaurusNewsItem.cs" />
+    <Compile Include="Model\TrovesaurusOnlineStream.cs" />
+    <Compile Include="Model\TroveServerStatus.cs" />
     <Compile Include="Properties\Strings.Designer.cs">
       <DependentUpon>Strings.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -253,7 +268,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <Resource Include="Resources\VersionHistory.md" />
+    <Resource Include="Resources\VersionHistory.md">
+      <SubType>Designer</SubType>
+    </Resource>
     <Resource Include="SampleData\DesignTimeTroveMod.json" />
     <Resource Include="SampleData\DesignTimeTroveMods.json" />
     <None Include="TroveTools.NET_TemporaryKey.pfx" />
@@ -314,7 +331,15 @@
     <Resource Include="Resources\glyphicons-11-envelope.png" />
     <Resource Include="Resources\Stylesheet.css" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\glyphicons-194-ok-sign.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\glyphicons-145-folder-open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\glyphicons-44-group.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

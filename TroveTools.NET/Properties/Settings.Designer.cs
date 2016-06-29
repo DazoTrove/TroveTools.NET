@@ -142,5 +142,17 @@ namespace TroveTools.NET.Properties {
                 this["StartMinimized"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TrovesaurusCheckMail {
+            get {
+                return ((bool)(this["TrovesaurusCheckMail"]));
+            }
+            set {
+                this["TrovesaurusCheckMail"] = value;
+            }
+        }
     }
 }

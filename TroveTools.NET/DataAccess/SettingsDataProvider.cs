@@ -103,6 +103,16 @@ namespace TroveTools.NET.DataAccess
             }
         }
 
+        public static bool TrovesaurusCheckMail
+        {
+            get { return Settings.Default.TrovesaurusCheckMail; }
+            set
+            {
+                Settings.Default.TrovesaurusCheckMail = value;
+                Settings.Default.Save();
+            }
+        }
+
         public static bool StartMinimized
         {
             get { return Settings.Default.StartMinimized; }

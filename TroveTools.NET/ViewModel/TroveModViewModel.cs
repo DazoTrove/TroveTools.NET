@@ -1,6 +1,8 @@
 ﻿using log4net;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +17,7 @@ namespace TroveTools.NET.ViewModel
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private DelegateCommand _UpdateCommand, _LaunchModSiteCommand;
-        private DelegateCommand<string> _InstallCommand;
+        private DelegateCommand<string> _InstallCommand, _LaunchPathCommand;
 
         #region Constructors
         public TroveModViewModel() : base(new TroveMod()) { }
@@ -67,6 +69,15 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
+        public DelegateCommand<string> LaunchPathCommand
+        {
+            get
+            {
+                if (_LaunchPathCommand == null) _LaunchPathCommand = new DelegateCommand<string>(LaunchPath);
+                return _LaunchPathCommand;
+            }
+        }
+
         public DelegateCommand<string> InstallCommand
         {
             get
@@ -78,6 +89,18 @@ namespace TroveTools.NET.ViewModel
         #endregion
 
         #region Private methods
+        internal static void LaunchPath(string path)
+        {
+            try
+            {
+                if (File.Exists(path) || Directory.Exists(path))
+                    Process.Start(path);
+                else
+                    log.ErrorFormat("File not found: [{0}]", path);
+            }
+            catch (Exception ex) { log.Error(string.Format("Error launching path: [{0}]", path), ex); }
+        }
+
         private void InstallModFromTrovesaurus(string fileId)
         {
             try
@@ -97,7 +120,7 @@ namespace TroveTools.NET.ViewModel
                     mod = this;
                     MainWindowViewModel.Instance.MyMods.MyMods.Add(this);
                 }
-                
+
                 if (string.IsNullOrEmpty(fileId))
                     mod.UpdateMod();
                 else

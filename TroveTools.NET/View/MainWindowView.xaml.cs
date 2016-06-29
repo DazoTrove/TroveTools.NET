@@ -1,20 +1,9 @@
 ﻿using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using TroveTools.NET.Properties;
 using TroveTools.NET.ViewModel;
-//using System.Windows.Data;
-//using System.Windows.Documents;
-//using System.Windows.Input;
-//using System.Windows.Media;
-//using System.Windows.Media.Imaging;
-//using System.Windows.Navigation;
-//using System.Windows.Shapes;
 
 namespace TroveTools.NET.View
 {
@@ -86,7 +75,7 @@ namespace TroveTools.NET.View
             trayIcon.Visible = false;
         }
 
-        private void rtbLogMessages_TextChanged(object sender, TextChangedEventArgs e)
+        private void LogMessagesField_TextChanged(object sender, TextChangedEventArgs e)
         {
             RichTextBox rtb = sender as RichTextBox;
             rtb.ScrollToEnd();

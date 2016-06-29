@@ -19,7 +19,7 @@ namespace TroveTools.NET.ViewModel
     class MyModsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private DelegateCommand _RefreshCommand, _UpdateAllCommand, _UninstallAllCommand;
+        private DelegateCommand _RefreshCommand, _UpdateAllCommand, _UninstallAllCommand, _LaunchModsFolderCommand;
         private DelegateCommand<TroveModViewModel> _RemoveModCommand;
         private DelegateCommand<string> _AddModCommand, _SearchMyModsCommand, _SortCommand;
         private CollectionViewSource _MyModsView = new CollectionViewSource();
@@ -63,7 +63,7 @@ namespace TroveTools.NET.ViewModel
                 }
 
                 // If auto update setting is enabled, update all mods on startup
-                if (SettingsDataProvider.AutoUpdateMods)
+                if (MainWindowViewModel.Instance.Settings.AutoUpdateMods)
                 {
                     UpdateAllMods();
                     StartUpdateTimer(SettingsDataProvider.AutoUpdateInterval);
@@ -82,6 +82,11 @@ namespace TroveTools.NET.ViewModel
             {
                 canSaveData = true;
             }
+        }
+
+        public void Closing()
+        {
+            StopUpdateTimer();
         }
 
         public void StartUpdateTimer(TimeSpan autoUpdateInterval)
@@ -197,6 +202,15 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
+        public DelegateCommand LaunchModsFolderCommand
+        {
+            get
+            {
+                if (_LaunchModsFolderCommand == null) _LaunchModsFolderCommand = new DelegateCommand(p => TroveModViewModel.LaunchPath(SettingsDataProvider.ModsFolder));
+                return _LaunchModsFolderCommand;
+            }
+        }
+
         public DelegateCommand<string> SearchMyModsCommand
         {
             get
@@ -220,6 +234,10 @@ namespace TroveTools.NET.ViewModel
         private void RefreshMods(object obj)
         {
             log.Info("Checking all mods for updates");
+
+            // Refresh mod list
+            MainWindowViewModel.Instance.GetMoreMods.RefreshCommand.Execute(null);
+
             foreach (dynamic mod in MyMods)
             {
                 mod.CheckForUpdates();
@@ -240,7 +258,7 @@ namespace TroveTools.NET.ViewModel
         {
             try
             {
-                log.Info("Updating all mods");
+                log.Info("Checking all mods for updates and installing updates if available");
 
                 // Refresh mod list
                 MainWindowViewModel.Instance.GetMoreMods.RefreshCommand.Execute(null);

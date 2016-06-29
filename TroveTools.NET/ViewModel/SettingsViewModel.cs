@@ -61,7 +61,10 @@ namespace TroveTools.NET.ViewModel
                 if (UpdateTroveGameStatus) TroveGameStatus.StartTimer(TrovesaurusAccountLinkKey);
 
                 // Setup auto update interval options
-                _AutoUpdateIntervals.Add(new TimeSpan(0, 1, 0));
+#if DEBUG
+                _AutoUpdateIntervals.Add(new TimeSpan(0, 0, 30)); 
+                _AutoUpdateIntervals.Add(new TimeSpan(0, 1, 0)); 
+#endif
                 _AutoUpdateIntervals.Add(new TimeSpan(0, 5, 0));
                 _AutoUpdateIntervals.Add(new TimeSpan(0, 10, 0));
                 _AutoUpdateIntervals.Add(new TimeSpan(0, 15, 0));
@@ -175,6 +178,16 @@ namespace TroveTools.NET.ViewModel
                     TroveGameStatus.StartTimer(TrovesaurusAccountLinkKey);
                 else
                     TroveGameStatus.StopTimer();
+            }
+        }
+
+        public bool TrovesaurusCheckMail
+        {
+            get { return SettingsDataProvider.TrovesaurusCheckMail; }
+            set
+            {
+                SettingsDataProvider.TrovesaurusCheckMail = value;
+                RaisePropertyChanged("TrovesaurusCheckMail");
             }
         }
 

@@ -1,17 +1,9 @@
 ﻿using log4net;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Navigation;
 using TroveTools.NET.Properties;
 using TroveTools.NET.ViewModel;
 
@@ -33,7 +25,7 @@ namespace TroveTools.NET.View
         /// Handle Add Mods Click event here in the view code behind so that we can display an Open
         /// File Dialog box and pass the filenames as strings to the view model's AddModCommand
         /// </summary>
-        private void btnAddMods_Click(object sender, RoutedEventArgs e)
+        private void AddModsButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {

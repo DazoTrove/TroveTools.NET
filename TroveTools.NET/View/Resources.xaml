@@ -3,14 +3,20 @@
                     xmlns:c="clr-namespace:TroveTools.NET.Converter"
                     xmlns:vw="clr-namespace:TroveTools.NET.View"
                     xmlns:vm="clr-namespace:TroveTools.NET.ViewModel">
-    
-    <c:ImagePathConverter x:Key="ImagePathConverter" />
-    <c:EmptyStringConverter x:Key="EmptyStringConverter" />
-    <c:MultiLineStringConverter x:Key="MultiLineStringConverter" />
-    <c:SortColumnToVisibilityConverter x:Key="SortColumnToVisibilityConverter" />
-    <c:UnixTimeSecondsToDateTimeConverter x:Key="UnixTimeSecondsToDateTimeConverter" />
-    <c:TimeSpanToUserFriendlyStringConverter x:Key="TimeSpanToUserFriendlyStringConverter" />
 
+    <!-- Converters -->
+    <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+    <c:ImagePathConverter x:Key="ImagePathConverter" />
+    <c:NullValueConverter x:Key="NullValueConverter" />
+    <c:NullValueMultiConverter x:Key="NullValueMultiConverter" />
+    <c:MultiLineStringConverter x:Key="MultiLineStringConverter" />
+    <c:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+    <c:QuantityToStringConverter x:Key="QuantityToStringConverter" />
+    <c:SortColumnToVisibilityConverter x:Key="SortColumnToVisibilityConverter" />
+    <c:DateTimeOrTimeSpanStringConverter x:Key="DateTimeOrTimeSpanStringConverter" />
+    <c:UnixTimeSecondsToDateTimeConverter x:Key="UnixTimeSecondsToDateTimeConverter" />
+
+    <!-- Styles -->
     <Style TargetType="{x:Type Image}">
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
@@ -27,12 +33,88 @@
         <Setter Property="FontFamily" Value="/Resources/#Orbitron" />
     </Style>
 
+    <Style x:Key="HorizontalGridSplitter" TargetType="{x:Type GridSplitter}">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="SizeNS" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type GridSplitter}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Height="{TemplateBinding Height}">
+                        <Border Width="50" Height="4" HorizontalAlignment="Center" BorderThickness="0 1" Background="White" BorderBrush="#A0A0A0"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Height" Value="6" />
+        <Setter Property="Margin" Value="0,1" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+    </Style>
+
+    <Style x:Key="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
+        <Setter Property="Height" Value="50" />
+        <Setter Property="BorderBrush" Value="LightGray" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <Style TargetType="{x:Type GridViewColumnHeader}">
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+    </Style>
+
+    <Style x:Key="BorderlessButton" TargetType="{x:Type Button}">
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter Name="content" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="content" Property="RenderTransform" >
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="1.1" ScaleY="1.1" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="content" Property="RenderTransform" >
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX=".95" ScaleY=".95" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Templates -->
     <DataTemplate x:Key="TabItemTemplate">
-        <ContentPresenter>
-            <ContentPresenter.Content>
-                <TextBlock Text="{Binding DisplayName}" Style="{StaticResource OribitronFontTextBlock}" />
-            </ContentPresenter.Content>
-        </ContentPresenter>
+        <!-- Tab Item Header Template -->
+        <StackPanel Orientation="Horizontal" Margin="3,3,3,3">
+            <TextBlock Text="{Binding DisplayName}" Style="{StaticResource OribitronFontTextBlock}" FontSize="14" FontWeight="Bold" />
+            <!-- Add a special Mail Count badge for the Trovesaurus tab only -->
+            <ContentControl Content="{Binding}">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type vm:TrovesaurusViewModel}">
+                        <Border Background="Red" CornerRadius="10" Padding="5,2,5,2" Margin="3,0,0,0" Visibility="{Binding MailCount, Converter={StaticResource NullToVisibilityConverter}}">
+                            <TextBlock Foreground="White" FontWeight="Bold" FontSize="14" Text="{Binding MailCount}"/>
+                        </Border>
+                    </DataTemplate>
+                    <!-- Blank templates for all other tabs (if these aren't included the templates to display the content are used instead) -->
+                    <DataTemplate DataType="{x:Type vm:MyModsViewModel}" />
+                    <DataTemplate DataType="{x:Type vm:GetMoreModsViewModel}" />
+                    <DataTemplate DataType="{x:Type vm:SettingsViewModel}" />
+                    <DataTemplate DataType="{x:Type vm:AboutViewModel}" />
+                </ContentControl.Resources>
+            </ContentControl>
+        </StackPanel>
     </DataTemplate>
 
     <!-- DataTemplates to bind tab views to view models -->
@@ -56,82 +138,7 @@
         <vw:TrovesaurusView/>
     </DataTemplate>
 
-    <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
-
-    <!-- Below are two methods for keeping the ListViewItem selected when clicking and typing inside a textbox,
-         but neither kept the proper item selected after losing focus (such as trying to click on the Remove Location button) -->
-    <!--
-    <Style TargetType="{x:Type ListViewItem}">
-        <Style.Triggers>
-            <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="IsSelected" Value="True" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-    -->
-
-    <!--
-    <Style TargetType="{x:Type ListViewItem}">
-        <Style.Triggers>
-            <EventTrigger RoutedEvent="PreviewGotKeyboardFocus">
-                <BeginStoryboard>
-                    <Storyboard>
-                        <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(ListViewItem.IsSelected)">
-                            <DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
-                        </BooleanAnimationUsingKeyFrames>
-                    </Storyboard>
-                </BeginStoryboard>
-            </EventTrigger>
-        </Style.Triggers>
-    </Style>
-    -->
-
-    <Style x:Key="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
-        <Setter Property="Height" Value="50" />
-        <Setter Property="BorderBrush" Value="LightGray" />
-        <Setter Property="BorderThickness" Value="1" />
-    </Style>
-
-    <Style TargetType="{x:Type GridViewColumnHeader}">
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
-    </Style>
-
-    <Style x:Key="BorderlessButton" TargetType="{x:Type Button}">
-        <Setter Property="Padding" Value="1"/>
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Name="border" Background="{TemplateBinding Background}">
-                        <ContentPresenter Name="content" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                      Margin="{TemplateBinding Padding}"
-                                      RecognizesAccessKey="True"
-                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="content" Property="RenderTransform" >
-                                <Setter.Value>
-                                    <ScaleTransform ScaleX="1.1" ScaleY="1.1" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="content" Property="RenderTransform" >
-                                <Setter.Value>
-                                    <ScaleTransform ScaleX=".95" ScaleY=".95" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                        <Trigger Property="IsFocused" Value="True">
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
+    <!-- Sorting column header template with direction arrows -->
     <DataTemplate x:Key="SortingColumnHeaderTemplate">
         <DockPanel HorizontalAlignment="Stretch">
             <TextBlock Margin="2,0,2,0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type GridViewColumnHeader}},Path=Tag}" />
