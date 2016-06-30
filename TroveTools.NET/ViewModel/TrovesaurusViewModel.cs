@@ -53,6 +53,9 @@ namespace TroveTools.NET.ViewModel
                 OnlineStreams.Clear();
                 foreach (var item in TrovesaurusApi.StreamList) OnlineStreams.Add(item);
 
+                CalendarView.SortDescriptions.Clear();
+                CalendarView.SortDescriptions.Add(new SortDescription("EndDateTime", ListSortDirection.Ascending));
+
                 log.Info("Trovesaurus news, calendar, and streams data loaded successfully");
             }
             catch (Exception ex)

@@ -34,12 +34,9 @@ namespace TroveTools.NET.View
             trayIcon.BalloonTipTitle = Strings.MainWindowView_MinimizeBalloonTipTitle;
             trayIcon.Text = Strings.MainWindowView_MinimizeBalloonTipTitle;
 
-            trayIcon.Click += (s, e) =>
-            {
-                Show();
-                WindowState = WindowState.Normal;
-                ShowInTaskbar = true;
-            };
+            trayIcon.Click += (s, e) => RestoreWindow();
+            trayIcon.DoubleClick += (s, e) => RestoreWindow();
+            trayIcon.BalloonTipClicked += (s, e) => RestoreWindow();
 
             if (MainWindowViewModel.Instance.Settings.StartMinimized)
             {
@@ -52,6 +49,13 @@ namespace TroveTools.NET.View
         {
             if (WindowState == WindowState.Minimized) UpdateTrayIconMinimized();
             base.OnStateChanged(e);
+        }
+
+        private void RestoreWindow()
+        {
+            Show();
+            WindowState = WindowState.Normal;
+            ShowInTaskbar = true;
         }
 
         private void UpdateTrayIconMinimized()

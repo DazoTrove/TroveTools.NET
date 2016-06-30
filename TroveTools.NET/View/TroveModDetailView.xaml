@@ -12,7 +12,7 @@
              Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
              BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" 
              Padding="6"
-             d:DesignWidth="890" d:DesignHeight="1550"
+             d:DesignWidth="890" d:DesignHeight="500"
              d:DataContext="{d:DesignInstance Type=sd:DesignTimeTroveModViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
         <ResourceDictionary Source="Resources.xaml"/>
@@ -168,6 +168,7 @@
                     </GridView>
                 </ListView.View>
             </ListView>-->
+            
             <!-- Replaces -->
             <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3">
                 <Bold>Mod Replaces:</Bold>

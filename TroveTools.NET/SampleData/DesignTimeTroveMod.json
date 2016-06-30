@@ -1,27 +1,51 @@
-﻿{
-  "id": "2319",
-  "name": "Quadcopter drones",
-  "author": "B_Y3LL0W",
-  "type": "ALLY",
-  "subtype": "",
-  "description": "Recently, I was thinking of making a drone ally for my costume mod. Then, I had this in my mind- \"How about making drones for everyone?\" <br>\n<br>\nSo, I made these.<br>\nThe Surveillance Drone. <br>\n<img src=\"http:\/\/i.imgur.com\/Jy69K3y.gif\" border=\"0\" alt=\"\"><br>\n<br>\nThe Companion Drone.<br>\n<img src=\"http:\/\/i.imgur.com\/NDJXq9g.gif\" border=\"0\" alt=\"\"><br>\n<br>\nThe Tactical Military Drone.<br>\n<img src=\"http:\/\/i.imgur.com\/XcRHL9X.gif\" border=\"0\" alt=\"\"><br>\n<br>\nThe Micro Quadcopter.<br>\n<img src=\"http:\/\/i.imgur.com\/tzZ5tdu.gif\" border=\"0\" alt=\"\"><br>\n<br>\nThe Spy Drone.<br>\n<img src=\"http:\/\/i.imgur.com\/PnBZIKW.gif\" border=\"0\" alt=\"\"><br>",
-  "date": "1465883519",
-  "status2": "Work in Progress",
-  "replaces": "&lt;ul&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_copphone\"&gt;Petite Auto-Patroller&lt;/a&gt;&lt;/li&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_snapshot\"&gt;Click-Happy Camerabot&lt;/a&gt;&lt;/li&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_cookieoven\"&gt;Cookie Bakerbot&lt;/a&gt;&lt;/li&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_toaster\"&gt;Patient Toast-Popper&lt;/a&gt;&lt;/li&gt;\r\n&lt;li&gt;&lt;a href=\"https://www.trovesaurus.com/collections/pet/punchbot_cucklock\"&gt;Ticking Timekeeper&lt;/a&gt;&lt;/li&gt;\r\n&lt;/ul&gt;",
-  "totaldownloads": 96,
-  "votes": 3,
-  "views": 3815,
-  "downloads": [
-    {
-      "fileid": "2428",
-      "version": "2428",
-      "date": "1465883619",
-      "downloads": 96
-    }
-  ],
-  "image": "https://www.trovesaurus.com/images/uploads/3357.png",
-  "FilePath": "C:\\Users\\David\\AppData\\Roaming\\TroveTools.NET\\mods\\Quadcopter drones+1465883619.zip",
-  "Status": "Up To Date",
-  "Enabled": false,
-  "UnixTimeSeconds": 1465883619
-}
+﻿  {
+    "id": "801",
+    "name": "Neon Rezonance",
+    "author": "CryoGX",
+    "type": "WINGS",
+    "subtype": "",
+    "description": "<p>Fly around as a true neonic DJ as sound waves flow out of you!</p>",
+    "date": "1436058201",
+    "views": "15637",
+    "status2": "Work in Progress",
+    "replaces": "<p>Neophyte Wings</p>",
+    "totaldownloads": "7073",
+    "downloads": [
+      {
+        "fileid": "1446",
+        "version": "X",
+        "date": "1450555472",
+        "downloads": "2958"
+      },
+      {
+        "fileid": "1445",
+        "version": "X ERA ORANGE",
+        "date": "1450555159",
+        "downloads": "71"
+      },
+      {
+        "fileid": "1444",
+        "version": "X ERA GREEN",
+        "date": "1450554949",
+        "downloads": "84"
+      },
+      {
+        "fileid": "262",
+        "version": "1.0 - Orange",
+        "date": "1436181827",
+        "downloads": "3397"
+      },
+      {
+        "fileid": "261",
+        "version": "1.0 - Green",
+        "date": "1436181791",
+        "downloads": "563"
+      }
+    ],
+    "votes": "7",
+    "image": "https://www.trovesaurus.com/images/uploads/2576.png",
+    "FilePath": "C:\\Users\\David\\AppData\\Roaming\\TroveTools.NET\\mods\\Neon Rezonance+1450555159.zip",
+    "Status": "New Version Available",
+    "Enabled": true,
+    "UnixTimeSeconds": 1450555159
+  }

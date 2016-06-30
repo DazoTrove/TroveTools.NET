@@ -1,5 +1,9 @@
 ﻿<div id="main_content_wrap" class="outer"><section id="main_content" class="inner">
 
+## Version 1.0.0.6 Beta (TBD)
+- Clicking on the tray icon balloon notification now restores the window in addition to clicking or double-clicking on the tray icon itself
+- Trovesaurus tab: sort event calendar by end date
+
 ## Version 1.0.0.5 Beta (6/29/2016)
 - Trovesaurus tab with Trove news, online streams, mail message count, server status, and events/contests calendar
 - Trovesaurus tab: added full date values as tooltips on friendly values and URLs as tooltips on links
