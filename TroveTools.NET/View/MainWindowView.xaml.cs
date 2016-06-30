@@ -84,5 +84,15 @@ namespace TroveTools.NET.View
             RichTextBox rtb = sender as RichTextBox;
             rtb.ScrollToEnd();
         }
+
+        public static void HideToolbarOverflow(ToolBar toolBar)
+        {
+            // Hide overflow button
+            var overflowGrid = toolBar.Template.FindName("OverflowGrid", toolBar) as FrameworkElement;
+            if (overflowGrid != null) overflowGrid.Visibility = Visibility.Collapsed;
+
+            var mainPanelBorder = toolBar.Template.FindName("MainPanelBorder", toolBar) as FrameworkElement;
+            if (mainPanelBorder != null) mainPanelBorder.Margin = new Thickness(0);
+        }
     }
 }

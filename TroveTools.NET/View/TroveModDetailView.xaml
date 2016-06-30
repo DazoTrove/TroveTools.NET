@@ -117,8 +117,8 @@
                                 </Button>
                                 <wpf:HtmlLabel Grid.Column="1" Text="{Binding Changes}" AutoSizeHeightOnly="True" Margin="3" IsSelectionEnabled="False"/>
                                 <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Downloads, Mode=OneWay, StringFormat=N0}" HorizontalAlignment="Center" Margin="3"/>
-                                <TextBlock Grid.Column="3" VerticalAlignment="Center" FontStyle="Italic" ToolTip="{Binding DateTime, StringFormat=g}"
-                                       Text="{Binding DateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}" Margin="3"/>
+                                <TextBlock Grid.Column="3" VerticalAlignment="Center" FontStyle="Italic" ToolTip="{Binding DateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                       Text="{Binding DateTime, StringFormat=g, Mode=OneWay}" Margin="3"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

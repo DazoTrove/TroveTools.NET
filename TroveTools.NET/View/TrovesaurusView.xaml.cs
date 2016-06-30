@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace TroveTools.NET.View
 {
@@ -10,6 +11,11 @@ namespace TroveTools.NET.View
         public TrovesaurusView()
         {
             InitializeComponent();
+        }
+
+        private void ToolBar_Loaded(object sender, RoutedEventArgs e)
+        {
+            MainWindowView.HideToolbarOverflow(sender as ToolBar);
         }
     }
 }

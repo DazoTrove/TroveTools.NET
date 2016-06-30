@@ -36,7 +36,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="250"/>
         </Grid.RowDefinitions>
-        <ToolBar ToolBarTray.IsLocked="True"  Grid.Row="0">
+        <ToolBar ToolBarTray.IsLocked="True"  Grid.Row="0" Loaded="ToolBar_Loaded">
             <Hyperlink Foreground="{x:Null}" Command="{Binding LaunchTrovesaurusCommand}">
                 <Image Source="/Resources/TrovesaurusLogo.png" VerticalAlignment="Center" Height="31" Width="200" Margin="0,0,10,0" />
             </Hyperlink>

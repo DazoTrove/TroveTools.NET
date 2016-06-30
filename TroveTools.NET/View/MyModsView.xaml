@@ -20,7 +20,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="250"/>
         </Grid.RowDefinitions>
-        <ToolBar ToolBarTray.IsLocked="True" Grid.Row="0">
+        <ToolBar ToolBarTray.IsLocked="True" Grid.Row="0" Loaded="ToolBar_Loaded">
             <Button Name="AddModsButton" HorizontalAlignment="Left" VerticalAlignment="Top" Click="AddModsButton_Click" Focusable="False">
                 <StackPanel>
                     <Image Source="/Resources/glyphicons-191-plus-sign.png" Width="26" Height="26" Stretch="None" />

@@ -2,7 +2,11 @@
 
 ## Version 1.0.0.6 Beta (TBD)
 - Clicking on the tray icon balloon notification now restores the window in addition to clicking or double-clicking on the tray icon itself
-- Trovesaurus tab: sort event calendar by end date
+- Trovesaurus tab: sort event calendar by end date, and moved refresh button
+- Updated Trovesaurus mail URL
+- Mod Detail Pane: updated download date display to show full date and time
+- Get More Mods: added log message to display refresh timer (refreshes are allowed only every 30 seconds)
+- All tabs with toolbars: hide overflow button (window size has a minimum so overflow is never needed)
 
 ## Version 1.0.0.5 Beta (6/29/2016)
 - Trovesaurus tab with Trove news, online streams, mail message count, server status, and events/contests calendar

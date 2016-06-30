@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using Humanizer;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -262,6 +263,7 @@ namespace TroveTools.NET.ViewModel
                     lastUpdated = DateTime.Now;
                     log.Info("Loading mod list complete");
                 }
+                else log.InfoFormat("Please wait {0} to refresh the mod list again", lastUpdated.AddSeconds(30).Subtract(DateTime.Now).Humanize());
             }
             catch (Exception ex)
             {

@@ -44,7 +44,7 @@
         </Grid.RowDefinitions>
         <GroupBox Header="Location Settings" Padding="5" Grid.Row="0">
             <DockPanel>
-                <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top">
+                <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top" Loaded="ToolBar_Loaded">
                     <Button x:Name="AddLocationButton" HorizontalAlignment="Left" VerticalAlignment="Top" Click="AddLocationButton_Click" Focusable="False">
                         <StackPanel>
                             <Image Source="/Resources/glyphicons-191-plus-sign.png" Width="26" Height="26" Stretch="None" />

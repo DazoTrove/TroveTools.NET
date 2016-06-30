@@ -41,5 +41,10 @@ namespace TroveTools.NET.View
                 log.Error("Error adding location", ex);
             }
         }
+
+        private void ToolBar_Loaded(object sender, RoutedEventArgs e)
+        {
+            MainWindowView.HideToolbarOverflow(sender as ToolBar);
+        }
     }
 }

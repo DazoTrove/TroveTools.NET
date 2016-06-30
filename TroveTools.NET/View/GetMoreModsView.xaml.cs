@@ -20,5 +20,10 @@ namespace TroveTools.NET.View
             TroveModViewModel vm = control.DataContext as TroveModViewModel;
             vm.InstallCommand.Execute(null);
         }
+        
+        private void ToolBar_Loaded(object sender, RoutedEventArgs e)
+        {
+            MainWindowView.HideToolbarOverflow(sender as ToolBar);
+        }
     }
 }

@@ -38,7 +38,7 @@ namespace TroveTools.NET.Model
         public const string TroveLaunchUrl = TrovesaurusBaseUrl + "toolbox/ping.php?id={0}&action=launch";
         public const string TroveCloseUrl = TrovesaurusBaseUrl + "toolbox/ping.php?id={0}&action=close";
         public const string MailCountUrl = TrovesaurusBaseUrl + "toolbox/mailcount.php?key={0}";
-        public const string MailboxUrl = TrovesaurusBaseUrl + "mail.php";
+        public const string MailboxUrl = TrovesaurusBaseUrl + "mail";
         public const string ModInfoUrl = TrovesaurusBaseUrl + "toolbox/modinfo.php?id={0}";
 
         private static List<TroveMod> _ModList = null;
