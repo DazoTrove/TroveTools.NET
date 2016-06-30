@@ -40,6 +40,7 @@ namespace TroveTools.NET.ViewModel
             {
                 log.Info("Loading Trovesaurus news, calendar, and streams data");
                 if (_StatusTimer == null) StartStatusTimer();
+                CheckStatus();
 
                 TrovesaurusApi.RefreshNewsList();
                 NewsItems.Clear();
@@ -104,8 +105,8 @@ namespace TroveTools.NET.ViewModel
         {
             try
             {
-                log.Info("Checking server status");
                 if (MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail) CheckMail();
+                log.Info("Checking server status");
                 ServerStatus = TrovesaurusApi.GetServerStatus();
                 //ServerStatusHtml = TrovesaurusApi.GetServerStatusHtml();
             }

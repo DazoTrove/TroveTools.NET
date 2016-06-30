@@ -28,18 +28,15 @@ namespace TroveTools.NET.Model
         public const string NewsUrl = TrovesaurusBaseUrl + "feeds/news.php";
         public const string NewsPageUrl = TrovesaurusBaseUrl + "news";
         public const string NewsTagUrl = TrovesaurusBaseUrl + "news.php?t={0}";
-        public const string NewsArticlePageUrl = TrovesaurusBaseUrl + "toolbox/page.php?id={0}";
         public const string ServerStatusUrl = TrovesaurusBaseUrl + "statusjson.php";
         public const string ServerStatusHtmlUrl = TrovesaurusBaseUrl + "_status.php";
         public const string ServerStatusPage = TrovesaurusBaseUrl + "status.php";
-        public const string CommandsUrl = TrovesaurusBaseUrl + "toolbox/page.php?id=262";
         public const string OnlineStreamsUrl = TrovesaurusBaseUrl + "feeds/onlinestreams.php";
         public const string OnlineStreamsPageUrl = TrovesaurusBaseUrl + "livestreams.php";
         public const string TroveLaunchUrl = TrovesaurusBaseUrl + "toolbox/ping.php?id={0}&action=launch";
         public const string TroveCloseUrl = TrovesaurusBaseUrl + "toolbox/ping.php?id={0}&action=close";
         public const string MailCountUrl = TrovesaurusBaseUrl + "toolbox/mailcount.php?key={0}";
         public const string MailboxUrl = TrovesaurusBaseUrl + "mail";
-        public const string ModInfoUrl = TrovesaurusBaseUrl + "toolbox/modinfo.php?id={0}";
 
         private static List<TroveMod> _ModList = null;
         private static List<TrovesaurusNewsItem> _NewsList = null;

@@ -56,7 +56,7 @@ namespace TroveTools.NET.ViewModel
                 TrovesaurusModsView.Filter = ModFilter;
 
                 // Set default sort to total downloads
-                SortModList("TotalDownloads");
+                SortModList("Votes");
             }
             catch (Exception ex)
             {
