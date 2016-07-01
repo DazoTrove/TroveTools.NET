@@ -16,16 +16,26 @@ namespace TroveTools.NET.Converter
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string source = value as string;
-            if (string.IsNullOrEmpty(source)) return null;
-            return Regex.Replace(source, "[\r\n]+", ", ");
+            try
+            {
+                string source = value as string;
+                if (string.IsNullOrEmpty(source)) return null;
+                return Regex.Replace(source, "[\r\n]+", ", ");
+            }
+            catch (Exception ex) { log.Error(string.Format("Error converting multiline string: [{0}]", value), ex); }
+            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string source = value as string;
-            if (string.IsNullOrEmpty(source)) return null;
-            return source.Replace(", ", Environment.NewLine);
+            try
+            {
+                string source = value as string;
+                if (string.IsNullOrEmpty(source)) return null;
+                return source.Replace(", ", Environment.NewLine);
+            }
+            catch (Exception ex) { log.Error(string.Format("Error converting multiline string back: [{0}]", value), ex); }
+            return null;
         }
     }
 }

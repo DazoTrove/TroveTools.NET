@@ -12,22 +12,7 @@
              d:DesignWidth="895" d:DesignHeight="650"
              d:DataContext="{d:DesignInstance Type=sd:DesignTimeGetMoreModsViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources.xaml"/>
-                <ResourceDictionary>
-                    <SolidColorBrush x:Key="brushWatermarkBackground" Color="White" />
-                    <SolidColorBrush x:Key="brushWatermarkForeground" Color="LightSteelBlue" />
-                    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                    <Style x:Key="EntryFieldStyle" TargetType="Grid" >
-                        <Setter Property="HorizontalAlignment" Value="Stretch" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                        <Setter Property="Margin" Value="0,0,10,0" />
-                    </Style>
-
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <ResourceDictionary Source="Resources.xaml"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>

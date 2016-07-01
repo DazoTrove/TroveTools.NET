@@ -131,16 +131,16 @@ namespace TroveTools.NET.Model
             if (mod?.Downloads == null) throw new ArgumentNullException("mod.Downloads");
 
             string unixDate = mod.Downloads.First(m => m.FileId == fileId).Date;
-            try { mod.UnixTimeSeconds = Convert.ToInt64(unixDate); } catch { }
-
             string fileName = string.Format("{0}+{1}.zip", TroveMod.FilterModFilename(mod.Name), unixDate);
+            string localPath = Path.Combine(SettingsDataProvider.ModsFolder, fileName);
 
             using (var client = OpenWebClient())
             {
-                string localPath = Path.Combine(SettingsDataProvider.ModsFolder, fileName);
                 client.DownloadFile(string.Format(ModDownloadUrl, mod.Id, fileId), localPath);
-                return localPath;
             }
+            try { mod.UnixTimeSeconds = Convert.ToInt64(unixDate); } catch { }
+
+            return localPath;
         }
 
         public static void LaunchTrovesaurus(string url = TrovesaurusBaseUrl)

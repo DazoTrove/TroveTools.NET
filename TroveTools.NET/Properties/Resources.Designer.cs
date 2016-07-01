@@ -61,23 +61,24 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {
-        ///  &quot;id&quot;: &quot;6&quot;,
-        ///  &quot;name&quot;: &quot;Display No Clouds&quot;,
-        ///  &quot;author&quot;: &quot;Ocgineer&quot;,
-        ///  &quot;type&quot;: &quot;UTILITY&quot;,
-        ///  &quot;subtype&quot;: &quot;&quot;,
-        ///  &quot;description&quot;: &quot;&amp;lt;p&amp;gt;This is a simple vfx mod that removes the clouds in the sky.&amp;lt;br /&amp;gt;This would be extremely useful for those that like gliding or build at great heights!&amp;lt;/p&amp;gt;&quot;,
-        ///  &quot;date&quot;: &quot;1423870377&quot;,
-        ///  &quot;status2&quot;: &quot;Completed&quot;,
-        ///  &quot;replaces&quot;: &quot;&quot;,
-        ///  &quot;totaldownloads&quot;: 8884,
-        ///  &quot;votes&quot;: 7,
-        ///  &quot;views&quot;: 12782,
-        ///  &quot;downloads&quot;: [
-        ///    {
-        ///      &quot;fileid&quot;: &quot;12&quot;,
-        ///      &quot;version&quot;: &quot;12 [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to   {
+        ///    &quot;id&quot;: &quot;801&quot;,
+        ///    &quot;name&quot;: &quot;Neon Rezonance&quot;,
+        ///    &quot;author&quot;: &quot;CryoGX&quot;,
+        ///    &quot;type&quot;: &quot;WINGS&quot;,
+        ///    &quot;subtype&quot;: &quot;&quot;,
+        ///    &quot;description&quot;: &quot;&lt;p&gt;Fly around as a true neonic DJ as sound waves flow out of you!&lt;/p&gt;&quot;,
+        ///    &quot;date&quot;: &quot;1436058201&quot;,
+        ///    &quot;views&quot;: &quot;15637&quot;,
+        ///    &quot;status2&quot;: &quot;Work in Progress&quot;,
+        ///    &quot;replaces&quot;: &quot;&lt;p&gt;Neophyte Wings&lt;/p&gt;&quot;,
+        ///    &quot;totaldownloads&quot;: &quot;7073&quot;,
+        ///    &quot;downloads&quot;: [
+        ///      {
+        ///        &quot;fileid&quot;: &quot;1446&quot;,
+        ///        &quot;version&quot;: &quot;X&quot;,
+        ///        &quot;date&quot;: &quot;1450555472&quot;,
+        ///        &quot;downloads&quot;: &quot;2958&quot; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DesignTimeTroveMod {
             get {
@@ -112,6 +113,26 @@ namespace TroveTools.NET.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to /*******************************************************************************
+        ///MeyerWeb Reset
+        ///*******************************************************************************/
+        ///
+        ///html, body, div, span, applet, object, iframe,
+        ///h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        ///a, abbr, acronym, address, big, cite, code,
+        ///del, dfn, img, ins, kbd, q, s, samp,
+        ///small, strike, sub, sup, tt, var,
+        ///center, dl, dt, dd, ol, ul, li,
+        ///b, u, i, em, strong, fieldset, form, label, legend,
+        ///table, caption, tbody, tfoot, the [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string HtmlFieldStylesheet {
+            get {
+                return ResourceManager.GetString("HtmlFieldStylesheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*******************************************************************************
         ///Slate Theme for GitHub Pages
         ///by Jason Costello, @jsncostello
         ///*******************************************************************************/
@@ -134,14 +155,12 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;div id=&quot;main_content_wrap&quot; class=&quot;outer&quot;&gt;&lt;section id=&quot;main_content&quot; class=&quot;inner&quot;&gt;
         ///
-        ///## Coming Soon:
-        ///- Trovesaurus tab with news, calendar events and contests, server status, mail messages
-        ///- Mod detail pane for selected mod
-        ///
-        ///## Version 1.0.0.4 Beta (6/25/2016)
-        ///- Settings: auto update mods now refreshes the Trovesaurus API mod list on every update (rather than only the first)
-        ///- Settings: new start minimized option
-        ///- About: updated format of version history to be Markdown to match GitHub release deta [rest of string was truncated]&quot;;.
+        ///## Version 1.0.0.6 Beta (TBD)
+        ///- Clicking on the tray icon balloon notification now restores the window in addition to clicking or double-clicking on the tray icon itself
+        ///- Trovesaurus tab: sort event calendar by end date, and moved refresh button
+        ///- Trovesaurus tab: refresh button now also refreshes mail and server status immediately
+        ///- Updated Trovesaurus mail URL
+        ///- All tabs with toolbars: hide overflow button (window [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string VersionHistory {
             get {

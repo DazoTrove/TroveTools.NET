@@ -12,7 +12,7 @@
              Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
              BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" 
              Padding="6"
-             d:DesignWidth="890" d:DesignHeight="500"
+             d:DesignWidth="890" d:DesignHeight="800"
              d:DataContext="{d:DesignInstance Type=sd:DesignTimeTroveModViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
         <ResourceDictionary Source="Resources.xaml"/>
@@ -70,7 +70,8 @@
             </TextBlock>
 
             <!-- Description -->
-            <wpf:HtmlLabel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Description}" AutoSizeHeightOnly="True"/>
+            <wpf:HtmlLabel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Description}" AutoSizeHeightOnly="True" Margin="0,5,0,5"
+                           BaseStylesheet="{Binding Source={x:Static vm:MainWindowViewModel.Instance}, Path=HtmlFieldStylesheet, Mode=OneWay}"/>
             <!-- Downloads List -->
             <HeaderedItemsControl Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Grid.IsSharedSizeScope="True" ItemsSource="{Binding Downloads}" Margin="0,5,0,5" Padding="5" HorizontalAlignment="Stretch">
                 <HeaderedItemsControl.Template>
@@ -87,18 +88,18 @@
                 </HeaderedItemsControl.Template>
                 <HeaderedItemsControl.HeaderTemplate>
                     <DataTemplate DataType="HeaderedItemsControl">
-                            <Grid HorizontalAlignment="Stretch">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Version"/>
-                                    <ColumnDefinition Width="450" SharedSizeGroup="Changes"/>
-                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Downloads"/>
-                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Created"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Version" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
-                                <TextBlock Grid.Column="1" Text="Changes" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
-                                <TextBlock Grid.Column="2" Text="Downloads" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
-                                <TextBlock Grid.Column="3" Text="Created" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
-                            </Grid>
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Version"/>
+                                <ColumnDefinition Width="450" SharedSizeGroup="Changes"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Downloads"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Created"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Version" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
+                            <TextBlock Grid.Column="1" Text="Changes" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
+                            <TextBlock Grid.Column="2" Text="Downloads" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
+                            <TextBlock Grid.Column="3" Text="Created" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
+                        </Grid>
                     </DataTemplate>
                 </HeaderedItemsControl.HeaderTemplate>
                 <ItemsControl.ItemTemplate>
@@ -113,9 +114,13 @@
                                 </Grid.ColumnDefinitions>
                                 <Button Grid.Column="0" Command="{Binding DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding FileId}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="3" Padding="2">
+                                    <Button.ToolTip>
+                                        <TextBlock>File ID: <Run Text="{Binding FileId}"/></TextBlock>
+                                    </Button.ToolTip>
                                     <TextBlock>v <Run Text="{Binding Version}"/></TextBlock>
                                 </Button>
-                                <wpf:HtmlLabel Grid.Column="1" Text="{Binding Changes}" AutoSizeHeightOnly="True" Margin="3" IsSelectionEnabled="False"/>
+                                <wpf:HtmlLabel Grid.Column="1" Text="{Binding Changes}" AutoSizeHeightOnly="True" Margin="3" IsSelectionEnabled="False"
+                                               BaseStylesheet="{Binding Source={x:Static vm:MainWindowViewModel.Instance}, Path=HtmlFieldStylesheet, Mode=OneWay}"/>
                                 <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Downloads, Mode=OneWay, StringFormat=N0}" HorizontalAlignment="Center" Margin="3"/>
                                 <TextBlock Grid.Column="3" VerticalAlignment="Center" FontStyle="Italic" ToolTip="{Binding DateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
                                        Text="{Binding DateTime, StringFormat=g, Mode=OneWay}" Margin="3"/>
@@ -123,57 +128,24 @@
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
-            </HeaderedItemsControl>
-            <!--<ListView Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding Downloads}" Margin="0,5,0,5">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource ListViewItemStyle}">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <HeaderedItemsControl.Style>
+                    <Style TargetType="HeaderedItemsControl">
+                        <Style.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.View>
-                    <GridView AllowsColumnReorder="False">
-                        <GridViewColumn Header="Version" Width="150">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Command="{Binding Path=DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Stretch">
-                                        <TextBlock>
-                                            v <Run Text="{Binding Version}"/>
-                                        </TextBlock>
-                                    </Button>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Changes" Width="450">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <wpf:HtmlLabel Text="{Binding Changes}" AutoSizeHeightOnly="True"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Downloads" Width="80">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Downloads, Mode=OneWay, StringFormat=N0}" HorizontalAlignment="Center"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Created" Width="150">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock FontStyle="Italic" Text="{Binding DateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
-                                               ToolTip="{Binding DateTime, StringFormat=g}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>-->
-            
+                </HeaderedItemsControl.Style>
+            </HeaderedItemsControl>
+
             <!-- Replaces -->
-            <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3">
+            <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,5,0,5" Visibility="{Binding Replaces, Converter={StaticResource NullToVisibilityConverter}}">
                 <Bold>Mod Replaces:</Bold>
             </TextBlock>
-            <wpf:HtmlLabel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Replaces, Converter={StaticResource NullValueConverter}, ConverterParameter='Unspecified'}" AutoSizeHeightOnly="True"/>
+            <wpf:HtmlLabel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" AutoSizeHeightOnly="True" IsSelectionEnabled="False" Margin="0,5,0,5"
+                           Visibility="{Binding Replaces, Converter={StaticResource NullToVisibilityConverter}}" Text="{Binding Replaces}"
+                           BaseStylesheet="{Binding Source={x:Static vm:MainWindowViewModel.Instance}, Path=HtmlFieldStylesheet, Mode=OneWay}"/>
         </Grid>
     </ScrollViewer>
 </UserControl>

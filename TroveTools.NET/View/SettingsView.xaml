@@ -79,7 +79,13 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="450" Header="Location Path" DisplayMemberBinding="{Binding LocationPath}" />
+                            <GridViewColumn Width="450" Header="Location Path">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock><Hyperlink Command="{Binding LaunchFolderCommand}"><Run Text="{Binding LocationPath}"/></Hyperlink></TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -98,12 +104,12 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <CheckBox IsChecked="{Binding TroveUriEnabled}" Content="Trove:// URI Handler for Trovesaurus mod installation links" Margin="0,5,0,0" Grid.Row="0" Grid.Column="0" />
                 <CheckBox IsChecked="{Binding RunAtStartup}" Content="Run at Windows Startup" Margin="0,5,0,0" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" />
                 <CheckBox IsChecked="{Binding StartMinimized}" Content="Start Minimized" Margin="0,5,0,0" Grid.Row="1" Grid.Column="0" />
                 <CheckBox IsChecked="{Binding MinimizeToTray}" Content="Minimize to System Tray" Margin="0,5,0,0" Grid.Row="2" Grid.Column="0" />
-                
+
                 <CheckBox IsChecked="{Binding AutoUpdateMods}" Content="Auto Update My Mods" Margin="0,5,0,0" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
                 <TextBlock Text="Check for updates every" Margin="0,5,5,0" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" />
                 <ComboBox Margin="0,5,0,0" Grid.Row="2" Grid.Column="2" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding AutoUpdateIntervalsView}">

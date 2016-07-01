@@ -129,7 +129,8 @@
                                         posted <Run FontStyle="Italic" Text="{Binding Date, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
                                                     ToolTip="{Binding Date, StringFormat=g}"/>
                                         <LineBreak/>
-                                        <wpf:HtmlLabel Text="{Binding PreviewHtml}" AutoSizeHeightOnly="True"/><LineBreak/>
+                                        <wpf:HtmlLabel Text="{Binding PreviewHtml}" AutoSizeHeightOnly="True"
+                                                       BaseStylesheet="{Binding Source={x:Static vm:MainWindowViewModel.Instance}, Path=HtmlFieldStylesheet, Mode=OneWay}"/><LineBreak/>
                                         <Run FontWeight="Bold" Text="{Binding Views, Converter={StaticResource QuantityToStringConverter}, ConverterParameter='view'}"/>,
                                         <Run FontWeight="Bold" Text="{Binding Comments, Converter={StaticResource QuantityToStringConverter}, ConverterParameter='comment'}"/><LineBreak/>
                                         
@@ -241,7 +242,7 @@
 
         <!-- Trovesaurus Mail -->
         <GroupBox Grid.Row="2" Grid.Column="1" Margin="5" FontSize="14"
-                  Visibility="{Binding Source={x:Static vm:MainWindowViewModel.Instance}, Path=Settings.TrovesaurusCheckMail, Converter={StaticResource BoolToVisConverter}}">
+                  Visibility="{Binding Source={x:Static vm:MainWindowViewModel.Instance}, Path=Settings.TrovesaurusCheckMail, Converter={StaticResource BooleanToVisibilityConverter}}">
             <GroupBox.Header>
                 <TextBlock FontWeight="Bold" Style="{StaticResource OribitronFontTextBlock}">
                     <Hyperlink Command="{Binding LaunchTrovesaurusMailCommand}">Trovesaurus Mail</Hyperlink>

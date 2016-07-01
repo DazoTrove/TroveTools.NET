@@ -17,18 +17,23 @@ namespace TroveTools.NET.Converter
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            string direction = parameter as string;
-            string property = values[0] as string;
-            string sortBy = values[1] as string;
-            ListSortDirection? sortDirection = values[2] as ListSortDirection?;
+            try
+            {
+                string direction = parameter as string;
+                string property = values[0] as string;
+                string sortBy = values[1] as string;
+                ListSortDirection? sortDirection = values[2] as ListSortDirection?;
 
-            //log.DebugFormat("Sorting indicator visibility: direction = [{0}], property = [{1}], sorting dir = [{2}], sorting by = [{3}]",
-            //    direction, property, sortDirection, sortBy);
+                //log.DebugFormat("Sorting indicator visibility: direction = [{0}], property = [{1}], sorting dir = [{2}], sorting by = [{3}]",
+                //    direction, property, sortDirection, sortBy);
 
-            if (direction == null || property == null || sortDirection == null || sortBy == null) return Visibility.Collapsed;
+                if (direction == null || property == null || sortDirection == null || sortBy == null) return Visibility.Collapsed;
 
-            return (sortBy == property && sortDirection.ToString().Equals(direction, StringComparison.OrdinalIgnoreCase)) ?
-                Visibility.Visible : Visibility.Collapsed;
+                return (sortBy == property && sortDirection.ToString().Equals(direction, StringComparison.OrdinalIgnoreCase)) ?
+                    Visibility.Visible : Visibility.Collapsed;
+            }
+            catch (Exception ex) { log.Error(string.Format("Error converting sort column details to visibility: [{0}]", values), ex); }
+            return Visibility.Collapsed;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

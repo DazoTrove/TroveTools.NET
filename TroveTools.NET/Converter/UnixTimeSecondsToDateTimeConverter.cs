@@ -15,8 +15,12 @@ namespace TroveTools.NET.Converter
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            long source;
-            if (long.TryParse(value.ToString(), out source)) return GetLocalDateTime(source);
+            try
+            {
+                long source;
+                if (long.TryParse(value?.ToString(), out source)) return GetLocalDateTime(source);
+            }
+            catch (Exception ex) { log.Error(string.Format("Error converting unix time to date and time: [{0}]", value), ex); }
             return null;
         }
 

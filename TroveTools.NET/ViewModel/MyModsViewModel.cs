@@ -233,11 +233,10 @@ namespace TroveTools.NET.ViewModel
         #region Private methods
         private void RefreshMods(object obj)
         {
-            log.Info("Checking all mods for updates");
-
             // Refresh mod list
             MainWindowViewModel.Instance.GetMoreMods.RefreshCommand.Execute(null);
 
+            log.Info("Checking all mods for updates");
             foreach (dynamic mod in MyMods)
             {
                 mod.CheckForUpdates();

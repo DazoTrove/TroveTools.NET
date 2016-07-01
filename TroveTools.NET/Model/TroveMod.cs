@@ -63,6 +63,7 @@ namespace TroveTools.NET.Model
         }
         #endregion
 
+        #region Download Class
         /// <summary>
         /// Individual download file for a mod from Trovesaurus
         /// </summary>
@@ -93,7 +94,8 @@ namespace TroveTools.NET.Model
             {
                 get { return UnixTimeSecondsToDateTimeConverter.GetLocalDateTime(Date); }
             }
-        }
+        } 
+        #endregion
 
         #region Trovesaurus Mod Properties
         [JsonProperty("id")]
@@ -180,7 +182,7 @@ namespace TroveTools.NET.Model
         [JsonIgnore]
         public bool CanUpdateMod
         {
-            get { return Status == Strings.TroveMod_Status_NewVersionAvailable || HasErrorStatus; }
+            get { return !string.IsNullOrEmpty(Id) && Downloads?.Count > 0 && (Status == Strings.TroveMod_Status_NewVersionAvailable || HasErrorStatus); }
         }
 
         [JsonIgnore]

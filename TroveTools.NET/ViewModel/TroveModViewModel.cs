@@ -96,7 +96,7 @@ namespace TroveTools.NET.ViewModel
                 if (File.Exists(path) || Directory.Exists(path))
                     Process.Start(path);
                 else
-                    log.ErrorFormat("File not found: [{0}]", path);
+                    log.ErrorFormat("Path not found: [{0}]", path);
             }
             catch (Exception ex) { log.Error(string.Format("Error launching path: [{0}]", path), ex); }
         }

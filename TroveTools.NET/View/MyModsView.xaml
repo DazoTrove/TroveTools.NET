@@ -58,6 +58,37 @@
                     <TextBlock Text="Open Mods Folder" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
+            <!-- Profiles -->
+            <!--<Separator/>
+            <StackPanel>
+                <ComboBox Width="125" Margin="3,3,3,3" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding ProfilesView}" />
+                <Grid Background="{StaticResource brushWatermarkBackground}" Style="{StaticResource EntryFieldStyle}" Margin="3,0,3,3">
+                    <TextBlock Margin="5,2" Text="New Profile Name" Foreground="{StaticResource brushWatermarkForeground}"
+                           Visibility="{Binding ElementName=ProfileNameField, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBox x:Name="ProfileNameField" Width="125" Background="Transparent" Text="{Binding ProfileName, UpdateSourceTrigger=PropertyChanged}" />
+                    <Button Style="{StaticResource BorderlessButton}" HorizontalAlignment="Right" Command="{Binding ClearProfileNameCommand}">
+                        <Image Width="13" Height="13" Source="/Resources/glyphicons-193-remove-sign.png" Margin="0,0,5,0" />
+                    </Button>
+                </Grid>
+            </StackPanel>
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding LoadProfileCommand}" Focusable="False" ToolTip="Load selected profile">
+                <StackPanel>
+                    <Image Source="/Resources/glyphicons-416-disk-open.png" Width="24" Height="23" Stretch="None" />
+                    <TextBlock Text="Load Profile" VerticalAlignment="Center" Margin="2" />
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding SaveProfileCommamd}" Focusable="False" ToolTip="Save enabled mods with new profile name">
+                <StackPanel>
+                    <Image Source="/Resources/glyphicons-415-disk-save.png" Width="24" Height="23" Stretch="None" />
+                    <TextBlock Text="Save Profile" VerticalAlignment="Center" Margin="2" />
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding CopyProfileLinkCommand}" Focusable="False" ToolTip="Copies a Trove:// URI schema link for the selected profile to your clipboard">
+                <StackPanel>
+                    <Image Source="/TroveTools.NET;component/Resources/glyphicons-512-copy.png" Width="24" Height="23" Stretch="None" />
+                    <TextBlock Text="Copy Link" VerticalAlignment="Center" Margin="2" />
+                </StackPanel>
+            </Button>-->
         </ToolBar>
         <ListView x:Name="MyModsList" SelectionMode="Single" AlternationCount="2" IsSynchronizedWithCurrentItem="True" Grid.IsSharedSizeScope="True"
                   ItemsSource="{Binding MyModsView}" ItemContainerStyle="{StaticResource ListViewItemStyle}" Grid.Row="1">
@@ -130,7 +161,7 @@
                                     </TextBlock>
                                     <TextBlock Text="{Binding Status}" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" />
                                     <Button Content="Update" VerticalAlignment="Center" Margin="6,0,0,0" Command="{Binding UpdateCommand}" HorizontalAlignment="Right"
-                                            Visibility="{Binding Path=CanUpdateMod, Converter={StaticResource BoolToVisConverter}}" Grid.Column="1" Grid.RowSpan="2" />
+                                            Visibility="{Binding Path=CanUpdateMod, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Column="1" Grid.RowSpan="2" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

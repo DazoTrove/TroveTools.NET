@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,10 +11,17 @@ namespace TroveTools.NET.Converter
 {
     class NullValueConverter : IValueConverter
     {
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string) return string.IsNullOrEmpty(value as string) ? parameter : value;
-            return value == null ? parameter : value;
+            try
+            {
+                if (value is string) return string.IsNullOrEmpty(value as string) ? parameter : value;
+                return value == null ? parameter : value;
+            }
+            catch (Exception ex) { log.Error(string.Format("Error checking for null value: [{0}]", value), ex); }
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

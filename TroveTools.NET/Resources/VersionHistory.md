@@ -1,14 +1,27 @@
 ﻿<div id="main_content_wrap" class="outer"><section id="main_content" class="inner">
 
-## Version 1.0.0.6 Beta (TBD)
+## Coming Soon
+- My Mods: mod profile/packs loading, saving, and sharing links with new Trove:// URI Schema link format
+- Launching Trove:// URI Schema links when the program is already running (new instance will pass the data in the background to the already running instance and close)
+
+## Version 1.0.0.6 Beta (6/30/2016)
 - Clicking on the tray icon balloon notification now restores the window in addition to clicking or double-clicking on the tray icon itself
 - Trovesaurus tab: sort event calendar by end date, and moved refresh button
 - Trovesaurus tab: refresh button now also refreshes mail and server status immediately
 - Updated Trovesaurus mail URL
+- Settings: added links to open Trove game folders
 - Mod Detail Pane: updated download date display to show full date and time
 - Get More Mods: added log message to display refresh timer (refreshes are allowed only every 30 seconds)
-- All tabs with toolbars: hide overflow button (window size has a minimum so overflow is never needed)
 - Get More Mods: updated default sort to Likes
+- Design/Style Updates
+  - All tabs with toolbars: hide overflow button (window size has a minimum so overflow is never needed)
+  - Mod Detail Pane: improved spacing between text fields
+  - All HTML data fields (news, mod descriptions, replaces, download changes, etc.) now use a simple stylesheet to reduce large spaces from paragraph and other tags
+- Bug Fixes and error prevention
+  - Updated all binding value converters to include error logging
+  - Mod Detail Pane: fixed date/time conversion issue for manually loaded mods
+  - Mod Detail Pane: downloads table is hidden for manually loaded mods that have no downloads
+  - My Mods: fixed update button to only display when a valid Trovesaurus ID and downloads are found for the mod
 
 ## Version 1.0.0.5 Beta (6/29/2016)
 - Trovesaurus tab with Trove news, online streams, mail message count, server status, and events/contests calendar

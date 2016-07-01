@@ -16,16 +16,26 @@ namespace TroveTools.NET.Converter
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string source = value as string;
-            if (string.IsNullOrEmpty(source)) return null;
-            return new Uri(new Uri(TrovesaurusApi.TrovesaurusBaseUrl), source).ToString();
+            try
+            {
+                string source = value as string;
+                if (string.IsNullOrEmpty(source)) return null;
+                return new Uri(new Uri(TrovesaurusApi.TrovesaurusBaseUrl), source).ToString();
+            }
+            catch (Exception ex) { log.Error(string.Format("Error converting image path: [{0}]", value), ex); }
+            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string url = value as string;
-            if (string.IsNullOrEmpty(url)) return null;
-            return new Uri(url).MakeRelativeUri(new Uri(TrovesaurusApi.TrovesaurusBaseUrl)).ToString();
+            try
+            {
+                string url = value as string;
+                if (string.IsNullOrEmpty(url)) return null;
+                return new Uri(url).MakeRelativeUri(new Uri(TrovesaurusApi.TrovesaurusBaseUrl)).ToString();
+            }
+            catch (Exception ex) { log.Error(string.Format("Error converting image path back: [{0}]", value), ex); }
+            return null;
         }
     }
 }

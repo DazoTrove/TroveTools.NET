@@ -64,6 +64,11 @@ namespace TroveTools.NET.ViewModel
         public NotifyAppender LogAppender { get; }
 
         public ObservableCollection<ViewModelBase> Workspaces { get; }
+
+        public string HtmlFieldStylesheet
+        {
+            get { return Resources.HtmlFieldStylesheet; }
+        }
         #endregion
 
         #region Commands

@@ -33,7 +33,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -339,6 +339,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\glyphicons-44-group.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\glyphicons-416-disk-open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\glyphicons-415-disk-save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\glyphicons-223-share.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\glyphicons-512-copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\HtmlFieldStylesheet.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

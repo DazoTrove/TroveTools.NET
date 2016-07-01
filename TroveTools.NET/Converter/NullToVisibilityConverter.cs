@@ -19,13 +19,18 @@ namespace TroveTools.NET.Converter
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string defaultValue = parameter as string;
-            Visibility invisibility = Visibility.Collapsed;
-            try { if (!string.IsNullOrEmpty(defaultValue)) invisibility = (Visibility)Enum.Parse(typeof(Visibility), defaultValue); }
-            catch (Exception ex) { log.Warn(string.Format("Invalid visibility parameter: [{0}]", parameter), ex); }
+            try
+            {
+                string defaultValue = parameter as string;
+                Visibility invisibility = Visibility.Collapsed;
+                try { if (!string.IsNullOrEmpty(defaultValue)) invisibility = (Visibility)Enum.Parse(typeof(Visibility), defaultValue); }
+                catch (Exception ex) { log.Warn(string.Format("Invalid visibility parameter: [{0}]", parameter), ex); }
 
-            if (value == null) return invisibility;
-            if (value.Equals(GetDefault(value.GetType()))) return invisibility;
+                if (value == null) return invisibility;
+                if (value is string && string.IsNullOrWhiteSpace(value as string)) return invisibility;
+                if (value.Equals(GetDefault(value.GetType()))) return invisibility;
+            }
+            catch (Exception ex) { log.Error(string.Format("Error converting value to visibility: [{0}]", value), ex); }
 
             return Visibility.Visible;
         }

@@ -5,7 +5,7 @@
                     xmlns:vm="clr-namespace:TroveTools.NET.ViewModel">
 
     <!-- Converters -->
-    <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <c:ImagePathConverter x:Key="ImagePathConverter" />
     <c:NullValueConverter x:Key="NullValueConverter" />
     <c:NullValueMultiConverter x:Key="NullValueMultiConverter" />
@@ -92,6 +92,15 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+    
+    <SolidColorBrush x:Key="brushWatermarkBackground" Color="White" />
+    <SolidColorBrush x:Key="brushWatermarkForeground" Color="LightSteelBlue" />
+    
+    <Style x:Key="EntryFieldStyle" TargetType="Grid" >
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,10,0" />
     </Style>
 
     <!-- Templates -->

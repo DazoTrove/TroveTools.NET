@@ -16,7 +16,7 @@ namespace TroveTools.NET.Converter
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return StringToBool(reader.Value.ToString());
+            return StringToBool(reader.Value?.ToString());
         }
 
         public override bool CanConvert(Type objectType)
