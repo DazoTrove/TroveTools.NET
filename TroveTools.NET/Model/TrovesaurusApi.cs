@@ -138,6 +138,7 @@ namespace TroveTools.NET.Model
             {
                 client.DownloadFile(string.Format(ModDownloadUrl, mod.Id, fileId), localPath);
             }
+            mod.CurrentFileId = fileId;
             try { mod.UnixTimeSeconds = Convert.ToInt64(unixDate); } catch { }
 
             return localPath;

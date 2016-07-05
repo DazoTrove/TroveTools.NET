@@ -16,7 +16,7 @@ namespace TroveTools.NET.ViewModel
     class TroveModViewModel : ViewModelBase<TroveMod>
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private DelegateCommand _UpdateCommand, _LaunchModSiteCommand;
+        private DelegateCommand _UpdateCommand, _LaunchModSiteCommand, _CopyModUriCommand;
         private DelegateCommand<string> _InstallCommand, _LaunchPathCommand;
 
         #region Constructors
@@ -86,9 +86,24 @@ namespace TroveTools.NET.ViewModel
                 return _InstallCommand;
             }
         }
+
+        public DelegateCommand CopyModUriCommand
+        {
+            get
+            {
+                if (_CopyModUriCommand == null) _CopyModUriCommand = new DelegateCommand(CallCopyModUri);
+                return _CopyModUriCommand;
+            }
+        }
         #endregion
 
         #region Private methods
+        private void CallUpdateMod(object param = null)
+        {
+            dynamic mod = this;
+            mod.UpdateMod();
+        }
+
         internal static void LaunchPath(string path)
         {
             try
@@ -135,10 +150,10 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
-        private void CallUpdateMod(object param = null)
+        private void CallCopyModUri(object param = null)
         {
             dynamic mod = this;
-            mod.UpdateMod();
+            mod.CopyModUri();
         }
         #endregion
     }

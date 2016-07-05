@@ -10,7 +10,7 @@ namespace TroveTools.NET.Model
 {
     class TroveServerStatus
     {
-        public class LiveStatus
+        public class ServerStatus
         {
             [JsonProperty("online"), JsonConverter(typeof(JsonBoolConverter))]
             public bool Online { get; set; }
@@ -25,23 +25,8 @@ namespace TroveTools.NET.Model
             }
         }
 
-        public class PublicTestServerStatus
-        {
-            [JsonProperty("online"), JsonConverter(typeof(JsonBoolConverter))]
-            public bool Online { get; set; }
+        public ServerStatus Live { get; set; }
 
-            [JsonProperty("date")]
-            public string Date { get; set; }
-
-            [JsonIgnore]
-            public DateTime DateTime
-            {
-                get { return UnixTimeSecondsToDateTimeConverter.GetLocalDateTime(Date); }
-            }
-        }
-
-        public LiveStatus Live { get; set; }
-
-        public PublicTestServerStatus PTS { get; set; }
+        public ServerStatus PTS { get; set; }
     }
 }

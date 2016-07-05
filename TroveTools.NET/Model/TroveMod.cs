@@ -13,6 +13,8 @@ using TroveTools.NET.Converter;
 using TroveTools.NET.DataAccess;
 using TroveTools.NET.Framework;
 using TroveTools.NET.Properties;
+using System.Runtime.Serialization;
+using System.Windows;
 
 namespace TroveTools.NET.Model
 {
@@ -23,8 +25,9 @@ namespace TroveTools.NET.Model
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public const string OverrideFolder = "override";
+        public const string IndexFile = "index.tfi";
         public const string FileTypeSearchPattern = "*.zip";
-        private bool _enabled = true;
+        public const string TroveUriFormat = "trove://{0};{1}";
         private static List<TroveMod> _myMods;
 
         #region Constructors
@@ -94,11 +97,11 @@ namespace TroveTools.NET.Model
             {
                 get { return UnixTimeSecondsToDateTimeConverter.GetLocalDateTime(Date); }
             }
-        } 
+        }
         #endregion
 
         #region Trovesaurus Mod Properties
-        [JsonProperty("id")]
+        [JsonProperty("id"), AffectsProperty("CanUpdateMod")]
         public string Id { get; set; }
 
         [JsonProperty("name")]
@@ -134,7 +137,7 @@ namespace TroveTools.NET.Model
         [JsonProperty("views")]
         public int Views { get; set; }
 
-        [JsonProperty("downloads")]
+        [JsonProperty("downloads"), AffectsProperty("CanUpdateMod"), AffectsProperty("LatestDownload"), AffectsProperty("CurrentDownload")]
         public List<Download> Downloads { get; set; }
 
         [JsonProperty("image")]
@@ -147,6 +150,7 @@ namespace TroveTools.NET.Model
         [AffectsProperty("CanUpdateMod")]
         public string Status { get; set; } = string.Empty;
 
+        private bool _enabled = true;
         [AffectsProperty("Status"), AffectsProperty("CanUpdateMod")]
         public bool Enabled
         {
@@ -164,6 +168,24 @@ namespace TroveTools.NET.Model
         }
 
         public long UnixTimeSeconds { get; set; }
+
+        private bool _UpdatesDisabled = false;
+        [AffectsProperty("CanUpdateMod")]
+        public bool UpdatesDisabled
+        {
+            get { return _UpdatesDisabled; }
+            set
+            {
+                _UpdatesDisabled = value;
+                if (_UpdatesDisabled)
+                    log.InfoFormat("Updates for mod '{0}' are now disabled", Name);
+                else
+                    log.InfoFormat("Updates for mod '{0}' are now enabled", Name);
+            }
+        }
+
+        [AffectsProperty("CurrentDownload")]
+        public string CurrentFileId { get; set; }
         #endregion
 
         #region Derived Properties
@@ -182,7 +204,7 @@ namespace TroveTools.NET.Model
         [JsonIgnore]
         public bool CanUpdateMod
         {
-            get { return !string.IsNullOrEmpty(Id) && Downloads?.Count > 0 && (Status == Strings.TroveMod_Status_NewVersionAvailable || HasErrorStatus); }
+            get { return !UpdatesDisabled && !string.IsNullOrEmpty(Id) && Downloads?.Count > 0 && (Status == Strings.TroveMod_Status_NewVersionAvailable || HasErrorStatus); }
         }
 
         [JsonIgnore]
@@ -196,9 +218,27 @@ namespace TroveTools.NET.Model
         {
             get
             {
-                string fileId = Downloads.Max(m => Convert.ToInt32(m.FileId)).ToString();
-                Download latest = Downloads.Where(m => m.FileId == fileId).First();
-                return latest;
+                try
+                {
+                    string fileId = Downloads.Max(m => Convert.ToInt32(m.FileId)).ToString();
+                    Download latest = Downloads.Where(m => m.FileId == fileId).FirstOrDefault();
+                    return latest;
+                }
+                catch (Exception ex)
+                {
+                    log.Error(string.Format("Error getting latest download for mod: {0}", Name), ex);
+                    return null;
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public Download CurrentDownload
+        {
+            get
+            {
+                Download current = Downloads.Where(m => m.FileId == CurrentFileId).FirstOrDefault();
+                return current;
             }
         }
         #endregion
@@ -315,12 +355,15 @@ namespace TroveTools.NET.Model
         /// Uninstalls mod from Trove folder
         /// </summary>
         [AffectsProperty("Status"), AffectsProperty("CanUpdateMod")]
-        public void UninstallMod()
+        public void UninstallMod(bool previousVersion = false)
         {
             if (string.IsNullOrEmpty(FilePath) || !File.Exists(FilePath)) return;
             try
             {
-                log.InfoFormat("Uninstalling mod: {0}", Name);
+                if (previousVersion)
+                    log.InfoFormat("Uninstalling previous version of mod: {0}{1}", Name, CurrentDownload != null ? string.Format(" (v {0})", CurrentDownload.Version) : null);
+                else
+                    log.InfoFormat("Uninstalling mod: {0}", Name);
 
                 // Uninstall mod from each enabled location
                 foreach (TroveLocation loc in TroveLocation.Locations.Where(l => l.Enabled))
@@ -411,10 +454,12 @@ namespace TroveTools.NET.Model
         {
             try
             {
+                // Uninstall existing mod prior to installing new version
+                string oldFile = FilePath;
+                if (Enabled && !string.IsNullOrEmpty(oldFile) && File.Exists(oldFile)) UninstallMod(true);
+
                 log.InfoFormat("Downloading mod: {0}", Name);
                 Status = Strings.TroveMod_Status_Downloading;
-
-                string oldFile = FilePath;
                 FilePath = TrovesaurusApi.DownloadMod(this);
 
                 if (!string.IsNullOrEmpty(oldFile) && FilePath != oldFile && File.Exists(oldFile))
@@ -443,10 +488,12 @@ namespace TroveTools.NET.Model
         {
             try
             {
+                // Uninstall existing mod prior to installing new version
+                string oldFile = FilePath;
+                if (Enabled && !string.IsNullOrEmpty(oldFile) && File.Exists(oldFile)) UninstallMod(true);
+
                 log.InfoFormat("Downloading mod: {0} with download file ID {1}", Name, fileId);
                 Status = Strings.TroveMod_Status_Downloading;
-
-                string oldFile = FilePath;
                 FilePath = TrovesaurusApi.DownloadMod(this, fileId);
 
                 if (!string.IsNullOrEmpty(oldFile) && FilePath != oldFile && File.Exists(oldFile))
@@ -467,9 +514,13 @@ namespace TroveTools.NET.Model
             }
         }
 
+        /// <summary>
+        /// Updates the current mod's properties from the provided mod object from Trovesaurus API
+        /// </summary>
+        /// <param name="mod"></param>
         [AffectsProperty("Id"), AffectsProperty("Name"), AffectsProperty("Author"), AffectsProperty("Type"), AffectsProperty("SubType"), AffectsProperty("Description"),
             AffectsProperty("DateCreated"), AffectsProperty("TrovesaurusStatus"), AffectsProperty("Replaces"), AffectsProperty("TotalDownloads"), AffectsProperty("Votes"),
-            AffectsProperty("Views"), AffectsProperty("Downloads"), AffectsProperty("ImagePath")]
+            AffectsProperty("Views"), AffectsProperty("Downloads"), AffectsProperty("ImagePath"), AffectsProperty("CurrentFileId")]
         public void UpdatePropertiesFromTrovesaurus(TroveMod mod)
         {
             if (mod != null)
@@ -488,7 +539,29 @@ namespace TroveTools.NET.Model
                 Views = mod.Views;
                 Downloads = new List<Download>(mod.Downloads);
                 ImagePath = mod.ImagePath;
+
+                // Get the current file ID using the file date if it is not already set
+                if (string.IsNullOrEmpty(CurrentFileId))
+                {
+                    var download = Downloads.FirstOrDefault(d => d.Date == UnixTimeSeconds.ToString());
+                    if (download != null) CurrentFileId = download.FileId;
+                }
             }
+        }
+
+        /// <summary>
+        /// Copies the mod installation URI to the clipboard
+        /// </summary>
+        public void CopyModUri()
+        {
+            if (string.IsNullOrEmpty(Id))
+            {
+                log.WarnFormat("Unable to copy mod URI for {0}: mod ID not found", Name, Id);
+                return;
+            }
+            string uri = string.Format(TroveUriFormat, Id, string.IsNullOrEmpty(CurrentFileId) ? LatestDownload.FileId : CurrentFileId);
+            Clipboard.SetText(uri);
+            log.InfoFormat("Copied mod installation URI for {0} to clipboard: {1}", Name, uri);
         }
 
         private TroveMod FindTrovesaurusMod()
@@ -505,7 +578,7 @@ namespace TroveTools.NET.Model
         {
             try
             {
-                log.Info("Removing Trove override folders");
+                log.Info("Removing all Trove override folders");
                 int count = 0;
                 foreach (TroveLocation loc in TroveLocation.Locations.Where(l => l.Enabled))
                 {
@@ -565,6 +638,10 @@ namespace TroveTools.NET.Model
             // Add override folder at deepest folder level if not already included in zip file
             if (!folder.EndsWith(OverrideFolder, StringComparison.OrdinalIgnoreCase)) folder = Path.Combine(folder, OverrideFolder);
 
+            // Check for valid installation location
+            if (!File.Exists(Path.Combine(Path.GetDirectoryName(folder), IndexFile)))
+                throw new TroveModException(string.Format("Incorrectly packaged mod: {0} is not an overridable folder (zip entry path: {1})", Path.GetDirectoryName(folder), entry.FullName));
+
             // Resolve folder path and combine with zip entry filename
             return Path.Combine(SettingsDataProvider.ResolveFolder(folder), entry.Name);
         }
@@ -598,5 +675,14 @@ namespace TroveTools.NET.Model
             }
         }
         #endregion
+    }
+
+    [Serializable]
+    class TroveModException : Exception
+    {
+        public TroveModException() { }
+        public TroveModException(string message) : base(message) { }
+        public TroveModException(string message, Exception innerException) : base(message, innerException) { }
+        protected TroveModException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

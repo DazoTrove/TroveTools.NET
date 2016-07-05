@@ -106,9 +106,7 @@ namespace TroveTools.NET.ViewModel
             try
             {
                 if (MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail) CheckMail();
-                log.Info("Checking server status");
                 ServerStatus = TrovesaurusApi.GetServerStatus();
-                //ServerStatusHtml = TrovesaurusApi.GetServerStatusHtml();
             }
             catch (Exception ex) { log.Error("Trovesaurus check status error", ex); }
         }
@@ -174,22 +172,6 @@ namespace TroveTools.NET.ViewModel
             {
                 _ServerStatus = value;
                 RaisePropertyChanged("ServerStatus");
-            }
-        }
-
-        private string _ServerStatusHtml = null;
-        public string ServerStatusHtml
-        {
-            get
-            {
-                try { if (_ServerStatusHtml == null) ServerStatusHtml = TrovesaurusApi.GetServerStatusHtml(); }
-                catch (Exception ex) { log.Error("Error retrieving server status HTML", ex); }
-                return _ServerStatusHtml;
-            }
-            set
-            {
-                _ServerStatusHtml = value;
-                RaisePropertyChanged("ServerStatusHtml");
             }
         }
 

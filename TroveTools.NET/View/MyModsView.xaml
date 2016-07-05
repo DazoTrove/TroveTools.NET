@@ -58,7 +58,7 @@
                     <TextBlock Text="Open Mods Folder" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
-            <!-- Profiles -->
+            <!-- Mod Packs -->
             <!--<Separator/>
             <StackPanel>
                 <ComboBox Width="125" Margin="3,3,3,3" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding ProfilesView}" />
@@ -92,6 +92,31 @@
         </ToolBar>
         <ListView x:Name="MyModsList" SelectionMode="Single" AlternationCount="2" IsSynchronizedWithCurrentItem="True" Grid.IsSharedSizeScope="True"
                   ItemsSource="{Binding MyModsView}" ItemContainerStyle="{StaticResource ListViewItemStyle}" Grid.Row="1">
+            <ListView.ContextMenu>
+                <ContextMenu DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                    <MenuItem Header="Disable mod updates" IsCheckable="True" IsChecked="{Binding SelectedItem.UpdatesDisabled}"/>
+                    <MenuItem Header="Mod enabled" IsCheckable="True" IsChecked="{Binding SelectedItem.Enabled}"/>
+                    <MenuItem Header="Remove Mod" Command="{Binding DataContext.RemoveModCommand}" CommandParameter="{Binding SelectedItem}"/>
+                    <Separator/>
+                    <MenuItem Command="{Binding SelectedItem.UpdateCommand}">
+                        <MenuItem.Header>
+                            <TextBlock Text="{Binding SelectedItem.LatestDownload, Mode=OneWay, StringFormat='Update mod to latest: {0}'}"/>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem Header="Other Downloads" ItemsSource="{Binding SelectedItem.Downloads}">
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header" Value="{Binding}"/>
+                                <Setter Property="Command" Value="{Binding DataContext.SelectedItem.InstallCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                <Setter Property="CommandParameter" Value="{Binding FileId}"/>
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="View mod page on Trovesaurus" Command="{Binding SelectedItem.LaunchModSiteCommand}"/>
+                    <MenuItem Header="Copy mod installation URI to Clipboard for sharing" Command="{Binding SelectedItem.CopyModUriCommand}"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.View>
                 <GridView AllowsColumnReorder="False" ColumnHeaderTemplate="{DynamicResource SortingColumnHeaderTemplate}">
                     <GridViewColumn Width="50">
@@ -159,7 +184,7 @@
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
-                                    <TextBlock Text="{Binding Status}" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" />
+                                    <TextBlock Text="{Binding Status}" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" ToolTip="{Binding Status}"/>
                                     <Button Content="Update" VerticalAlignment="Center" Margin="6,0,0,0" Command="{Binding UpdateCommand}" HorizontalAlignment="Right"
                                             Visibility="{Binding Path=CanUpdateMod, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Column="1" Grid.RowSpan="2" />
                                 </Grid>

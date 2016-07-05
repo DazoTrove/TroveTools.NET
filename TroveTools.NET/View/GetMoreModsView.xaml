@@ -55,21 +55,21 @@
                 <ContextMenu DataContext="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource Self}}">
                     <MenuItem Command="{Binding InstallCommand}">
                         <MenuItem.Header>
-                            <TextBlock>
-                                <TextBlock.Text>
-                                    <Binding StringFormat="Download Latest: {0}" Path="LatestDownload" Mode="OneWay" />
-                                </TextBlock.Text>
-                            </TextBlock>
+                            <TextBlock Text="{Binding LatestDownload, Mode=OneWay, StringFormat='Download latest: {0}'}"/>
                         </MenuItem.Header>
                     </MenuItem>
                     <MenuItem Header="Other Downloads" ItemsSource="{Binding Downloads}">
-                        <MenuItem.ItemTemplate>
-                            <DataTemplate>
-                                <MenuItem Header="{Binding}" Command="{Binding DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" CommandParameter="{Binding FileId}" />
-                            </DataTemplate>
-                        </MenuItem.ItemTemplate>
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header" Value="{Binding}"/>
+                                <Setter Property="Command" Value="{Binding DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                <Setter Property="CommandParameter" Value="{Binding FileId}"/>
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
                     </MenuItem>
-                    <MenuItem Command="{Binding LaunchModSiteCommand}" Header="View mod page on Trovesaurus"/>
+                    <Separator/>
+                    <MenuItem Header="View mod page on Trovesaurus" Command="{Binding LaunchModSiteCommand}"/>
+                    <MenuItem Header="Copy mod installation URI to Clipboard for sharing" Command="{Binding CopyModUriCommand}"/>
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>

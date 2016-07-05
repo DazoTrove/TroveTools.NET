@@ -87,6 +87,7 @@ namespace TroveTools.NET.ViewModel
         public void Closing()
         {
             StopUpdateTimer();
+            SaveMyMods();
         }
 
         public void StartUpdateTimer(TimeSpan autoUpdateInterval)
@@ -257,10 +258,10 @@ namespace TroveTools.NET.ViewModel
         {
             try
             {
-                log.Info("Checking all mods for updates and installing updates if available");
-
                 // Refresh mod list
                 MainWindowViewModel.Instance.GetMoreMods.RefreshCommand.Execute(null);
+
+                log.Info("Checking all mods for updates and installing updates if available");
 
                 // Update all mods
                 foreach (dynamic mod in MyMods)

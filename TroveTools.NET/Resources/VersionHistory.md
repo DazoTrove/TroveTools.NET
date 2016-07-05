@@ -1,8 +1,19 @@
 ﻿<div id="main_content_wrap" class="outer"><section id="main_content" class="inner">
 
 ## Coming Soon
-- My Mods: mod profile/packs loading, saving, and sharing links with new Trove:// URI Schema link format
-- Launching Trove:// URI Schema links when the program is already running (new instance will pass the data in the background to the already running instance and close)
+- My Mods: mod packs management including loading, saving, and sharing links to mod packs with a new Trove:// URI Schema link format
+- Launching Trove:// URI schema links when the program is already running (new instance will pass the data in the background to the already running instance and close)
+
+## Version 1.0.0.7 Beta
+- My Mods: check for valid mod zip file format before installing. The folder(s) where the zip file will be extracted must contain an index.tfi file before an override folder is automatically created
+- My Mods: disable updates per mod with right click context menu option
+- My Mods and Get More Mods: copy Trove:// URI schema links with right click context menu command
+- Style Update
+  - My Mods: changed status to use text trimming with an elipsis and a tooltip for long error messages
+- Bug Fixes
+  - Trovesaurus tab: fixed server status not displaying date and time properly when offline
+  - My Mods: the current version of a mod is uninstalled before updating to a new version of a mod to properly remove files that were in an old version but not included in the latest version
+  - Get More Mods: updated right click context menu for downloads to remove extra spacing
 
 ## Version 1.0.0.6 Beta (6/30/2016)
 - Clicking on the tray icon balloon notification now restores the window in addition to clicking or double-clicking on the tray icon itself
