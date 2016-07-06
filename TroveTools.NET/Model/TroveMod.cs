@@ -220,8 +220,8 @@ namespace TroveTools.NET.Model
             {
                 try
                 {
-                    string fileId = Downloads.Max(m => Convert.ToInt32(m.FileId)).ToString();
-                    Download latest = Downloads.Where(m => m.FileId == fileId).FirstOrDefault();
+                    string fileId = Downloads?.Max(m => Convert.ToInt32(m.FileId)).ToString();
+                    Download latest = Downloads?.Where(m => m.FileId == fileId).FirstOrDefault();
                     return latest;
                 }
                 catch (Exception ex)
@@ -237,8 +237,16 @@ namespace TroveTools.NET.Model
         {
             get
             {
-                Download current = Downloads.Where(m => m.FileId == CurrentFileId).FirstOrDefault();
-                return current;
+                try
+                {
+                    Download current = Downloads?.Where(m => m.FileId == CurrentFileId).FirstOrDefault();
+                    return current;
+                }
+                catch (Exception ex)
+                {
+                    log.Error(string.Format("Error getting current download for mod: {0}", Name), ex);
+                    return null;
+                }
             }
         }
         #endregion
@@ -420,7 +428,7 @@ namespace TroveTools.NET.Model
                 // Verify mod zip file exists
                 if (!File.Exists(FilePath))
                 {
-                    log.ErrorFormat("File [{0}] not found", FilePath);
+                    log.ErrorFormat("File [{0}] not found for mod {1}", FilePath, Name);
                     Status = string.Format(Strings.TroveMod_Status_Error, "File not found");
                     Enabled = false;
                     return;

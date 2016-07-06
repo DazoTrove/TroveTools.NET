@@ -47,23 +47,23 @@
             <TextBlock Grid.Row="0" Grid.Column="1">
                 <Hyperlink Command="{Binding LaunchModSiteCommand}"><Bold><Run Text="{Binding Name}"/></Bold></Hyperlink>
             </TextBlock>
-            <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap">
+            <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Visibility="{Binding Author, Converter={StaticResource NullToVisibilityConverter}}">
                 <Bold>Authors:</Bold> <Run Text="{Binding Author, Converter={StaticResource MultiLineStringConverter}}"/>
             </TextBlock>
             <TextBlock Grid.Row="2" Grid.Column="1" TextWrapping="Wrap">
                 <Bold>Downloads:</Bold> <Run Text="{Binding TotalDownloads, StringFormat=N0}"/>, <Bold>Views:</Bold> <Run Text="{Binding Views, StringFormat=N0}"/>,
                 <Bold>Likes:</Bold> <Run Text="{Binding Votes, StringFormat=N0}"/>
             </TextBlock>
-            <TextBlock Grid.Row="3" Grid.Column="1" TextWrapping="Wrap">
+            <TextBlock Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" Visibility="{Binding TrovesaurusStatus, Converter={StaticResource NullToVisibilityConverter}}">
                 <Bold>Trovesaurus Status:</Bold> <Run Text="{Binding TrovesaurusStatus}"/>
             </TextBlock>
             <TextBlock Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" Visibility="{Binding Status, Converter={StaticResource NullToVisibilityConverter}}">
                 <Bold>Status:</Bold> <Run Text="{Binding Status}"/>
             </TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="2">
+            <TextBlock Grid.Row="0" Grid.Column="2" Visibility="{Binding Type, Converter={StaticResource NullToVisibilityConverter}}">
                 <Bold>Type:</Bold> <Run Text="{Binding Type}"/> <Run Text="{Binding SubType}"/>
             </TextBlock>
-            <TextBlock Grid.Row="1" Grid.Column="2">
+            <TextBlock Grid.Row="1" Grid.Column="2" Visibility="{Binding DateCreated, Converter={StaticResource NullToVisibilityConverter}}">
                 <Bold>Created:</Bold> <Run Text="{Binding DateCreated, Converter={StaticResource UnixTimeSecondsToDateTimeConverter}, StringFormat=g}"/>
             </TextBlock>
             <TextBlock Grid.Row="2" Grid.Column="2">

@@ -21,7 +21,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -32,8 +32,12 @@
         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=DisplayName, Source={x:Static vm:MainWindowViewModel.Instance}}" Style="{StaticResource OribitronFontTextBlock}"
                    FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Margin="10,0" TextWrapping="Wrap" />
         <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap" Margin="10,0">
-            <Hyperlink Command="{Binding LaunchFeedbackCommand}">
-                Provide your feedback! Check out the GitHub issues page to report any bugs, view some of my planned enhancements, or suggest enhancements of your own.
+            Provide your feedback!<LineBreak/>
+            • <Hyperlink Command="{Binding LaunchFeedbackCommand}">
+                Check out the GitHub issues page to report any bugs, view some of my planned enhancements, or suggest enhancements of your own.
+            </Hyperlink><LineBreak/>
+            • <Hyperlink Command="{Binding LaunchFeedbackCommand}" CommandParameter="Forum">
+                Comment on the Trove Forum post for TroveTools.NET
             </Hyperlink>
         </TextBlock>
         <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1" Grid.Row="2" Grid.ColumnSpan="2" Margin="10">

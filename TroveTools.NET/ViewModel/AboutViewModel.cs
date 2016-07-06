@@ -14,25 +14,31 @@ namespace TroveTools.NET.ViewModel
     class AboutViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private DelegateCommand _LaunchFeedbackCommand;
+        private DelegateCommand<string> _LaunchFeedbackCommand;
 
         public AboutViewModel()
         {
             DisplayName = Strings.AboutViewModel_DisplayName;
         }
 
-        public DelegateCommand LaunchFeedbackCommand
+        public DelegateCommand<string> LaunchFeedbackCommand
         {
             get
             {
-                if (_LaunchFeedbackCommand == null) _LaunchFeedbackCommand = new DelegateCommand(LaunchFeedback);
+                if (_LaunchFeedbackCommand == null) _LaunchFeedbackCommand = new DelegateCommand<string>(LaunchFeedback);
                 return _LaunchFeedbackCommand;
             }
         }
 
-        private void LaunchFeedback(object param = null)
+        private void LaunchFeedback(string param = null)
         {
-            try { AboutTroveTools.LaunchFeedback(); }
+            try
+            {
+                if (param == "Forum")
+                    AboutTroveTools.LauchForumPost();
+                else
+                    AboutTroveTools.LaunchFeedback();
+            }
             catch (Exception ex) { log.Error("Error launching feeback", ex); }
         }
 

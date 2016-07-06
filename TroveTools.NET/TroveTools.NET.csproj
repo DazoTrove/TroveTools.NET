@@ -33,7 +33,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>9</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -145,7 +145,10 @@
     <Compile Include="Converter\UnixTimeSecondsToDateTimeConverter.cs" />
     <Compile Include="DataAccess\RegistrySettings.cs" />
     <Compile Include="DataAccess\SettingsDataProvider.cs" />
+    <Compile Include="Framework\AppInstanceManager.cs" />
+    <Compile Include="Framework\IIpcClient.cs" />
     <Compile Include="Framework\NotifyAppender.cs" />
+    <Compile Include="Framework\SharedMemoryCommon.cs" />
     <Compile Include="Framework\WebClientExtended.cs">
       <SubType>Component</SubType>
     </Compile>

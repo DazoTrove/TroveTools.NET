@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using TroveTools.NET.Framework;
 using TroveTools.NET.Model;
@@ -19,6 +20,8 @@ namespace TroveTools.NET.ViewModel
         private static readonly MainWindowViewModel _instance;
 
         private DelegateCommand _LoadDataCommand, _ClosingCommand;
+        private bool _dataLoaded = false;
+        private string _savedTroveUri = null;
 
         #region Constructors
         static MainWindowViewModel()
@@ -94,14 +97,24 @@ namespace TroveTools.NET.ViewModel
         #region Public Methods
         public void LoadData(object param = null)
         {
-            // Load data for each of the workspaces
-            Settings.LoadData();
-            GetMoreMods.LoadData();
-            MyMods.LoadData();
-            Trovesaurus.LoadData();
+            try
+            {
+                // Load data for each of the workspaces
+                Settings.LoadData();
+                GetMoreMods.LoadData();
+                MyMods.LoadData();
+                Trovesaurus.LoadData();
 
-            var args = ApplicationDetails.GetApplicationArguments();
-            if (args != null) TroveUriInstallMod(args.ModId, args.FileId);
+                _dataLoaded = true;
+
+                // Process saved Trove URI to handle case when Trove URI link clicked before application was fully loaded
+                if (!string.IsNullOrEmpty(_savedTroveUri)) ProcessTroveUri(_savedTroveUri);
+
+                // Process a URI from the command line args if there are any
+                ProcessTroveUri(ApplicationDetails.GetTroveUri());
+            }
+            catch (Exception ex) { log.Error("Error loading main window data", ex); }
+            finally { _dataLoaded = true; }
         }
 
         public void Closing(object param = null)
@@ -109,6 +122,22 @@ namespace TroveTools.NET.ViewModel
             Settings.Closing();
             MyMods.Closing();
             Trovesaurus.Closing();
+        }
+
+        public void ProcessTroveUri(string troveUri)
+        {
+            if (string.IsNullOrEmpty(troveUri)) return;
+            if (Application.Current.Dispatcher.CheckAccess())
+            {
+                if (_dataLoaded)
+                {
+                    log.InfoFormat("Processing Trove URI: {0}", troveUri);
+                    var args = ApplicationDetails.GetApplicationArguments(troveUri);
+                    if (args != null) TroveUriInstallMod(args.ModId, args.FileId);
+                }
+                else _savedTroveUri = troveUri;
+            }
+            else Application.Current.Dispatcher.Invoke(() => ProcessTroveUri(troveUri));
         }
 
         public void TroveUriInstallMod(string modId, string fileId)

@@ -48,31 +48,50 @@ namespace TroveTools.NET.Model
         }
 
         /// <summary>
-        /// Parses command line arguments for mod links (ex: trove://6;12) to return a mod ID and file ID for installation
+        /// Parses the command line arguments and activation data for Trove:// mod links
         /// </summary>
-        internal static AppArgs GetApplicationArguments()
+        internal static string GetTroveUri()
         {
-            // First try parsing traditional command line args
-            Regex modParse = new Regex(@"trove:[/\\]{0,2}(?<ModId>\d+);(?<FileId>\d+)", RegexOptions.IgnoreCase);
-
-            string[] args = Environment.GetCommandLineArgs();
-            if (args.Length > 1)
+            try
             {
-                Match m = modParse.Match(args[1]);
-                if (m.Success)
-                    return new AppArgs() { ModId = m.Groups["ModId"].Value, FileId = m.Groups["FileId"].Value };
-                else
-                    log.WarnFormat("Unknown command line argument: [{0}]", args[1]);
+                Regex uriParse = new Regex(@"(?<Uri>trove:[/\\]{0,2}.+)$", RegexOptions.IgnoreCase);
+
+                // First try parsing traditional command line args
+                var args = Environment.GetCommandLineArgs();
+                if (args.Length > 1)
+                {
+                    Match m = uriParse.Match(args[1]);
+                    if (m.Success) return m.Groups["Uri"].Value;
+                }
+
+                // Next try parsing ClickOnce activation arguments from the SetupInformation property of the domain
+                string[] activationData = AppDomain.CurrentDomain.SetupInformation?.ActivationArguments?.ActivationData;
+                if (activationData != null)
+                {
+                    Match m = uriParse.Match(activationData[0]);
+                    if (m.Success) return m.Groups["Uri"].Value;
+                }
             }
+            catch (Exception ex) { log.Error("Error parsing command line arguments for Trove URI", ex); }
+            return null;
+        }
 
-            // Next try parsing ClickOnce activation arguments from the SetupInformation property of the domain
-            string[] activationData = AppDomain.CurrentDomain.SetupInformation?.ActivationArguments?.ActivationData;
-            if (activationData != null)
+        /// <summary>
+        /// Parses the given URI for mod links (ex: trove://6;12) to return a mod ID and file ID for installation
+        /// </summary>
+        internal static AppArgs GetApplicationArguments(string uri)
+        {
+            try
             {
-                Match m = modParse.Match(activationData[0]);
+                if (uri == null) return null;
+
+                Regex modParse = new Regex(@"trove:[/\\]{0,2}(?<ModId>\d+);(?<FileId>\d+)", RegexOptions.IgnoreCase);
+                Match m = modParse.Match(uri);
                 if (m.Success) return new AppArgs() { ModId = m.Groups["ModId"].Value, FileId = m.Groups["FileId"].Value };
-            }
 
+                log.WarnFormat("Unknown Trove:// URI format: [{0}]", uri);
+            }
+            catch (Exception ex) { log.Error(string.Format("Error parsing Trove URI for mod details: [{0}]", uri), ex); }
             return null;
         }
 

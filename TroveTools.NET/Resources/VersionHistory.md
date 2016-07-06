@@ -2,9 +2,15 @@
 
 ## Coming Soon
 - My Mods: mod packs management including loading, saving, and sharing links to mod packs with a new Trove:// URI Schema link format
-- Launching Trove:// URI schema links when the program is already running (new instance will pass the data in the background to the already running instance and close)
 
-## Version 1.0.0.7 Beta
+## Version 1.0.0.8 Beta (7/5/2016)
+- About: added [link to forum post](http://forums.trovegame.com/showthread.php?103168-Mod-Loader-TroveTools.NET-created-by-Dazo-(for-Windows-PCs)) for feedback
+- Mod Detail Pane: hide many fields when they contain no data for custom mods installed from zip files
+- Trove:// URI schema links now work when the program is already running (the new instance passes the data in the background to the already running instance and closes)
+- Bug Fix
+  - My Mods: fixed exception when loading custom mods installed from zip files
+
+## Version 1.0.0.7 Beta (7/4/2016)
 - My Mods: check for valid mod zip file format before installing. The folder(s) where the zip file will be extracted must contain an index.tfi file before an override folder is automatically created
 - My Mods: disable updates per mod with right click context menu option
 - My Mods and Get More Mods: copy Trove:// URI schema links with right click context menu command
