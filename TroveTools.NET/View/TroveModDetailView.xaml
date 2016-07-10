@@ -37,7 +37,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}" MaxHeight="90" MaxWidth="90" Margin="0,0,6,0">
+            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Source="{Binding ImagePath, Converter={c:ImagePathConverter}}" MaxHeight="90" MaxWidth="90" Margin="0,0,6,0">
                 <Image.ToolTip>
                     <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
                         <Image Source="{Binding Source}" MaxHeight="300" MaxWidth="300" />
@@ -47,32 +47,32 @@
             <TextBlock Grid.Row="0" Grid.Column="1">
                 <Hyperlink Command="{Binding LaunchModSiteCommand}"><Bold><Run Text="{Binding Name}"/></Bold></Hyperlink>
             </TextBlock>
-            <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Visibility="{Binding Author, Converter={StaticResource NullToVisibilityConverter}}">
-                <Bold>Authors:</Bold> <Run Text="{Binding Author, Converter={StaticResource MultiLineStringConverter}}"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Visibility="{Binding Author, Converter={c:NullToVisibilityConverter}}">
+                <Bold>Authors:</Bold> <Run Text="{Binding Author, Converter={c:MultiLineStringConverter}}"/>
             </TextBlock>
             <TextBlock Grid.Row="2" Grid.Column="1" TextWrapping="Wrap">
                 <Bold>Downloads:</Bold> <Run Text="{Binding TotalDownloads, StringFormat=N0}"/>, <Bold>Views:</Bold> <Run Text="{Binding Views, StringFormat=N0}"/>,
                 <Bold>Likes:</Bold> <Run Text="{Binding Votes, StringFormat=N0}"/>
             </TextBlock>
-            <TextBlock Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" Visibility="{Binding TrovesaurusStatus, Converter={StaticResource NullToVisibilityConverter}}">
+            <TextBlock Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" Visibility="{Binding TrovesaurusStatus, Converter={c:NullToVisibilityConverter}}">
                 <Bold>Trovesaurus Status:</Bold> <Run Text="{Binding TrovesaurusStatus}"/>
             </TextBlock>
-            <TextBlock Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" Visibility="{Binding Status, Converter={StaticResource NullToVisibilityConverter}}">
+            <TextBlock Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" Visibility="{Binding Status, Converter={c:NullToVisibilityConverter}}">
                 <Bold>Status:</Bold> <Run Text="{Binding Status}"/>
             </TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="2" Visibility="{Binding Type, Converter={StaticResource NullToVisibilityConverter}}">
+            <TextBlock Grid.Row="0" Grid.Column="2" Visibility="{Binding Type, Converter={c:NullToVisibilityConverter}}">
                 <Bold>Type:</Bold> <Run Text="{Binding Type}"/> <Run Text="{Binding SubType}"/>
             </TextBlock>
-            <TextBlock Grid.Row="1" Grid.Column="2" Visibility="{Binding DateCreated, Converter={StaticResource NullToVisibilityConverter}}">
-                <Bold>Created:</Bold> <Run Text="{Binding DateCreated, Converter={StaticResource UnixTimeSecondsToDateTimeConverter}, StringFormat=g}"/>
+            <TextBlock Grid.Row="1" Grid.Column="2" Visibility="{Binding DateCreated, Converter={c:NullToVisibilityConverter}}">
+                <Bold>Created:</Bold> <Run Text="{Binding DateCreated, Converter={c:UnixTimeSecondsToDateTimeConverter}, StringFormat=g}"/>
             </TextBlock>
             <TextBlock Grid.Row="2" Grid.Column="2">
                 <Bold>Last Updated:</Bold> <Run Text="{Binding LastUpdated, StringFormat=g}"/>
             </TextBlock>
-            <TextBlock Grid.Row="3" Grid.Column="2" Visibility="{Binding CurrentDownload, Converter={StaticResource NullToVisibilityConverter}}">
+            <TextBlock Grid.Row="3" Grid.Column="2" Visibility="{Binding CurrentDownload, Converter={c:NullToVisibilityConverter}}">
                 <Bold>Current Version:</Bold> v <Run Text="{Binding Path=CurrentDownload.Version, Mode=OneWay}"/>
             </TextBlock>
-            <TextBlock Grid.Row="4" Grid.Column="2" Visibility="{Binding FilePath, Converter={StaticResource NullToVisibilityConverter}}" TextWrapping="Wrap">
+            <TextBlock Grid.Row="4" Grid.Column="2" Visibility="{Binding FilePath, Converter={c:NullToVisibilityConverter}}" TextWrapping="Wrap">
                 <Bold>Path:</Bold> <Hyperlink Command="{Binding LaunchPathCommand}" CommandParameter="{Binding FilePath}"><Run Text="{Binding FilePath}"/></Hyperlink>
             </TextBlock>
 
@@ -129,7 +129,7 @@
                                 <wpf:HtmlLabel Grid.Column="1" Text="{Binding Changes}" AutoSizeHeightOnly="True" Margin="3" IsSelectionEnabled="False"
                                                BaseStylesheet="{Binding Source={x:Static vm:MainWindowViewModel.Instance}, Path=HtmlFieldStylesheet, Mode=OneWay}"/>
                                 <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Downloads, Mode=OneWay, StringFormat=N0}" HorizontalAlignment="Center" Margin="3"/>
-                                <TextBlock Grid.Column="3" VerticalAlignment="Center" FontStyle="Italic" ToolTip="{Binding DateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                <TextBlock Grid.Column="3" VerticalAlignment="Center" FontStyle="Italic" ToolTip="{Binding DateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
                                        Text="{Binding DateTime, StringFormat=g, Mode=OneWay}" Margin="3"/>
                             </Grid>
                         </Border>
@@ -147,11 +147,11 @@
             </HeaderedItemsControl>
 
             <!-- Replaces -->
-            <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,5,0,5" Visibility="{Binding Replaces, Converter={StaticResource NullToVisibilityConverter}}">
+            <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,5,0,5" Visibility="{Binding Replaces, Converter={c:NullToVisibilityConverter}}">
                 <Bold>Mod Replaces:</Bold>
             </TextBlock>
             <wpf:HtmlLabel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" AutoSizeHeightOnly="True" IsSelectionEnabled="False" Margin="0,5,0,5"
-                           Visibility="{Binding Replaces, Converter={StaticResource NullToVisibilityConverter}}" Text="{Binding Replaces}"
+                           Visibility="{Binding Replaces, Converter={c:NullToVisibilityConverter}}" Text="{Binding Replaces}"
                            BaseStylesheet="{Binding Source={x:Static vm:MainWindowViewModel.Instance}, Path=HtmlFieldStylesheet, Mode=OneWay}"/>
         </Grid>
     </ScrollViewer>

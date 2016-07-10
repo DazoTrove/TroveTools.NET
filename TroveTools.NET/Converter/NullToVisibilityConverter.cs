@@ -10,14 +10,16 @@ using System.Windows.Data;
 
 namespace TroveTools.NET.Converter
 {
+
     /// <summary>
     /// Returns a Visibility object depending on whether the value passed is null and the passed parameter to select between collapsed and hidden 
     /// </summary>
-    class NullToVisibilityConverter : IValueConverter
+    [ValueConversion(typeof(object), typeof(Visibility))]
+    class NullToVisibilityConverter : ConverterMarkupExtension<NullToVisibilityConverter>
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             try
             {
@@ -35,7 +37,7 @@ namespace TroveTools.NET.Converter
             return Visibility.Visible;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

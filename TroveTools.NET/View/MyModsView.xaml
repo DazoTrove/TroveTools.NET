@@ -21,77 +21,163 @@
             <RowDefinition Height="250"/>
         </Grid.RowDefinitions>
         <ToolBar ToolBarTray.IsLocked="True" Grid.Row="0" Loaded="ToolBar_Loaded">
-            <Button Name="AddModsButton" HorizontalAlignment="Left" VerticalAlignment="Top" Click="AddModsButton_Click" Focusable="False">
+            <Button Name="AddModsButton" HorizontalAlignment="Left" VerticalAlignment="Top" Click="AddModsButton_Click" Focusable="False" ToolTip="Add custom mod zip files">
                 <StackPanel>
                     <Image Source="/Resources/glyphicons-191-plus-sign.png" Width="26" Height="26" Stretch="None" />
                     <TextBlock Text="Add Mods" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False"
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False" ToolTip="Remove the selected mod"
                     Command="{Binding RemoveModCommand}" CommandParameter="{Binding MyModsView.CurrentItem}">
                 <StackPanel>
                     <Image Source="/TroveTools.NET;component/Resources/glyphicons-193-remove-sign.png" Width="26" Height="26" Stretch="None" />
                     <TextBlock Text="Remove Mod" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding RefreshCommand}" Focusable="False">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding RefreshCommand}" Focusable="False" ToolTip="Refreshes list of mods and checks for updates">
                 <StackPanel>
                     <Image Source="/TroveTools.NET;component/Resources/glyphicons-82-refresh.png" Width="26" Height="26" Stretch="None" />
                     <TextBlock Text="Refresh" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding UpdateAllCommand}" Focusable="False">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding UpdateAllCommand}" Focusable="False" ToolTip="Updates all mods to the latest version">
                 <StackPanel>
                     <Image Source="/Resources/glyphicons-182-download-alt.png" Width="26" Height="26" Stretch="None" />
                     <TextBlock Text="Update All" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding UninstallAllCommand}" Focusable="False">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding UninstallAllCommand}" Focusable="False" ToolTip="Uninstalls all mods and deletes all override folders">
                 <StackPanel>
                     <Image Source="/Resources/glyphicons-198-remove-circle.png" Width="26" Height="26" Stretch="None" />
                     <TextBlock Text="Uninstall All" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding LaunchModsFolderCommand}" Focusable="False">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding LaunchModsFolderCommand}" Focusable="False" ToolTip="Open Mods Folder">
                 <StackPanel>
                     <Image Source="/Resources/glyphicons-145-folder-open.png" Width="26" Height="26" Stretch="None" />
-                    <TextBlock Text="Open Mods Folder" VerticalAlignment="Center" Margin="2" />
+                    <TextBlock Text="Mods Folder" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
             <!-- Mod Packs -->
-            <!--<Separator/>
+            <Separator/>
             <StackPanel>
-                <ComboBox Width="125" Margin="3,3,3,3" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding ProfilesView}" />
+                <ComboBox Width="125" Margin="3,3,3,3" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding ModPacksView}" Padding="3" MaxDropDownHeight="600">
+                    <ComboBox.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock FontWeight="Bold" Margin="3,3,3,3" FontSize="16">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock" BasedOn="{StaticResource OribitronFontTextBlock}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Name}" Value="Trovesaurus">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                            <Run Text="{Binding Name, Mode=OneWay}"/> Mod Packs
+                                        </TextBlock>
+                                        <TextBlock FontWeight="Bold" Margin="3,3,3,3" FontSize="16">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock" BasedOn="{StaticResource OribitronFontTextBlock}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Name}" Value="Local">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                            <Hyperlink Command="{Binding DataContext.LaunchTrovesaurusModPacksCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                                <Run Text="{Binding Name, Mode=OneWay}"/> Mod Packs
+                                            </Hyperlink>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ComboBox.GroupStyle>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="Bold" Text="{Binding Name}"/>
+                                <TextBlock Visibility="{Binding Author, Converter={c:NullToVisibilityConverter}}">
+                                    : Created by <Run Text="{Binding Author}" FontStyle="Italic"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <Grid Background="{StaticResource brushWatermarkBackground}" Style="{StaticResource EntryFieldStyle}" Margin="3,0,3,3">
-                    <TextBlock Margin="5,2" Text="New Profile Name" Foreground="{StaticResource brushWatermarkForeground}"
-                           Visibility="{Binding ElementName=ProfileNameField, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    <TextBox x:Name="ProfileNameField" Width="125" Background="Transparent" Text="{Binding ProfileName, UpdateSourceTrigger=PropertyChanged}" />
-                    <Button Style="{StaticResource BorderlessButton}" HorizontalAlignment="Right" Command="{Binding ClearProfileNameCommand}">
+                    <TextBlock Margin="5,2" Text="New Pack Name" Foreground="{StaticResource brushWatermarkForeground}"
+                               Visibility="{Binding ElementName=ModPackNameField, Path=Text.IsEmpty, Converter={c:BooleanToVisibilityConverter}}" />
+                    <TextBox x:Name="ModPackNameField" Width="125" Background="Transparent" ToolTip="New Mod Pack Name" Text="{Binding ModPackName, UpdateSourceTrigger=PropertyChanged}" />
+                    <Button Style="{StaticResource BorderlessButton}" HorizontalAlignment="Right" Command="{Binding ClearModPackNameCommand}">
                         <Image Width="13" Height="13" Source="/Resources/glyphicons-193-remove-sign.png" Margin="0,0,5,0" />
                     </Button>
                 </Grid>
             </StackPanel>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding LoadProfileCommand}" Focusable="False" ToolTip="Load selected profile">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding LoadModPackCommand}" CommandParameter="{Binding ModPacksView.CurrentItem}"
+                    Focusable="False" ToolTip="Load selected mod pack">
                 <StackPanel>
                     <Image Source="/Resources/glyphicons-416-disk-open.png" Width="24" Height="23" Stretch="None" />
-                    <TextBlock Text="Load Profile" VerticalAlignment="Center" Margin="2" />
+                    <TextBlock Text="Load Pack" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding SaveProfileCommamd}" Focusable="False" ToolTip="Save enabled mods with new profile name">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding RemoveModPackCommand}" CommandParameter="{Binding ModPacksView.CurrentItem}"
+                    Focusable="False" ToolTip="Remove selected mod pack">
+                <StackPanel>
+                    <Image Source="/Resources/glyphicons-208-remove.png" Width="24" Height="23" Stretch="None" />
+                    <TextBlock Text="Remove Pack" VerticalAlignment="Center" Margin="2" />
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding SaveModPackCommamd}" CommandParameter="{Binding ModPackName}"
+                    Focusable="False" ToolTip="Save all enabled standalone mods with the new mod pack name">
                 <StackPanel>
                     <Image Source="/Resources/glyphicons-415-disk-save.png" Width="24" Height="23" Stretch="None" />
-                    <TextBlock Text="Save Profile" VerticalAlignment="Center" Margin="2" />
+                    <TextBlock Text="Save Pack" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
             </Button>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding CopyProfileLinkCommand}" Focusable="False" ToolTip="Copies a Trove:// URI schema link for the selected profile to your clipboard">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding CopyModPackLinkCommand}" CommandParameter="{Binding ModPacksView.CurrentItem}"
+                    Focusable="False" ToolTip="Copies a Trove:// URI schema link for the selected mod pack to your clipboard">
                 <StackPanel>
                     <Image Source="/TroveTools.NET;component/Resources/glyphicons-512-copy.png" Width="24" Height="23" Stretch="None" />
                     <TextBlock Text="Copy Link" VerticalAlignment="Center" Margin="2" />
                 </StackPanel>
-            </Button>-->
+            </Button>
         </ToolBar>
+        <!-- My Mods List -->
         <ListView x:Name="MyModsList" SelectionMode="Single" AlternationCount="2" IsSynchronizedWithCurrentItem="True" Grid.IsSharedSizeScope="True"
                   ItemsSource="{Binding MyModsView}" ItemContainerStyle="{StaticResource ListViewItemStyle}" Grid.Row="1">
+            <ListView.InputBindings>
+                <KeyBinding Command="{Binding RemoveModCommand}" CommandParameter="{Binding MyModsView.CurrentItem}" Key="Delete" />
+            </ListView.InputBindings>
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Expander IsExpanded="True">
+                                            <Expander.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <CheckBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" IsThreeState="True" ToolTip="All Mods Enabled" VerticalAlignment="Center"
+                                                              IsChecked="{Binding Path=Name.ModsEnabled, Mode=TwoWay}" Visibility="{Binding Name, Converter={c:NullToVisibilityConverter}}"/>
+                                                    <TextBlock FontWeight="Bold" Margin="3,3,3,3" Style="{StaticResource OribitronFontTextBlock}" FontSize="14"
+                                                               Text="{Binding Name, Mode=OneWay, Converter={c:NullValueConverter}, ConverterParameter='Standalone Mods'}"/>
+                                                </StackPanel>
+                                            </Expander.Header>
+                                            <ItemsPresenter />
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListView.GroupStyle>
             <ListView.ContextMenu>
                 <ContextMenu DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
                     <MenuItem Header="Disable mod updates" IsCheckable="True" IsChecked="{Binding SelectedItem.UpdatesDisabled}"/>
@@ -123,7 +209,7 @@
                         <GridViewColumnHeader Tag="Image" IsHitTestVisible="False"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}" MaxWidth="50" MaxHeight="50">
+                                <Image Source="{Binding ImagePath, Converter={c:ImagePathConverter}}" MaxWidth="50" MaxHeight="50">
                                     <Image.ToolTip>
                                         <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
                                             <Image Source="{Binding Source}" MaxHeight="300" MaxWidth="300" />
@@ -151,7 +237,7 @@
                                     <TextBlock Grid.Row="0" Grid.Column="1" Margin="6,0,0,0">
                                         <Hyperlink Command="{Binding LaunchModSiteCommand}"><TextBlock Text="{Binding Name}"/></Hyperlink>
                                     </TextBlock>
-                                    <TextBlock Grid.Row="1" Grid.Column="1" Margin="6,0,0,0" Text="{Binding Author, Converter={StaticResource MultiLineStringConverter}}" />
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Margin="6,0,0,0" Text="{Binding Author, Converter={c:MultiLineStringConverter}}" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -186,7 +272,7 @@
                                     </TextBlock>
                                     <TextBlock Text="{Binding Status}" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" ToolTip="{Binding Status}"/>
                                     <Button Content="Update" VerticalAlignment="Center" Margin="6,0,0,0" Command="{Binding UpdateCommand}" HorizontalAlignment="Right"
-                                            Visibility="{Binding Path=CanUpdateMod, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Column="1" Grid.RowSpan="2" />
+                                            Visibility="{Binding Path=CanUpdateMod, Converter={c:BooleanToVisibilityConverter}}" Grid.Column="1" Grid.RowSpan="2" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -204,6 +290,6 @@
         </ListView>
         <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" Style="{StaticResource HorizontalGridSplitter}" />
         <vw:TroveModDetailView DataContext="{Binding SelectedItem, ElementName=MyModsList}" Grid.Row="3"
-                               Visibility="{Binding SelectedItem, ElementName=MyModsList, Converter={StaticResource NullToVisibilityConverter}}" />
+                               Visibility="{Binding SelectedItem, ElementName=MyModsList, Converter={c:NullToVisibilityConverter}}" />
     </Grid>
 </UserControl>

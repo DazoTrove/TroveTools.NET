@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:c="clr-namespace:TroveTools.NET.Converter"
              xmlns:vw="clr-namespace:TroveTools.NET.View"
              xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
              mc:Ignorable="d" 
@@ -115,7 +116,7 @@
                 <ComboBox Margin="0,5,0,0" Grid.Row="2" Grid.Column="2" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding AutoUpdateIntervalsView}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource DateTimeOrTimeSpanStringConverter}}" />
+                            <TextBlock Text="{Binding Converter={c:DateTimeOrTimeSpanStringConverter}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>

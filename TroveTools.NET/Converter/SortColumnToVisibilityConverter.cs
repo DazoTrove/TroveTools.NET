@@ -11,11 +11,11 @@ using System.Windows.Data;
 
 namespace TroveTools.NET.Converter
 {
-    class SortColumnToVisibilityConverter : IMultiValueConverter
+    class SortColumnToVisibilityConverter : MultiConverterMarkupExtension<SortColumnToVisibilityConverter>
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace TroveTools.NET.Converter
             return Visibility.Collapsed;
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        public override object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

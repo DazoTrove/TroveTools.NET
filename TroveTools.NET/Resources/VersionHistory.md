@@ -1,7 +1,16 @@
 ﻿<div id="main_content_wrap" class="outer"><section id="main_content" class="inner">
 
-## Coming Soon
-- My Mods: mod packs management including loading, saving, and sharing links to mod packs with a new Trove:// URI Schema link format
+## Version 1.1.0 Release (7/6/2016)
+- My Mods: new mod pack management features
+  - Loading mod packs from Trovesaurus and local mod packs. The dropdown populates automatically and includes a link to the Trovesaurus mod packs page where you can compile your own packs to share with others
+  - Removing local mod packs
+  - Saving all enabled standalone mods as a local mod pack
+  - Copying Trove:// URI protocol links for Trovesaurus and local mod packs. New URI format is **trove://modpack=PackId** for Trovesaurus mod packs, and **trove://Pack+Name?ModId1&amp;ModId2&amp;...&amp;ModIdN** for local mod packs
+- Trovesaurus API requests now include details to identify that requests came from the TroveTools.NET mod loader to help Etaew track usage metrics
+- Trovesaurus server status is now hidden if no data was returned from the Trovesaurus API
+- My Mods: added delete key shortcut to remove the selected mod
+- Bug Fix
+  - Trovesaurus server status web calls are now limited to once every 30 seconds, and should no longer cause a stack overflow exception crash
 
 ## Version 1.0.0.8 Beta (7/5/2016)
 - About: added [link to forum post](http://forums.trovegame.com/showthread.php?103168-Mod-Loader-TroveTools.NET-created-by-Dazo-(for-Windows-PCs)) for feedback

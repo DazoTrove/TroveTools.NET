@@ -13,7 +13,7 @@ namespace TroveTools.NET.Model
 {
     static class ApplicationDetails
     {
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static string GetCurrentVersion()
         {
@@ -85,9 +85,14 @@ namespace TroveTools.NET.Model
             {
                 if (uri == null) return null;
 
-                Regex modParse = new Regex(@"trove:[/\\]{0,2}(?<ModId>\d+);(?<FileId>\d+)", RegexOptions.IgnoreCase);
-                Match m = modParse.Match(uri);
-                if (m.Success) return new AppArgs() { ModId = m.Groups["ModId"].Value, FileId = m.Groups["FileId"].Value };
+                Match m = Regex.Match(uri, @"trove:[/\\]{0,2}(?<ModId>\d+);(?<FileId>\d+)", RegexOptions.IgnoreCase);
+                if (m.Success) return new AppArgs { LinkType = AppArgs.LinkTypes.Mod, ModId = m.Groups["ModId"].Value, FileId = m.Groups["FileId"].Value, Uri = uri };
+
+                m = Regex.Match(uri, TroveModPack.IdUriRegex, RegexOptions.IgnoreCase);
+                if (m.Success) return new AppArgs { LinkType = AppArgs.LinkTypes.ModPack, Uri = uri };
+
+                m = Regex.Match(uri, TroveModPack.AdHocUriRegex, RegexOptions.IgnoreCase);
+                if (m.Success) return new AppArgs { LinkType = AppArgs.LinkTypes.ModPack, Uri = uri };
 
                 log.WarnFormat("Unknown Trove:// URI format: [{0}]", uri);
             }
@@ -97,8 +102,11 @@ namespace TroveTools.NET.Model
 
         internal class AppArgs
         {
+            public enum LinkTypes { Mod, ModPack }
+            public LinkTypes LinkType { get; set; }
             public string ModId { get; set; }
             public string FileId { get; set; }
+            public string Uri { get; set; }
         }
     }
 }

@@ -186,6 +186,8 @@ namespace TroveTools.NET.Model
 
         [AffectsProperty("CurrentDownload")]
         public string CurrentFileId { get; set; }
+
+        public string PackName { get; set; }
         #endregion
 
         #region Derived Properties
@@ -221,7 +223,7 @@ namespace TroveTools.NET.Model
                 try
                 {
                     string fileId = Downloads?.Max(m => Convert.ToInt32(m.FileId)).ToString();
-                    Download latest = Downloads?.Where(m => m.FileId == fileId).FirstOrDefault();
+                    Download latest = Downloads?.FirstOrDefault(m => m.FileId == fileId);
                     return latest;
                 }
                 catch (Exception ex)
@@ -239,7 +241,7 @@ namespace TroveTools.NET.Model
             {
                 try
                 {
-                    Download current = Downloads?.Where(m => m.FileId == CurrentFileId).FirstOrDefault();
+                    Download current = Downloads?.FirstOrDefault(m => m.FileId == CurrentFileId);
                     return current;
                 }
                 catch (Exception ex)
@@ -333,16 +335,19 @@ namespace TroveTools.NET.Model
                             {
                                 // Skip over folder entries
                                 if (string.IsNullOrEmpty(entry.Name)) continue;
+
                                 string extractPath = GetZipEntryExtractPath(loc, entry);
-
-                                if (log.IsInfoEnabled && File.Exists(extractPath)) log.InfoFormat("Overwriting existing file: {0}", extractPath);
-
-                                // Extract entry from zip file
-                                using (var outputStream = File.Create(extractPath))
+                                if (extractPath != null)
                                 {
-                                    using (var inputStream = entry.Open())
+                                    if (log.IsInfoEnabled && File.Exists(extractPath)) log.InfoFormat("Overwriting existing file: {0}", extractPath);
+
+                                    // Extract entry from zip file
+                                    using (var outputStream = File.Create(extractPath))
                                     {
-                                        inputStream.CopyTo(outputStream);
+                                        using (var inputStream = entry.Open())
+                                        {
+                                            inputStream.CopyTo(outputStream);
+                                        }
                                     }
                                 }
                             }
@@ -574,11 +579,9 @@ namespace TroveTools.NET.Model
 
         private TroveMod FindTrovesaurusMod()
         {
-            var ic = StringComparison.OrdinalIgnoreCase;
-            var mod = TrovesaurusApi.ModList.Where(m => m.Id.Equals(Id, ic)).FirstOrDefault();
-            if (mod == null) mod = TrovesaurusApi.ModList.Where(m => FilterModFilename(m.Name).Equals(FilterModFilename(Name), ic)).FirstOrDefault();
-            return mod;
+            return TrovesaurusApi.GetMod(Id, Name);
         }
+
         #endregion
 
         #region Public Static Methods and Properties
@@ -648,7 +651,10 @@ namespace TroveTools.NET.Model
 
             // Check for valid installation location
             if (!File.Exists(Path.Combine(Path.GetDirectoryName(folder), IndexFile)))
-                throw new TroveModException(string.Format("Incorrectly packaged mod: {0} is not an overridable folder (zip entry path: {1})", Path.GetDirectoryName(folder), entry.FullName));
+            {
+                log.ErrorFormat("Incorrectly packaged mod: {0} is not an overridable folder (zip entry path: {1})", Path.GetDirectoryName(folder), entry.FullName);
+                return null;
+            }
 
             // Resolve folder path and combine with zip entry filename
             return Path.Combine(SettingsDataProvider.ResolveFolder(folder), entry.Name);

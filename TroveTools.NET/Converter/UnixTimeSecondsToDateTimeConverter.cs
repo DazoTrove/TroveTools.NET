@@ -9,11 +9,12 @@ using System.Windows.Data;
 
 namespace TroveTools.NET.Converter
 {
-    class UnixTimeSecondsToDateTimeConverter : IValueConverter
+    [ValueConversion(typeof(object), typeof(DateTime))]
+    class UnixTimeSecondsToDateTimeConverter : ConverterMarkupExtension<UnixTimeSecondsToDateTimeConverter>
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             try
             {
@@ -24,7 +25,7 @@ namespace TroveTools.NET.Converter
             return null;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null) return null;
             DateTime source = (DateTime)value;

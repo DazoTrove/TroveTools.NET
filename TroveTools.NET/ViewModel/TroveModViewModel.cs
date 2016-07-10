@@ -37,6 +37,17 @@ namespace TroveTools.NET.ViewModel
             get { return MainWindowViewModel.Instance.MyMods.MyMods.Any(m => m.DataObject.Id == DataObject.Id); }
         }
 
+        private TroveModPackViewModel _ModPack;
+        public TroveModPackViewModel ModPack
+        {
+            get { return _ModPack; }
+            set
+            {
+                _ModPack = value;
+                RaisePropertyChanged("ModPack");
+            }
+        }
+
         /// <summary>
         /// Returns the version name and date of the latest download
         /// </summary>
@@ -122,7 +133,7 @@ namespace TroveTools.NET.ViewModel
             {
                 dynamic mod = null;
 
-                var existingMod = MainWindowViewModel.Instance.MyMods.MyMods.Where(m => m.DataObject.Id == DataObject.Id).FirstOrDefault();
+                var existingMod = MainWindowViewModel.Instance.MyMods.MyMods.FirstOrDefault(m => m.DataObject.Id == DataObject.Id);
                 if (existingMod != null)
                 {
                     // Update Mod from Trovesaurus
@@ -152,8 +163,7 @@ namespace TroveTools.NET.ViewModel
 
         private void CallCopyModUri(object param = null)
         {
-            dynamic mod = this;
-            mod.CopyModUri();
+            DataObject.CopyModUri();
         }
         #endregion
     }

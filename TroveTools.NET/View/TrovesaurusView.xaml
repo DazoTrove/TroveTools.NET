@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:c="clr-namespace:TroveTools.NET.Converter"
              xmlns:vw="clr-namespace:TroveTools.NET.View"
              xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
              xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
@@ -68,7 +69,7 @@
                                             <TextBlock Margin="3">
                                                 <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
                                                            CommandParameter="{Binding Url, Mode=OneWay}" ToolTip="{Binding Url, Mode=OneWay}" Foreground="{x:Null}">
-                                                    <Image MaxWidth="214" MaxHeight="120" Source="{Binding PreviewImage, Converter={StaticResource ImagePathConverter}}">
+                                                    <Image MaxWidth="214" MaxHeight="120" Source="{Binding PreviewImage, Converter={c:ImagePathConverter}}">
                                                         <!--<Image.ToolTip>
                                                             <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
                                                                 <Image Source="{Binding Source}" MaxWidth="320" MaxHeight="320"/>
@@ -118,7 +119,7 @@
                                     <TextBlock Margin="5" Grid.Row="0" Grid.Column="0">
                                         <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
                                                    CommandParameter="{Binding Url}" ToolTip="{Binding Url}" Foreground="{x:Null}">
-                                            <Image MaxWidth="225" Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}"/>
+                                            <Image MaxWidth="225" Source="{Binding ImagePath, Converter={c:ImagePathConverter}}"/>
                                         </Hyperlink>
                                     </TextBlock>
                                     <TextBlock TextWrapping="Wrap" FontSize="14" Grid.Row="0" Grid.Column="1" Margin="5">
@@ -127,13 +128,13 @@
                                             <Run Text="{Binding Title}"/>
                                         </Hyperlink><LineBreak/>
                                         by <Run FontWeight="Bold" Text="{Binding Author}"/>
-                                        posted <Run FontStyle="Italic" Text="{Binding Date, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                        posted <Run FontStyle="Italic" Text="{Binding Date, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
                                                     ToolTip="{Binding Date, StringFormat=g}"/>
                                         <LineBreak/>
                                         <wpf:HtmlLabel Text="{Binding PreviewHtml}" AutoSizeHeightOnly="True"
                                                        BaseStylesheet="{Binding Source={x:Static vm:MainWindowViewModel.Instance}, Path=HtmlFieldStylesheet, Mode=OneWay}"/><LineBreak/>
-                                        <Run FontWeight="Bold" Text="{Binding Views, Converter={StaticResource QuantityToStringConverter}, ConverterParameter='view'}"/>,
-                                        <Run FontWeight="Bold" Text="{Binding Comments, Converter={StaticResource QuantityToStringConverter}, ConverterParameter='comment'}"/><LineBreak/>
+                                        <Run FontWeight="Bold" Text="{Binding Views, Converter={c:QuantityToStringConverter}, ConverterParameter='view'}"/>,
+                                        <Run FontWeight="Bold" Text="{Binding Comments, Converter={c:QuantityToStringConverter}, ConverterParameter='comment'}"/><LineBreak/>
                                         
                                         <ItemsControl ItemsSource="{Binding Tags}">
                                             <ItemsControl.ItemsPanel>
@@ -172,7 +173,7 @@
         </ToolBar>
 
         <!-- Trove Server Status -->
-        <GroupBox Grid.Row="1" Grid.Column="1" FontSize="14" Margin="5">
+        <GroupBox Grid.Row="1" Grid.Column="1" FontSize="14" Margin="5" DataContext="{Binding ServerStatus}" Visibility="{Binding Converter={c:NullToVisibilityConverter}}">
             <GroupBox.Header>
                 <TextBlock FontWeight="Bold" Style="{StaticResource OribitronFontTextBlock}">
                     <Hyperlink Command="{Binding LaunchServerStatusCommand}">Trove Server Status</Hyperlink>
@@ -180,7 +181,7 @@
             </GroupBox.Header>
             <StackPanel>
                 <!-- Live Server Status -->
-                <ContentControl FontSize="14" Margin="5" DataContext="{Binding ServerStatus.Live}">
+                <ContentControl FontSize="14" Margin="5" DataContext="{Binding Live}">
                     <ContentControl.Style>
                         <Style TargetType="ContentControl">
                             <Style.Triggers>
@@ -191,7 +192,7 @@
                                                 <TextBlock Foreground="Red">
                                                     <Bold>Live Server:</Bold> Offline
                                                     <Image Source="/Resources/glyphicons-193-remove-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
-                                                    <Bold>Since:</Bold> <Run Text="{Binding DataContext.DateTime, Mode=OneWay, Converter={StaticResource DateTimeOrTimeSpanStringConverter},
+                                                    <Bold>Since:</Bold> <Run Text="{Binding DataContext.DateTime, Mode=OneWay, Converter={c:DateTimeOrTimeSpanStringConverter},
                                                                                             RelativeSource={RelativeSource AncestorType=ContentControl}}"
                                                                              ToolTip="{Binding DataContext.DateTime, Mode=OneWay, StringFormat=g,
                                                                                                RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
@@ -206,13 +207,13 @@
                     <TextBlock Foreground="Green">
                         <Bold>Live Server:</Bold> Online
                         <Image Source="/Resources/glyphicons-194-ok-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
-                        <Bold>Since:</Bold> <Run Text="{Binding DateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                        <Bold>Since:</Bold> <Run Text="{Binding DateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
                                                  ToolTip="{Binding DateTime, StringFormat=g}"/>
                     </TextBlock>
                 </ContentControl>
 
                 <!-- PTS Server Status -->
-                <ContentControl FontSize="14" Margin="5" DataContext="{Binding ServerStatus.PTS}">
+                <ContentControl FontSize="14" Margin="5" DataContext="{Binding PTS}">
                     <ContentControl.Style>
                         <Style TargetType="ContentControl">
                             <Style.Triggers>
@@ -223,7 +224,7 @@
                                                 <TextBlock Foreground="Red">
                                                     <Bold ToolTip="Public Test Server">PTS:</Bold> Offline
                                                     <Image Source="/Resources/glyphicons-193-remove-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
-                                                    <Bold>Since:</Bold> <Run Text="{Binding DataContext.DateTime, Mode=OneWay, Converter={StaticResource DateTimeOrTimeSpanStringConverter},
+                                                    <Bold>Since:</Bold> <Run Text="{Binding DataContext.DateTime, Mode=OneWay, Converter={c:DateTimeOrTimeSpanStringConverter},
                                                                                             RelativeSource={RelativeSource AncestorType=ContentControl}}"
                                                                              ToolTip="{Binding DataContext.DateTime, Mode=OneWay, StringFormat=g,
                                                                                                RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
@@ -238,7 +239,7 @@
                     <TextBlock Foreground="Green">
                         <Bold ToolTip="Public Test Server">PTS:</Bold> Online
                         <Image Source="/Resources/glyphicons-194-ok-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
-                        <Bold>Since:</Bold> <Run Text="{Binding Path=DateTime, Mode=OneWay, Converter={StaticResource DateTimeOrTimeSpanStringConverter}}"
+                        <Bold>Since:</Bold> <Run Text="{Binding Path=DateTime, Mode=OneWay, Converter={c:DateTimeOrTimeSpanStringConverter}}"
                                                  ToolTip="{Binding Path=DateTime, Mode=OneWay, StringFormat=g}"/>
                     </TextBlock>
                 </ContentControl>
@@ -247,7 +248,7 @@
 
         <!-- Trovesaurus Mail -->
         <GroupBox Grid.Row="2" Grid.Column="1" Margin="5" FontSize="14"
-                  Visibility="{Binding Source={x:Static vm:MainWindowViewModel.Instance}, Path=Settings.TrovesaurusCheckMail, Converter={StaticResource BooleanToVisibilityConverter}}">
+                  Visibility="{Binding Source={x:Static vm:MainWindowViewModel.Instance}, Path=Settings.TrovesaurusCheckMail, Converter={c:BooleanToVisibilityConverter}}">
             <GroupBox.Header>
                 <TextBlock FontWeight="Bold" Style="{StaticResource OribitronFontTextBlock}">
                     <Hyperlink Command="{Binding LaunchTrovesaurusMailCommand}">Trovesaurus Mail</Hyperlink>
@@ -302,9 +303,9 @@
                                                CommandParameter="{Binding Url}" ToolTip="{Binding Url}">
                                         <Run FontWeight="Bold" Text="{Binding Name, Mode=OneWay}"/>
                                     </Hyperlink><LineBreak/>
-                                    Start Date: <Run FontStyle="Italic" Text="{Binding StartDateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                    Start Date: <Run FontStyle="Italic" Text="{Binding StartDateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
                                                      ToolTip="{Binding StartDateTime, StringFormat=g}"/><LineBreak/>
-                                    End Date: <Run FontStyle="Italic" Text="{Binding EndDateTime, Converter={StaticResource DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                    End Date: <Run FontStyle="Italic" Text="{Binding EndDateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
                                                    ToolTip="{Binding EndDateTime, StringFormat=g}"/>
                                 </TextBlock>
                             </Border>

@@ -142,7 +142,7 @@ p img {
 pre, code {
   width: 100%;
   color: #222;
-  background-color: #fff;
+  background-color: #eee;
 
   font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   font-size: 14px;
@@ -161,7 +161,8 @@ pre {
 
 code {
   padding: 3px;
-  margin: 0 3px;
+  margin: 0;
+  vertical-align: text-bottom;
   box-shadow: 0 0 10px rgba(0,0,0,.1);
 }
 

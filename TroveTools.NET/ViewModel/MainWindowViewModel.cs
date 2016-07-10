@@ -101,9 +101,9 @@ namespace TroveTools.NET.ViewModel
             {
                 // Load data for each of the workspaces
                 Settings.LoadData();
+                Trovesaurus.LoadData();
                 GetMoreMods.LoadData();
                 MyMods.LoadData();
-                Trovesaurus.LoadData();
 
                 _dataLoaded = true;
 
@@ -133,7 +133,12 @@ namespace TroveTools.NET.ViewModel
                 {
                     log.InfoFormat("Processing Trove URI: {0}", troveUri);
                     var args = ApplicationDetails.GetApplicationArguments(troveUri);
-                    if (args != null) TroveUriInstallMod(args.ModId, args.FileId);
+                    if (args != null)
+                    {
+                        SetActiveWorkspace(MyMods);
+                        if (args.LinkType == ApplicationDetails.AppArgs.LinkTypes.Mod) TroveUriInstallMod(args.ModId, args.FileId);
+                        if (args.LinkType == ApplicationDetails.AppArgs.LinkTypes.ModPack) MyMods.TroveUriInstallModPack(args.Uri);
+                    }
                 }
                 else _savedTroveUri = troveUri;
             }
@@ -143,7 +148,7 @@ namespace TroveTools.NET.ViewModel
         public void TroveUriInstallMod(string modId, string fileId)
         {
             log.InfoFormat("Installing mod id [{0}], file id [{1}] from Trove URI argument", modId, fileId);
-            var modVm = GetMoreMods.TrovesaurusMods.Where(mod => mod.DataObject.Id == modId).FirstOrDefault();
+            var modVm = GetMoreMods.TrovesaurusMods.FirstOrDefault(mod => mod.DataObject.Id == modId);
             if (modVm != null)
                 modVm.InstallCommand.Execute(fileId);
             else

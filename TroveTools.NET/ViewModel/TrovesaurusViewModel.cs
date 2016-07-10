@@ -23,6 +23,7 @@ namespace TroveTools.NET.ViewModel
         private DelegateCommand _RefreshDataCommand;
         private CollectionViewSource _NewsView = new CollectionViewSource(), _CalendarView = new CollectionViewSource(), _StreamsView = new CollectionViewSource();
         private DispatcherTimer _StatusTimer = null;
+        private DateTime lastUpdated = DateTime.MinValue;
 
         public TrovesaurusViewModel()
         {
@@ -79,14 +80,13 @@ namespace TroveTools.NET.ViewModel
                     log.Error("Trovesaurus mail checking requires that a valid account link key is entered");
                     MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail = false;
                 }
-                TimeSpan checkInterval = new TimeSpan(0, 0, 30);
+                TimeSpan checkInterval = new TimeSpan(0, 1, 0);
                 log.InfoFormat("Starting Trovesaurus server status and mail check timer, checking every {0}", checkInterval.ToUserFriendlyString());
                 if (_StatusTimer == null)
                 {
                     _StatusTimer = new DispatcherTimer();
                     _StatusTimer.Tick += (s, e) => CheckStatus();
                 }
-                CheckStatus();
                 _StatusTimer.Interval = checkInterval;
                 _StatusTimer.Start();
             }
@@ -106,16 +106,29 @@ namespace TroveTools.NET.ViewModel
             try
             {
                 if (MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail) CheckMail();
-                ServerStatus = TrovesaurusApi.GetServerStatus();
+                RefreshServerStatus();
             }
             catch (Exception ex) { log.Error("Trovesaurus check status error", ex); }
+        }
+
+        private void RefreshServerStatus()
+        {
+            try
+            {
+                if (lastUpdated < DateTime.Now.AddSeconds(-25))
+                {
+                    lastUpdated = DateTime.Now;
+                    ServerStatus = TrovesaurusApi.GetServerStatus();
+                }
+            }
+            catch (Exception ex) { log.Error("Error refreshing server status", ex); }
         }
 
         private void CheckMail()
         {
             try
             {
-                MailCount = TrovesaurusApi.GetMailCount(MainWindowViewModel.Instance.Settings.TrovesaurusAccountLinkKey);
+                MailCount = TrovesaurusApi.GetMailCount();
                 log.InfoFormat("Checked Trovesaurus mail: {0} new Trovesaurus mail message{1}", MailCount, MailCount == 1 ? "" : "s");
             }
             catch (Exception ex) { log.Error("Error checking Trovesaurus mail", ex); }
@@ -164,14 +177,13 @@ namespace TroveTools.NET.ViewModel
         {
             get
             {
-                try { if (_ServerStatus == null) ServerStatus = TrovesaurusApi.GetServerStatus(); }
-                catch (Exception ex) { log.Error("Error retrieving server status", ex); }
+                if (_ServerStatus == null) RefreshServerStatus();
                 return _ServerStatus;
             }
             set
             {
                 _ServerStatus = value;
-                RaisePropertyChanged("ServerStatus");
+                if (value != null) RaisePropertyChanged("ServerStatus");
             }
         }
 

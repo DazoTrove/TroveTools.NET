@@ -28,7 +28,7 @@
             <Image Source="/Resources/glyphicons-28-search.png" Width="18" Height="18" Margin="0,0,5,0" />
             <Grid Background="{StaticResource brushWatermarkBackground}" Style="{StaticResource EntryFieldStyle}">
                 <TextBlock Margin="5,2" Text="Search" Foreground="{StaticResource brushWatermarkForeground}"
-                           Visibility="{Binding ElementName=SearchModsField, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                           Visibility="{Binding ElementName=SearchModsField, Path=Text.IsEmpty, Converter={c:BooleanToVisibilityConverter}}" />
                 <TextBox x:Name="SearchModsField" Width="200" Background="Transparent" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}" />
                 <Button Style="{StaticResource BorderlessButton}" HorizontalAlignment="Right" Command="{Binding ClearSearchCommand}">
                     <Image Width="13" Height="13" Source="/Resources/glyphicons-193-remove-sign.png" Margin="0,0,5,0" />
@@ -78,7 +78,7 @@
                         <GridViewColumnHeader IsHitTestVisible="False" Tag="Image"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}}" MaxWidth="50" MaxHeight="50">
+                                <Image Source="{Binding ImagePath, Converter={c:ImagePathConverter}}" MaxWidth="50" MaxHeight="50">
                                     <Image.ToolTip>
                                         <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
                                             <Image Source="{Binding Source}" MaxHeight="300" MaxWidth="300" />
@@ -101,7 +101,7 @@
                                     <TextBlock Grid.Row="0">
                                         <Hyperlink Command="{Binding LaunchModSiteCommand}"><Run Text="{Binding Name}"/></Hyperlink>
                                     </TextBlock>
-                                    <TextBlock Text="{Binding Author, Converter={StaticResource MultiLineStringConverter}}" Grid.Row="1" />
+                                    <TextBlock Text="{Binding Author, Converter={c:MultiLineStringConverter}}" Grid.Row="1" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -190,6 +190,6 @@
         </ListView>
         <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" Style="{StaticResource HorizontalGridSplitter}" />
         <vw:TroveModDetailView DataContext="{Binding SelectedItem, ElementName=TrovesaurusModsList}" Grid.Row="3"
-                               Visibility="{Binding SelectedItem, ElementName=TrovesaurusModsList, Converter={StaticResource NullToVisibilityConverter}}" />
+                               Visibility="{Binding SelectedItem, ElementName=TrovesaurusModsList, Converter={c:NullToVisibilityConverter}}" />
     </Grid>
 </UserControl>

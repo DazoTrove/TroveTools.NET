@@ -10,11 +10,12 @@ using System.Windows.Data;
 
 namespace TroveTools.NET.Converter
 {
-    class QuantityToStringConverter : IValueConverter
+    [ValueConversion(typeof(object), typeof(string))]
+    class QuantityToStringConverter : ConverterMarkupExtension<QuantityToStringConverter>
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             try
             {
@@ -26,7 +27,7 @@ namespace TroveTools.NET.Converter
             return value;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

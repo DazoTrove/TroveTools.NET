@@ -5,7 +5,7 @@
                     xmlns:vm="clr-namespace:TroveTools.NET.ViewModel">
 
     <!-- Converters -->
-    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <!--<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <c:ImagePathConverter x:Key="ImagePathConverter" />
     <c:NullValueConverter x:Key="NullValueConverter" />
     <c:NullValueMultiConverter x:Key="NullValueMultiConverter" />
@@ -14,7 +14,7 @@
     <c:QuantityToStringConverter x:Key="QuantityToStringConverter" />
     <c:SortColumnToVisibilityConverter x:Key="SortColumnToVisibilityConverter" />
     <c:DateTimeOrTimeSpanStringConverter x:Key="DateTimeOrTimeSpanStringConverter" />
-    <c:UnixTimeSecondsToDateTimeConverter x:Key="UnixTimeSecondsToDateTimeConverter" />
+    <c:UnixTimeSecondsToDateTimeConverter x:Key="UnixTimeSecondsToDateTimeConverter" />-->
 
     <!-- Styles -->
     <Style TargetType="{x:Type Image}">
@@ -112,7 +112,7 @@
             <ContentControl Content="{Binding}">
                 <ContentControl.Resources>
                     <DataTemplate DataType="{x:Type vm:TrovesaurusViewModel}">
-                        <Border Background="Red" CornerRadius="10" Padding="5,2,5,2" Margin="3,0,0,0" Visibility="{Binding MailCount, Converter={StaticResource NullToVisibilityConverter}}">
+                        <Border Background="Red" CornerRadius="10" Padding="5,2,5,2" Margin="3,0,0,0" Visibility="{Binding MailCount, Converter={c:NullToVisibilityConverter}}">
                             <TextBlock Foreground="White" FontWeight="Bold" FontSize="14" Text="{Binding MailCount}"/>
                         </Border>
                     </DataTemplate>
@@ -153,7 +153,7 @@
             <TextBlock Margin="2,0,2,0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type GridViewColumnHeader}},Path=Tag}" />
             <Path DockPanel.Dock="Left" StrokeThickness="1" Fill="Gray" Data="M 5,10 L 15,10 L 10,5 L 5,10">
                 <Path.Visibility>
-                    <MultiBinding Converter="{StaticResource SortColumnToVisibilityConverter}" ConverterParameter="Ascending">
+                    <MultiBinding Converter="{c:SortColumnToVisibilityConverter}" ConverterParameter="Ascending">
                         <Binding RelativeSource="{RelativeSource AncestorType={x:Type GridViewColumnHeader}}" Path="CommandParameter" />
                         <Binding RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" Path="DataContext.SortBy" />
                         <Binding RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" Path="DataContext.SortDirection" />
@@ -162,7 +162,7 @@
             </Path>
             <Path DockPanel.Dock="Left" StrokeThickness="1" Fill="Gray" Data="M 5,5 L 10,10 L 15,5 L 5,5">
                 <Path.Visibility>
-                    <MultiBinding Converter="{StaticResource SortColumnToVisibilityConverter}" ConverterParameter="Descending">
+                    <MultiBinding Converter="{c:SortColumnToVisibilityConverter}" ConverterParameter="Descending">
                         <Binding RelativeSource="{RelativeSource AncestorType={x:Type GridViewColumnHeader}}" Path="CommandParameter" />
                         <Binding RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" Path="DataContext.SortBy" />
                         <Binding RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" Path="DataContext.SortDirection" />

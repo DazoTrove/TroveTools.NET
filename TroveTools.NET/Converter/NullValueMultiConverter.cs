@@ -12,11 +12,11 @@ namespace TroveTools.NET.Converter
     /// <summary>
     /// If the first binding value is null or an empty string, return the second binding value; otherwise return the third binding value
     /// </summary>
-    class NullValueMultiConverter : IMultiValueConverter
+    class NullValueMultiConverter : MultiConverterMarkupExtension<NullValueMultiConverter>
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace TroveTools.NET.Converter
             return null;
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        public override object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

@@ -154,5 +154,17 @@ namespace TroveTools.NET.Properties {
                 this["TrovesaurusCheckMail"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MyModPacksJson {
+            get {
+                return ((string)(this["MyModPacksJson"]));
+            }
+            set {
+                this["MyModPacksJson"] = value;
+            }
+        }
     }
 }

@@ -19,10 +19,11 @@ namespace TroveTools.NET.ViewModel
     class MyModsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private DelegateCommand _RefreshCommand, _UpdateAllCommand, _UninstallAllCommand, _LaunchModsFolderCommand;
+        private DelegateCommand _RefreshCommand, _UpdateAllCommand, _UninstallAllCommand, _LaunchModsFolderCommand, _ClearModPackNameCommand;
         private DelegateCommand<TroveModViewModel> _RemoveModCommand;
-        private DelegateCommand<string> _AddModCommand, _SearchMyModsCommand, _SortCommand;
-        private CollectionViewSource _MyModsView = new CollectionViewSource();
+        private DelegateCommand<TroveModPackViewModel> _LoadModPackCommand, _RemoveModPackCommand, _CopyModPackLinkCommand;
+        private DelegateCommand<string> _AddModCommand, _SortCommand, _SaveModPackCommamd, _LaunchTrovesaurusModPacksCommand;
+        private CollectionViewSource _MyModsView = new CollectionViewSource(), _ModPacksView = new CollectionViewSource();
         private DispatcherTimer _UpdateTimer = null;
         private bool canSaveData = true;
 
@@ -32,6 +33,11 @@ namespace TroveTools.NET.ViewModel
         {
             DisplayName = Strings.MyModsViewModel_DisplayName;
             _MyModsView.Source = MyMods;
+            _MyModsView.IsLiveGroupingRequested = true;
+            _MyModsView.GroupDescriptions.Add(new PropertyGroupDescription("ModPack"));
+            _ModPacksView.Source = ModPacks;
+            _ModPacksView.GroupDescriptions.Add(new PropertyGroupDescription("Source"));
+            _ModPacksView.SortDescriptions.Add(new SortDescription("Source", ListSortDirection.Ascending));
         }
 
         #endregion // Constructor
@@ -45,6 +51,27 @@ namespace TroveTools.NET.ViewModel
             {
                 log.Info("Loading my mods");
 
+                // Load mods from model and create view model objects
+                foreach (TroveMod mod in TroveMod.MyMods)
+                {
+                    dynamic modVM = new TroveModViewModel(mod);
+                    MyMods.Add(modVM);
+                    modVM.CheckForUpdates();
+                }
+
+                // Load local mod packs
+                foreach (TroveModPack pack in SettingsDataProvider.MyModPacks) ModPacks.Add(new TroveModPackViewModel(pack));
+
+                // Load mod packs from Trovesaurus API
+                foreach (TroveModPack pack in TrovesaurusApi.ModPackList) ModPacks.Add(new TroveModPackViewModel(pack));
+
+                // If auto update setting is enabled, update all mods on startup
+                if (MainWindowViewModel.Instance.Settings.AutoUpdateMods)
+                {
+                    UpdateAllMods();
+                    StartUpdateTimer(SettingsDataProvider.AutoUpdateInterval);
+                }
+
                 // Setup auto-saving of my mods when the collection or items in the collection change
                 MyMods.CollectionChanged += (s, e) =>
                 {
@@ -54,23 +81,15 @@ namespace TroveTools.NET.ViewModel
                     SaveMyMods();
                 };
 
-                // Load mods from model and create view model objects
-                foreach (TroveMod mod in TroveMod.MyMods)
+                // Setup auto-saving of mod packs when the collection or items in the collection change
+                ModPacks.CollectionChanged += (s, e) =>
                 {
-                    dynamic modVM = new TroveModViewModel(mod);
-                    MyMods.Add(modVM);
-                    modVM.CheckForUpdates();
-                }
-
-                // If auto update setting is enabled, update all mods on startup
-                if (MainWindowViewModel.Instance.Settings.AutoUpdateMods)
-                {
-                    UpdateAllMods();
-                    StartUpdateTimer(SettingsDataProvider.AutoUpdateInterval);
-                }
+                    SaveModPacks();
+                };
 
                 canSaveData = true;
                 SaveMyMods();
+                SaveModPacks();
 
                 log.Info("Loaded my mods");
             }
@@ -121,6 +140,24 @@ namespace TroveTools.NET.ViewModel
         public ICollectionView MyModsView
         {
             get { return _MyModsView.View; }
+        }
+
+        public ObservableCollection<TroveModPackViewModel> ModPacks { get; } = new ObservableCollection<TroveModPackViewModel>();
+
+        public ICollectionView ModPacksView
+        {
+            get { return _ModPacksView.View; }
+        }
+
+        private string _ModPackName = string.Empty;
+        public string ModPackName
+        {
+            get { return _ModPackName; }
+            set
+            {
+                _ModPackName = value;
+                RaisePropertyChanged("ModPackName");
+            }
         }
 
         public string LastAddModLocation
@@ -212,21 +249,69 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
-        public DelegateCommand<string> SearchMyModsCommand
-        {
-            get
-            {
-                if (_SearchMyModsCommand == null) _SearchMyModsCommand = new DelegateCommand<string>(SearchMyMods, s => !string.IsNullOrEmpty(s));
-                return _SearchMyModsCommand;
-            }
-        }
-
         public DelegateCommand<string> SortCommand
         {
             get
             {
                 if (_SortCommand == null) _SortCommand = new DelegateCommand<string>(SortModList);
                 return _SortCommand;
+            }
+        }
+
+        public DelegateCommand<string> LaunchTrovesaurusModPacksCommand
+        {
+            get
+            {
+                if (_LaunchTrovesaurusModPacksCommand == null) _LaunchTrovesaurusModPacksCommand = new DelegateCommand<string>(p => LaunchTrovesaurus(TrovesaurusApi.ModPacksUrl));
+                return _LaunchTrovesaurusModPacksCommand;
+            }
+        }
+
+        public DelegateCommand ClearModPackNameCommand
+        {
+            get
+            {
+                if (_ClearModPackNameCommand == null) _ClearModPackNameCommand = new DelegateCommand(p => ModPackName = string.Empty);
+                return _ClearModPackNameCommand;
+            }
+        }
+
+        public DelegateCommand<TroveModPackViewModel> LoadModPackCommand
+        {
+            get
+            {
+                if (_LoadModPackCommand == null) _LoadModPackCommand = new DelegateCommand<TroveModPackViewModel>(
+                    currentItem => LoadModPack(currentItem), currentItem => currentItem != null);
+                return _LoadModPackCommand;
+            }
+        }
+
+        public DelegateCommand<TroveModPackViewModel> RemoveModPackCommand
+        {
+            get
+            {
+                if (_RemoveModPackCommand == null) _RemoveModPackCommand = new DelegateCommand<TroveModPackViewModel>(
+                    currentItem => RemoveModPack(currentItem), currentItem => currentItem != null && currentItem.DataObject.Source == TroveModPack.LocalSource);
+                return _RemoveModPackCommand;
+            }
+        }
+
+        public DelegateCommand<string> SaveModPackCommamd
+        {
+            get
+            {
+                if (_SaveModPackCommamd == null) _SaveModPackCommamd = new DelegateCommand<string>(SaveModPack, s => !string.IsNullOrEmpty(s));
+                return _SaveModPackCommamd;
+            }
+        }
+
+        public DelegateCommand<TroveModPackViewModel> CopyModPackLinkCommand
+        {
+            get
+            {
+                if (_CopyModPackLinkCommand == null) _CopyModPackLinkCommand = new DelegateCommand<TroveModPackViewModel>(
+                    currentItem => CopyModPackLink(currentItem), currentItem => currentItem != null);
+                return _CopyModPackLinkCommand;
             }
         }
         #endregion
@@ -254,6 +339,14 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
+        private void SaveModPacks(object sender = null, PropertyChangedEventArgs e = null)
+        {
+            if (canSaveData)
+            {
+                SettingsDataProvider.MyModPacks = ModPacks.Where(p => p.DataObject.Source == TroveModPack.LocalSource).Select(p => p.DataObject).ToList();
+            }
+        }
+
         private void UpdateAllMods(object param = null)
         {
             try
@@ -267,7 +360,7 @@ namespace TroveTools.NET.ViewModel
                 foreach (dynamic mod in MyMods)
                 {
                     mod.CheckForUpdates();
-                    if (mod.CanUpdateMod) mod.UpdateMod();
+                    if (mod.DataObject.CanUpdateMod) mod.UpdateMod();
                 }
             }
             catch (Exception ex)
@@ -326,18 +419,6 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
-        private void SearchMyMods(string param)
-        {
-            try
-            {
-                throw new NotImplementedException();
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error searching my mods", ex);
-            }
-        }
-
         private void SortModList(string column)
         {
             try
@@ -360,6 +441,110 @@ namespace TroveTools.NET.ViewModel
             {
                 log.Error("Error sorting mod list", ex);
             }
+        }
+
+        private void LaunchTrovesaurus(string url = null)
+        {
+            try { TrovesaurusApi.LaunchTrovesaurus(url); }
+            catch (Exception ex) { log.Error("Error launching Trovesaurus page", ex); }
+        }
+
+        public void TroveUriInstallModPack(string uri)
+        {
+            log.InfoFormat("Installing mod pack: [{0}] from Trove URI argument", uri);
+            TroveModPack pack = new TroveModPack(uri);
+            TroveModPackViewModel packVm = null;
+            if (string.IsNullOrEmpty(pack.PackId))
+            {
+                // Install Ad Hoc mod pack
+                packVm = new TroveModPackViewModel(pack);
+                ModPacks.Add(packVm);
+            }
+            else
+            {
+                // Find Trovesaurus mod pack
+                packVm = ModPacks.FirstOrDefault(p => p.DataObject.PackId == pack.PackId);
+                if (packVm == null)
+                {
+                    log.ErrorFormat("Could not find Trovesaurus mod pack ID {0}", pack.PackId);
+                    return;
+                }
+            }
+            ModPacksView.MoveCurrentTo(packVm);
+            LoadModPack(packVm);
+        }
+
+        private void LoadModPack(TroveModPackViewModel currentItem)
+        {
+            log.InfoFormat("Loading mod pack: {0}", currentItem.DataObject.Name);
+            foreach (var mod in currentItem.DataObject.Mods)
+            {
+                var modVm = MyMods.FirstOrDefault(m => m.DataObject.Id == mod.Id);
+                if (modVm == null)
+                {
+                    modVm = MainWindowViewModel.Instance.GetMoreMods.TrovesaurusMods.FirstOrDefault(m => m.DataObject.Id == mod.Id);
+                    if (modVm == null) modVm = new TroveModViewModel(mod);
+                    modVm.InstallCommand.Execute(null);
+                }
+                modVm.ModPack = currentItem;
+                modVm.DataObject.PackName = currentItem.DisplayName;
+            }
+        }
+
+        private void CopyModPackLink(TroveModPackViewModel currentItem)
+        {
+            currentItem.DataObject.CopyModPackUri();
+        }
+
+        private void RemoveModPack(TroveModPackViewModel currentItem)
+        {
+            log.InfoFormat("Removing mod pack: {0}", currentItem.DataObject.Name);
+            foreach (var mod in MyMods.Where(m => m.ModPack == currentItem))
+            {
+                mod.ModPack = null;
+                mod.DataObject.PackName = null;
+            }
+            ModPacks.Remove(currentItem);
+        }
+
+        private void SaveModPack(string modPackName)
+        {
+            bool newPack = false;
+            if (string.IsNullOrEmpty(modPackName))
+            {
+                log.Warn("No mod pack name specified to save");
+                return;
+            }
+            log.InfoFormat("Saving enabled standalone mods as mod pack {0}", modPackName);
+
+            TroveModPackViewModel pack = ModPacks.FirstOrDefault(p => p.DataObject.Name == modPackName && p.DataObject.Source == TroveModPack.LocalSource);
+            if (pack == null)
+            {
+                pack = new TroveModPackViewModel(new TroveModPack());
+                pack.DataObject.Name = modPackName;
+                newPack = true;
+            }
+            else pack.DataObject.Mods.Clear();
+
+            foreach (var mod in MyMods.Where(m => m.DataObject.Enabled && m.ModPack == null))
+            {
+                if (string.IsNullOrEmpty(mod.DataObject.Id))
+                {
+                    log.WarnFormat("Only mods downloaded from Trovesaurus can be included in mod packs, skipping mod: {0}", mod.DisplayName);
+                    continue;
+                }
+                pack.DataObject.Mods.Add(mod.DataObject);
+                mod.ModPack = pack;
+                mod.DataObject.PackName = null;
+            }
+
+            if (pack.DataObject.Mods.Count > 0)
+            {
+                if (newPack) ModPacks.Add(pack);
+                ModPacksView.MoveCurrentTo(pack);
+            }
+            else
+                log.ErrorFormat("No enabled standalone mods from Trovesaurus were added to mod pack {0}", modPackName);
         }
         #endregion
     }

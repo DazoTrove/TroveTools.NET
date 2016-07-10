@@ -73,6 +73,22 @@ namespace TroveTools.NET.DataAccess
             }
         }
 
+        public static List<TroveModPack> MyModPacks
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Settings.Default.MyModPacksJson))
+                    return new List<TroveModPack>();
+                else
+                    return JsonConvert.DeserializeObject<List<TroveModPack>>(Settings.Default.MyModPacksJson);
+            }
+            set
+            {
+                Settings.Default.MyModPacksJson = JsonConvert.SerializeObject(value, jsonSettings);
+                Settings.Default.Save();
+            }
+        }
+
         public static string LastAddModLocation
         {
             get { return Settings.Default.LastAddModLocation; }
