@@ -533,9 +533,9 @@ namespace TroveTools.NET.ViewModel
                     log.WarnFormat("Only mods downloaded from Trovesaurus can be included in mod packs, skipping mod: {0}", mod.DisplayName);
                     continue;
                 }
-                pack.DataObject.Mods.Add(mod.DataObject);
                 mod.ModPack = pack;
-                mod.DataObject.PackName = null;
+                mod.DataObject.PackName = modPackName;
+                pack.DataObject.Mods.Add(mod.DataObject);
             }
 
             if (pack.DataObject.Mods.Count > 0)

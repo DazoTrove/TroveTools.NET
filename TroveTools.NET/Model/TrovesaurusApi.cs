@@ -98,49 +98,64 @@ namespace TroveTools.NET.Model
         #region Public Static Methods
         public static void RefreshModList()
         {
-            string url = AddQuerystring(ModListUrl);
-            using (var client = OpenWebClient()) _ModList = JsonConvert.DeserializeObject<List<TroveMod>>(client.DownloadString(url));
+            try
+            {
+                string url = AddQuerystring(ModListUrl);
+                using (var client = OpenWebClient()) _ModList = JsonConvert.DeserializeObject<List<TroveMod>>(client.DownloadString(url));
+            }
+            catch (Exception ex) { log.Error("Error refreshing Trovesaurus mod list", ex); }
+            finally { if (_ModList == null) _ModList = new List<TroveMod>(); }
         }
 
         public static TroveMod GetMod(string id, string name = "")
         {
-            var ic = StringComparison.OrdinalIgnoreCase;
-            var mod = ModList.FirstOrDefault(m => m.Id.Equals(id, ic));
-            if (mod == null) mod = ModList.FirstOrDefault(m => TroveMod.FilterModFilename(m.Name).Equals(TroveMod.FilterModFilename(name), ic));
-            return mod;
+            try
+            {
+                var ic = StringComparison.OrdinalIgnoreCase;
+                var mod = ModList.FirstOrDefault(m => m.Id.Equals(id, ic));
+                if (mod == null) mod = ModList.FirstOrDefault(m => TroveMod.FilterModFilename(m.Name).Equals(TroveMod.FilterModFilename(name), ic));
+                return mod;
+            }
+            catch (Exception ex) { log.ErrorFormat("Error retrieving matching mod from Trovesaurus for mod {0}: {1}", string.IsNullOrEmpty(name) ? "id " + id : name, ex.Message); }
+            return null;
         }
 
         public static void RefreshModPackList()
         {
-            string url = AddQuerystring(ModPacksUrl), packsHtml;
-            using (var client = OpenWebClient()) packsHtml = client.DownloadString(url);
-
-            if (_ModPackList == null)
-                _ModPackList = new List<TroveModPack>();
-            else
-                _ModPackList.Clear();
-
-            // Parse mod packs HTML
-            foreach (Match packMatch in Regex.Matches(packsHtml, ModPackRegex, RegexOptions.Singleline))
+            try
             {
-                var mods = Regex.Matches(packMatch.Groups["Details"].Value, PackModsRegex, RegexOptions.Singleline);
-                if (mods.Count > 0)
+                string url = AddQuerystring(ModPacksUrl), packsHtml;
+                using (var client = OpenWebClient()) packsHtml = client.DownloadString(url);
+
+                if (_ModPackList == null)
+                    _ModPackList = new List<TroveModPack>();
+                else
+                    _ModPackList.Clear();
+
+                // Parse mod packs HTML
+                foreach (Match packMatch in Regex.Matches(packsHtml, ModPackRegex, RegexOptions.Singleline))
                 {
-                    TroveModPack pack = new TroveModPack();
-                    pack.PackId = packMatch.Groups["PackId"].Value;
-                    pack.Url = packMatch.Groups["Url"].Value;
-                    pack.Name = packMatch.Groups["Name"].Value;
-                    pack.Author = packMatch.Groups["Author"].Value;
-                    pack.Source = "Trovesaurus";
-                    
-                    foreach (Match modMatch in mods)
+                    var mods = Regex.Matches(packMatch.Groups["Details"].Value, PackModsRegex, RegexOptions.Singleline);
+                    if (mods.Count > 0)
                     {
-                        var mod = ModList.FirstOrDefault(m => m.Id == modMatch.Groups["ModId"].Value);
-                        if (mod != null) pack.Mods.Add(mod);
+                        TroveModPack pack = new TroveModPack();
+                        pack.PackId = packMatch.Groups["PackId"].Value;
+                        pack.Url = packMatch.Groups["Url"].Value;
+                        pack.Name = packMatch.Groups["Name"].Value;
+                        pack.Author = packMatch.Groups["Author"].Value;
+                        pack.Source = "Trovesaurus";
+
+                        foreach (Match modMatch in mods)
+                        {
+                            var mod = ModList.FirstOrDefault(m => m.Id == modMatch.Groups["ModId"].Value);
+                            if (mod != null) pack.Mods.Add(mod);
+                        }
+                        _ModPackList.Add(pack);
                     }
-                    _ModPackList.Add(pack);
                 }
             }
+            catch (Exception ex) { log.Error("Error refreshing Trovesaurus mod pack list", ex); }
+            finally { if (_ModPackList == null) _ModPackList = new List<TroveModPack>(); }
         }
 
         public static TroveModPack GetModPack(string packId)
@@ -150,38 +165,68 @@ namespace TroveTools.NET.Model
 
         public static void RefreshNewsList()
         {
-            string url = AddQuerystring(NewsUrl);
-            using (var client = OpenWebClient()) _NewsList = JsonConvert.DeserializeObject<List<TrovesaurusNewsItem>>(client.DownloadString(url));
+            try
+            {
+                string url = AddQuerystring(NewsUrl);
+                using (var client = OpenWebClient()) _NewsList = JsonConvert.DeserializeObject<List<TrovesaurusNewsItem>>(client.DownloadString(url));
+            }
+            catch (Exception ex) { log.Error("Error refreshing Trovesaurus news list", ex); }
+            finally { if (_NewsList == null) _NewsList = new List<TrovesaurusNewsItem>(); }
         }
 
         public static void RefreshCalendarList()
         {
-            string url = AddQuerystring(CalendarUrl, true);
-            using (var client = OpenWebClient()) _CalendarList = JsonConvert.DeserializeObject<List<TrovesaurusCalendarItem>>(client.DownloadString(url));
+            try
+            {
+                string url = AddQuerystring(CalendarUrl, true);
+                using (var client = OpenWebClient()) _CalendarList = JsonConvert.DeserializeObject<List<TrovesaurusCalendarItem>>(client.DownloadString(url));
+            }
+            catch (Exception ex) { log.Error("Error refreshing Trovesaurus calendar list", ex); }
+            finally { if (_CalendarList == null) _CalendarList = new List<TrovesaurusCalendarItem>(); }
         }
 
         public static void RefreshStreamList()
         {
-            string url = AddQuerystring(OnlineStreamsUrl);
-            using (var client = OpenWebClient()) _StreamList = JsonConvert.DeserializeObject<List<TrovesaurusOnlineStream>>(client.DownloadString(url));
+            try
+            {
+                string url = AddQuerystring(OnlineStreamsUrl);
+                using (var client = OpenWebClient()) _StreamList = JsonConvert.DeserializeObject<List<TrovesaurusOnlineStream>>(client.DownloadString(url));
+            }
+            catch (Exception ex) { log.Error("Error refreshing Trovesaurus online streams list", ex); }
+            finally { if (_StreamList == null) _StreamList = new List<TrovesaurusOnlineStream>(); }
         }
 
         public static int GetMailCount()
         {
-            string url = AddQuerystring(MailCountUrl);
-            using (var client = OpenWebClient()) return Convert.ToInt32(client.DownloadString(url));
+            try
+            {
+                string url = AddQuerystring(MailCountUrl);
+                using (var client = OpenWebClient()) return Convert.ToInt32(client.DownloadString(url));
+            }
+            catch (Exception ex) { log.Error("Error getting Trovesaurus mail count", ex); }
+            return 0;
         }
 
         public static TroveServerStatus GetServerStatus()
         {
-            string url = AddQuerystring(ServerStatusUrl, true);
-            using (var client = OpenWebClient()) return JsonConvert.DeserializeObject<TroveServerStatus>(client.DownloadString(url));
+            try
+            {
+                string url = AddQuerystring(ServerStatusUrl, true);
+                using (var client = OpenWebClient()) return JsonConvert.DeserializeObject<TroveServerStatus>(client.DownloadString(url));
+            }
+            catch (Exception ex) { log.Error("Error getting Server Status from Trovesaurus", ex); }
+            return null;
         }
 
         public static string GetServerStatusHtml()
         {
-            string url = AddQuerystring(ServerStatusHtmlUrl);
-            using (var client = OpenWebClient()) return client.DownloadString(url);
+            try
+            {
+                string url = AddQuerystring(ServerStatusHtmlUrl);
+                using (var client = OpenWebClient()) return client.DownloadString(url);
+            }
+            catch (Exception ex) { log.Error("Error getting Server Status HTML from Trovesaurus", ex); }
+            return null;
         }
 
         public static string DownloadMod(TroveMod mod)
@@ -238,12 +283,17 @@ namespace TroveTools.NET.Model
 
         public static string UpdateTroveGameStatus(bool online)
         {
-            using (var client = OpenWebClient())
+            try
             {
-                string url = AddQuerystring(online ? string.Format(TroveLaunchUrl, SettingsDataProvider.TrovesaurusAccountLinkKey) :
-                    string.Format(TroveCloseUrl, SettingsDataProvider.TrovesaurusAccountLinkKey), includeKey: false);
-                return client.DownloadString(url);
+                using (var client = OpenWebClient())
+                {
+                    string url = AddQuerystring(online ? string.Format(TroveLaunchUrl, SettingsDataProvider.TrovesaurusAccountLinkKey) :
+                        string.Format(TroveCloseUrl, SettingsDataProvider.TrovesaurusAccountLinkKey), includeKey: false);
+                    return client.DownloadString(url);
+                }
             }
+            catch (Exception ex) { log.Error("Error updating Trovesaurus online game status", ex); }
+            return null;
         }
         #endregion
 

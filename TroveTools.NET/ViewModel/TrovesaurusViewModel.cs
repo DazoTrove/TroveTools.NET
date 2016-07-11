@@ -81,7 +81,14 @@ namespace TroveTools.NET.ViewModel
                     MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail = false;
                 }
                 TimeSpan checkInterval = new TimeSpan(0, 1, 0);
-                log.InfoFormat("Starting Trovesaurus server status and mail check timer, checking every {0}", checkInterval.ToUserFriendlyString());
+
+                if (MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail && MainWindowViewModel.Instance.Settings.TrovesaurusServerStatus)
+                    log.InfoFormat("Starting Trovesaurus server status and mail check timer, checking every {0}", checkInterval.ToUserFriendlyString());
+                else if (MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail)
+                    log.InfoFormat("Starting Trovesaurus mail check timer, checking every {0}", checkInterval.ToUserFriendlyString());
+                else if (MainWindowViewModel.Instance.Settings.TrovesaurusServerStatus)
+                    log.InfoFormat("Starting Trovesaurus server status timer, checking every {0}", checkInterval.ToUserFriendlyString());
+
                 if (_StatusTimer == null)
                 {
                     _StatusTimer = new DispatcherTimer();
@@ -106,7 +113,7 @@ namespace TroveTools.NET.ViewModel
             try
             {
                 if (MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail) CheckMail();
-                RefreshServerStatus();
+                if (MainWindowViewModel.Instance.Settings.TrovesaurusServerStatus) RefreshServerStatus();
             }
             catch (Exception ex) { log.Error("Trovesaurus check status error", ex); }
         }

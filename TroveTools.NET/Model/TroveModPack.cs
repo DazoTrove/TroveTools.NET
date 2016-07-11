@@ -87,7 +87,7 @@ namespace TroveTools.NET.Model
                     Mods.Clear();
                     foreach (var modId in matchAdHoc.Groups["Mods"].Value.Split('&'))
                     {
-                        var mod = TrovesaurusApi.GetMod(modId);
+                        var mod = TroveMod.GetMod(modId);
                         if (mod != null)
                             Mods.Add(mod);
                         else

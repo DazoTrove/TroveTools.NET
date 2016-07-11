@@ -1,11 +1,18 @@
 ﻿<div id="main_content_wrap" class="outer"><section id="main_content" class="inner">
 
-## Version 1.1.0 Release (7/6/2016)
+## Version 1.1.1 Release (7/11/2016)
+- Trovesaurus tab: server status link is now always shown, and only the server details are hidden if no data is returned and instead a message stating that server status is not available is displayed
+- Settings: new Check Server Status every minute option
+- My Mods: fixed installation of mods from zip files while Trovesaurus is temporarily offline
+- Improved error handling for Trovesaurus API calls
+
+## Version 1.1.0 Release (7/10/2016)
 - My Mods: new mod pack management features
   - Loading mod packs from Trovesaurus and local mod packs. The dropdown populates automatically and includes a link to the Trovesaurus mod packs page where you can compile your own packs to share with others
   - Removing local mod packs
   - Saving all enabled standalone mods as a local mod pack
   - Copying Trove:// URI protocol links for Trovesaurus and local mod packs. New URI format is **trove://modpack=PackId** for Trovesaurus mod packs, and **trove://Pack+Name?ModId1&amp;ModId2&amp;...&amp;ModIdN** for local mod packs
+  - Mod listing is now grouped by mod pack and includes an option to quickly enable or disable all the mods in a mod pack
 - Trovesaurus API requests now include details to identify that requests came from the TroveTools.NET mod loader to help Etaew track usage metrics
 - Trovesaurus server status is now hidden if no data was returned from the Trovesaurus API
 - My Mods: added delete key shortcut to remove the selected mod

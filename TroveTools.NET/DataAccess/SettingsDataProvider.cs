@@ -129,6 +129,16 @@ namespace TroveTools.NET.DataAccess
             }
         }
 
+        public static bool TrovesaurusServerStatus
+        {
+            get { return Settings.Default.TrovesaurusServerStatus; }
+            set
+            {
+                Settings.Default.TrovesaurusServerStatus = value;
+                Settings.Default.Save();
+            }
+        }
+
         public static bool StartMinimized
         {
             get { return Settings.Default.StartMinimized; }

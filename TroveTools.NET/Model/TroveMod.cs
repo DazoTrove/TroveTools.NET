@@ -625,6 +625,15 @@ namespace TroveTools.NET.Model
             }
         }
 
+        public static TroveMod GetMod(string id)
+        {
+            var mod = MyMods.FirstOrDefault(m => m.Id == id);
+            if (mod != null) return mod;
+
+            mod = TrovesaurusApi.GetMod(id);
+            return mod;
+        }
+
         public static void SaveMyMods(List<TroveMod> myMods)
         {
             _myMods = myMods;

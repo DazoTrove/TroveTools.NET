@@ -166,5 +166,17 @@ namespace TroveTools.NET.Properties {
                 this["MyModPacksJson"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TrovesaurusServerStatus {
+            get {
+                return ((bool)(this["TrovesaurusServerStatus"]));
+            }
+            set {
+                this["TrovesaurusServerStatus"] = value;
+            }
+        }
     }
 }

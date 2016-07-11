@@ -191,6 +191,16 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
+        public bool TrovesaurusServerStatus
+        {
+            get { return SettingsDataProvider.TrovesaurusServerStatus; }
+            set
+            {
+                SettingsDataProvider.TrovesaurusServerStatus = value;
+                RaisePropertyChanged("TrovesaurusServerStatus");
+            }
+        }
+
         public string TrovesaurusAccountLinkKey
         {
             get { return SettingsDataProvider.TrovesaurusAccountLinkKey; }
