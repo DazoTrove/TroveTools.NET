@@ -1,4 +1,26 @@
 ﻿<div id="main_content_wrap" class="outer"><section id="main_content" class="inner">
+  
+If you are a new player lower than Mastery Rank 20, you can earn a free class coin by **[clicking this link (http://bit.ly/DazoFriend)](http://bit.ly/DazoFriend)** and signing in with your Glyph account to apply my Refer a Friend code
+  
+### [Check out Dazo's Trove Resource Compilation Spreadsheet (http://bit.ly/DazoTrove)](http://bit.ly/DazoTrove)
+- Links to other guides, tools, and Trove resources
+- **Forging &amp; Deconstruction Costs / Profit Calculator**
+- **Item Rarity Levels**
+- **Dragons:** contains a list of all dragons, current crafting costs, total mastery granted, and stat buffs
+- **Adventure &amp; Shadow Tower:** includes required power ranks, gear drops, level ranges, and rewards for all the various types of worlds and realms
+- **Shadowy Market:** a list of items that can be purchased from the Shadow Tower market with number of mastery points granted for each
+- **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
+- **Mastery:** a list of various things that grant mastery points
+
+## Version 1.1.2 Release (7/12/2016)
+- Removed beta version tag from title bar and About tab
+- Get More Mods: a cached copy of the Trovesaurus mod list is now saved
+- Get More Mods: updated default sorting to sort by total downloads after likes
+- Save window size, position, and state to user settings
+- Restore window size, position, and state on startup
+- Save mod details grid splitter position to user settings
+- Restore mod details grid splitter position on startup
+- About tab: added some Trove resources also created by Dazo
 
 ## Version 1.1.1 Release (7/11/2016)
 - Trovesaurus tab: server status link is now always shown, and only the server details are hidden if no data is returned and instead a message stating that server status is not available is displayed

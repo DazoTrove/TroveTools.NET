@@ -134,7 +134,7 @@
     <comment>The display name of the GetMoreModsViewModel object</comment>
   </data>
   <data name="MainWindowViewModel_DisplayName" xml:space="preserve">
-    <value>TroveTools.NET: version {0} Beta - created by Dazo</value>
+    <value>TroveTools.NET: version {0} - created by Dazo</value>
     <comment>Title of the main window</comment>
   </data>
   <data name="MainWindowView_MinimizeBalloonTipText" xml:space="preserve">

@@ -318,6 +318,8 @@ namespace TroveTools.NET.ViewModel
 
                 TrovesaurusModsView.SortDescriptions.Clear();
                 TrovesaurusModsView.SortDescriptions.Add(new SortDescription(SortBy, SortDirection));
+                TrovesaurusModsView.SortDescriptions.Add(new SortDescription("TotalDownloads", ListSortDirection.Descending));
+                TrovesaurusModsView.SortDescriptions.Add(new SortDescription("Views", ListSortDirection.Descending));
             }
             catch (Exception ex)
             {

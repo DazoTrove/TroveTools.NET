@@ -102,9 +102,16 @@ namespace TroveTools.NET.Model
             {
                 string url = AddQuerystring(ModListUrl);
                 using (var client = OpenWebClient()) _ModList = JsonConvert.DeserializeObject<List<TroveMod>>(client.DownloadString(url));
+
+                // Save mod list to settings
+                try { SettingsDataProvider.TrovesaurusMods = _ModList; } catch { }
             }
             catch (Exception ex) { log.Error("Error refreshing Trovesaurus mod list", ex); }
-            finally { if (_ModList == null) _ModList = new List<TroveMod>(); }
+            finally
+            {
+                // Load from cached mod list if an error occurred
+                if (_ModList == null) _ModList = SettingsDataProvider.TrovesaurusMods;
+            }
         }
 
         public static TroveMod GetMod(string id, string name = "")
@@ -198,12 +205,14 @@ namespace TroveTools.NET.Model
 
         public static int GetMailCount()
         {
+            string content = null;
             try
             {
                 string url = AddQuerystring(MailCountUrl);
-                using (var client = OpenWebClient()) return Convert.ToInt32(client.DownloadString(url));
+                using (var client = OpenWebClient()) content = client.DownloadString(url);
+                return Convert.ToInt32(content);
             }
-            catch (Exception ex) { log.Error("Error getting Trovesaurus mail count", ex); }
+            catch (Exception ex) { log.ErrorFormat("Error getting Trovesaurus mail count (content {0}): {1}", content, ex.Message); }
             return 0;
         }
 

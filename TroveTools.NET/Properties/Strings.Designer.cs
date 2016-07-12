@@ -115,7 +115,7 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TroveTools.NET: version {0} Beta - created by Dazo.
+        ///   Looks up a localized string similar to TroveTools.NET: version {0} - created by Dazo.
         /// </summary>
         internal static string MainWindowViewModel_DisplayName {
             get {

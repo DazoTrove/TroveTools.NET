@@ -178,5 +178,89 @@ namespace TroveTools.NET.Properties {
                 this["TrovesaurusServerStatus"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TrovesaurusModsJson {
+            get {
+                return ((string)(this["TrovesaurusModsJson"]));
+            }
+            set {
+                this["TrovesaurusModsJson"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("700")]
+        public double MainWindow_Height {
+            get {
+                return ((double)(this["MainWindow_Height"]));
+            }
+            set {
+                this["MainWindow_Height"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("950")]
+        public double MainWindow_Width {
+            get {
+                return ((double)(this["MainWindow_Width"]));
+            }
+            set {
+                this["MainWindow_Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NaN")]
+        public double MainWindow_Left {
+            get {
+                return ((double)(this["MainWindow_Left"]));
+            }
+            set {
+                this["MainWindow_Left"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NaN")]
+        public double MainWindow_Top {
+            get {
+                return ((double)(this["MainWindow_Top"]));
+            }
+            set {
+                this["MainWindow_Top"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.WindowState MainWindow_WindowState {
+            get {
+                return ((global::System.Windows.WindowState)(this["MainWindow_WindowState"]));
+            }
+            set {
+                this["MainWindow_WindowState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("250")]
+        public global::System.Windows.GridLength ModDetailSplitterHeight {
+            get {
+                return ((global::System.Windows.GridLength)(this["ModDetailSplitterHeight"]));
+            }
+            set {
+                this["ModDetailSplitterHeight"] = value;
+            }
+        }
     }
 }

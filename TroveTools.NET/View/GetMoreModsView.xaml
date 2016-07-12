@@ -19,7 +19,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="250"/>
+            <RowDefinition Height="{vw:SettingBinding ModDetailSplitterHeight}"/>
         </Grid.RowDefinitions>
         <ToolBar ToolBarTray.IsLocked="True"  Grid.Row="0" Loaded="ToolBar_Loaded">
             <Hyperlink Foreground="{x:Null}" Command="{Binding LaunchTrovesaurusCommand}">

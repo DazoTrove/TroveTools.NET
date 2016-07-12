@@ -77,6 +77,7 @@ namespace TroveTools.NET.View
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             trayIcon.Visible = false;
+            Settings.Default.Save();
         }
 
         private void LogMessagesField_TextChanged(object sender, TextChangedEventArgs e)

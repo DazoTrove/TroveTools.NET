@@ -10,7 +10,12 @@
         DataContext="{Binding Source={x:Static vm:MainWindowViewModel.Instance}}"
         Title="{Binding DisplayName}"
         Icon="/Resources/TroveTools.ico"
-        Width="950" Height="700" MinWidth="950" MinHeight="500"
+        MinWidth="950" MinHeight="500"
+        Height="{vw:SettingBinding MainWindow_Height}"
+        Width="{vw:SettingBinding MainWindow_Width}"
+        Left="{vw:SettingBinding MainWindow_Left}"
+        Top="{vw:SettingBinding MainWindow_Top}"
+        WindowState="{vw:SettingBinding MainWindow_WindowState}"
         Closing="Window_Closing">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -24,16 +29,12 @@
         <ResourceDictionary Source="Resources.xaml" />
     </Window.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="470*"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TabControl Name="WorkspaceTabs" ItemsSource="{Binding Workspaces}" ItemTemplate="{StaticResource TabItemTemplate}" IsSynchronizedWithCurrentItem="True" Margin="4,4,4,4" />
-        <Popup IsOpen="{Binding IsChecked, ElementName=LogMessagesButton}" PlacementTarget="{Binding ElementName=LogMessagesButton}" Placement="Top" StaysOpen="False" Grid.ColumnSpan="2">
+        <Popup IsOpen="{Binding IsChecked, ElementName=LogMessagesButton}" PlacementTarget="{Binding ElementName=LogMessagesButton}" Placement="Top" StaysOpen="False">
             <Border BorderBrush="Black" BorderThickness="1" >
                 <RichTextBox Name="LogMessagesField" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextChanged="LogMessagesField_TextChanged" Width="{Binding ActualWidth,ElementName=WorkspaceTabs}" Height="300">
                     <FlowDocument>
@@ -44,7 +45,7 @@
                 </RichTextBox>
             </Border>
         </Popup>
-        <StatusBar Grid.Row="1" Grid.ColumnSpan="2">
+        <StatusBar Grid.Row="1">
             <StatusBarItem>
                 <ToggleButton Name="LogMessagesButton">
                     <!-- Control Template can be used to remove default toggle button styling, but we would need a different visual clue that the log text is clickable - ->
