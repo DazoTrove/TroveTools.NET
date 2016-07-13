@@ -25,6 +25,9 @@ namespace TroveTools.NET.Model
         [JsonProperty("enddate")]
         public string EndDate { get; set; }
 
+        [JsonProperty("image")]
+        public string ImagePath { get; set; }
+
         [JsonIgnore]
         public DateTime StartDateTime
         {

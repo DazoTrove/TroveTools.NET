@@ -173,8 +173,13 @@
                     <Hyperlink Command="{Binding DataContext.LaunchServerStatusCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">Trove Server Status</Hyperlink>
                 </TextBlock>
             </GroupBox.Header>
-            <StackPanel>
-                <TextBlock FontSize="12" Margin="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock FontSize="12" Margin="5" Grid.ColumnSpan="3">
                     <TextBlock.Visibility>
                         <MultiBinding Converter="{c:NullValueMultiConverter}">
                             <Binding/>
@@ -185,7 +190,7 @@
                     No server status available right now
                 </TextBlock>
                 <!-- Live Launcher Status -->
-                <ContentControl FontSize="14" Margin="5" DataContext="{Binding Live}" Visibility="{Binding Converter={c:NullToVisibilityConverter}}">
+                <ContentControl Grid.Column="0" FontSize="14" Margin="5" DataContext="{Binding Live}" Visibility="{Binding Converter={c:NullToVisibilityConverter}}">
                     <ContentControl.Style>
                         <Style TargetType="ContentControl">
                             <Style.Triggers>
@@ -194,12 +199,11 @@
                                         <Setter.Value>
                                             <DataTemplate>
                                                 <TextBlock Foreground="Red">
-                                                    <Bold>Live Launcher:</Bold> Offline
-                                                    <Image Source="/Resources/glyphicons-193-remove-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
-                                                    <Bold>Since:</Bold> <Run Text="{Binding DataContext.DateTime, Mode=OneWay, Converter={c:DateTimeOrTimeSpanStringConverter},
-                                                                                            RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                                                                             ToolTip="{Binding DataContext.DateTime, Mode=OneWay, StringFormat=g,
-                                                                                               RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
+                                                    <Bold>Live Launcher:</Bold><LineBreak/>
+                                                    Offline <Image Source="/Resources/glyphicons-193-remove-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
+                                                    <Run Text="{Binding DataContext.DateTime, Mode=OneWay, Converter={c:DateTimeOrTimeSpanStringConverter},
+                                                                        RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                                         ToolTip="{Binding DataContext.DateTime, StringFormat=g, RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
                                                 </TextBlock>
                                             </DataTemplate>
                                         </Setter.Value>
@@ -209,15 +213,14 @@
                         </Style>
                     </ContentControl.Style>
                     <TextBlock Foreground="Green">
-                        <Bold>Live Launcher:</Bold> Online
-                        <Image Source="/Resources/glyphicons-194-ok-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
-                        <Bold>Since:</Bold> <Run Text="{Binding DateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
-                                                 ToolTip="{Binding DateTime, StringFormat=g}"/>
+                        <Bold>Live Launcher:</Bold><LineBreak/>
+                        Online <Image Source="/Resources/glyphicons-194-ok-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
+                        <Run Text="{Binding DateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}" ToolTip="{Binding DateTime, StringFormat=g}"/>
                     </TextBlock>
                 </ContentControl>
-                
+
                 <!-- Live Server Status -->
-                <ContentControl FontSize="14" Margin="5" DataContext="{Binding Server}" Visibility="{Binding Converter={c:NullToVisibilityConverter}}">
+                <ContentControl Grid.Column="1" FontSize="14" Margin="5" DataContext="{Binding Server}" Visibility="{Binding Converter={c:NullToVisibilityConverter}}">
                     <ContentControl.Style>
                         <Style TargetType="ContentControl">
                             <Style.Triggers>
@@ -226,12 +229,11 @@
                                         <Setter.Value>
                                             <DataTemplate>
                                                 <TextBlock Foreground="Red">
-                                                    <Bold>Live Server:</Bold> Offline
-                                                    <Image Source="/Resources/glyphicons-193-remove-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
-                                                    <Bold>Since:</Bold> <Run Text="{Binding DataContext.DateTime, Mode=OneWay, Converter={c:DateTimeOrTimeSpanStringConverter},
-                                                                                            RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                                                                             ToolTip="{Binding DataContext.DateTime, Mode=OneWay, StringFormat=g,
-                                                                                               RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
+                                                    <Bold>Live Server:</Bold><LineBreak/>
+                                                    Offline <Image Source="/Resources/glyphicons-193-remove-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
+                                                    <Run Text="{Binding DataContext.DateTime, Mode=OneWay, Converter={c:DateTimeOrTimeSpanStringConverter},
+                                                                        RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                                         ToolTip="{Binding DataContext.DateTime, StringFormat=g, RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
                                                 </TextBlock>
                                             </DataTemplate>
                                         </Setter.Value>
@@ -241,15 +243,14 @@
                         </Style>
                     </ContentControl.Style>
                     <TextBlock Foreground="Green">
-                        <Bold>Live Server:</Bold> Online
-                        <Image Source="/Resources/glyphicons-194-ok-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
-                        <Bold>Since:</Bold> <Run Text="{Binding DateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
-                                                 ToolTip="{Binding DateTime, StringFormat=g}"/>
+                        <Bold>Live Server:</Bold><LineBreak/>
+                        Online <Image Source="/Resources/glyphicons-194-ok-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
+                        <Run Text="{Binding DateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}" ToolTip="{Binding DateTime, StringFormat=g}"/>
                     </TextBlock>
                 </ContentControl>
 
                 <!-- PTS Server Status -->
-                <ContentControl FontSize="14" Margin="5" DataContext="{Binding PTS}" Visibility="{Binding Converter={c:NullToVisibilityConverter}}">
+                <ContentControl Grid.Column="2" FontSize="14" Margin="5" DataContext="{Binding PTS}" Visibility="{Binding Converter={c:NullToVisibilityConverter}}">
                     <ContentControl.Style>
                         <Style TargetType="ContentControl">
                             <Style.Triggers>
@@ -258,12 +259,11 @@
                                         <Setter.Value>
                                             <DataTemplate>
                                                 <TextBlock Foreground="Red">
-                                                    <Bold ToolTip="Public Test Server">PTS:</Bold> Offline
-                                                    <Image Source="/Resources/glyphicons-193-remove-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
-                                                    <Bold>Since:</Bold> <Run Text="{Binding DataContext.DateTime, Mode=OneWay, Converter={c:DateTimeOrTimeSpanStringConverter},
-                                                                                            RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                                                                             ToolTip="{Binding DataContext.DateTime, Mode=OneWay, StringFormat=g,
-                                                                                               RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
+                                                    <Bold ToolTip="Public Test Server">PTS:</Bold><LineBreak/>
+                                                    Offline <Image Source="/Resources/glyphicons-193-remove-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
+                                                    <Run Text="{Binding DataContext.DateTime, Mode=OneWay, Converter={c:DateTimeOrTimeSpanStringConverter},
+                                                                        RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                                         ToolTip="{Binding DataContext.DateTime, StringFormat=g, RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
                                                 </TextBlock>
                                             </DataTemplate>
                                         </Setter.Value>
@@ -273,13 +273,12 @@
                         </Style>
                     </ContentControl.Style>
                     <TextBlock Foreground="Green">
-                        <Bold ToolTip="Public Test Server">PTS:</Bold> Online
-                        <Image Source="/Resources/glyphicons-194-ok-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
-                        <Bold>Since:</Bold> <Run Text="{Binding Path=DateTime, Mode=OneWay, Converter={c:DateTimeOrTimeSpanStringConverter}}"
-                                                 ToolTip="{Binding Path=DateTime, Mode=OneWay, StringFormat=g}"/>
+                        <Bold ToolTip="Public Test Server">PTS:</Bold><LineBreak/>
+                        Online <Image Source="/Resources/glyphicons-194-ok-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
+                        <Run Text="{Binding DateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}" ToolTip="{Binding DateTime, StringFormat=g}"/>
                     </TextBlock>
                 </ContentControl>
-            </StackPanel>
+            </Grid>
         </GroupBox>
 
         <!-- Trovesaurus Mail -->
@@ -334,16 +333,34 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="LightGray" BorderThickness="1" Margin="3">
-                                <TextBlock>
-                                    <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
-                                               CommandParameter="{Binding Url}" ToolTip="{Binding Url}">
-                                        <Run FontWeight="Bold" Text="{Binding Name, Mode=OneWay}"/>
-                                    </Hyperlink><LineBreak/>
-                                    Start Date: <Run FontStyle="Italic" Text="{Binding StartDateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
-                                                     ToolTip="{Binding StartDateTime, StringFormat=g}"/><LineBreak/>
-                                    End Date: <Run FontStyle="Italic" Text="{Binding EndDateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
-                                                   ToolTip="{Binding EndDateTime, StringFormat=g}"/>
-                                </TextBlock>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Margin="3" Grid.Row="0" Grid.Column="0">
+                                        <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
+                                                   CommandParameter="{Binding Url}" ToolTip="{Binding Url}" Foreground="{x:Null}">
+                                            <Image MaxHeight="50" MaxWidth="75" Source="{Binding ImagePath, Converter={c:ImagePathConverter}}">
+                                                <Image.ToolTip>
+                                                    <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                                        <Image Source="{Binding Source}" MaxHeight="300" MaxWidth="300" />
+                                                    </ToolTip>
+                                                </Image.ToolTip>
+                                            </Image>
+                                        </Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="1" TextWrapping="Wrap">
+                                        <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
+                                                   CommandParameter="{Binding Url}" ToolTip="{Binding Url}">
+                                            <Run FontWeight="Bold" Text="{Binding Name, Mode=OneWay}"/>
+                                        </Hyperlink><LineBreak/>
+                                        Start Date: <Run FontStyle="Italic" Text="{Binding StartDateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                                         ToolTip="{Binding StartDateTime, StringFormat=g}"/><LineBreak/>
+                                        End Date: <Run FontStyle="Italic" Text="{Binding EndDateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                                       ToolTip="{Binding EndDateTime, StringFormat=g}"/>
+                                    </TextBlock>
+                                </Grid>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
