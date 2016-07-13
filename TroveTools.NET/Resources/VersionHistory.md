@@ -1,8 +1,8 @@
 ﻿<div id="main_content_wrap" class="outer"><section id="main_content" class="inner">
   
-If you are a new player lower than Mastery Rank 20, you can earn a free class coin by **[clicking this link (http://bit.ly/DazoFriend)](http://bit.ly/DazoFriend)** and signing in with your Glyph account to apply my Refer a Friend code
+If you are a new player lower than Mastery Rank 20, you can earn a free class coin by **[clicking this link: http://bit.ly/DazoFriend](http://bit.ly/DazoFriend)**, and signing in with your Glyph account to apply my Refer a Friend code
   
-### [Check out Dazo's Trove Resource Compilation Spreadsheet (http://bit.ly/DazoTrove)](http://bit.ly/DazoTrove)
+### [Check out Dazo's Trove Resource Compilation Spreadsheet: http://bit.ly/DazoTrove](http://bit.ly/DazoTrove)
 - Links to other guides, tools, and Trove resources
 - **Forging &amp; Deconstruction Costs / Profit Calculator**
 - **Item Rarity Levels**
@@ -11,6 +11,10 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Shadowy Market:** a list of items that can be purchased from the Shadow Tower market with number of mastery points granted for each
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
+
+## Version 1.1.3 Release (7/13/2016)
+- Trovesaurus tab: added Live server status in addition to the Live launcher status - thanks to Etaew for adding this info to the API that is used and for all his hard work getting Trovesaurus restored.
+More detail on Trove server downtime whether planned or unexpected can always be found by clicking on the [server status link](https://www.trovesaurus.com/status.php) to view the Trovesaurus server status page.
 
 ## Version 1.1.2 Release (7/12/2016)
 - Removed beta version tag from title bar and About tab

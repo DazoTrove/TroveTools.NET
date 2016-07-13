@@ -184,8 +184,40 @@
                     </TextBlock.Visibility>
                     No server status available right now
                 </TextBlock>
-                <!-- Live Server Status -->
+                <!-- Live Launcher Status -->
                 <ContentControl FontSize="14" Margin="5" DataContext="{Binding Live}" Visibility="{Binding Converter={c:NullToVisibilityConverter}}">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=Online}" Value="False">
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <TextBlock Foreground="Red">
+                                                    <Bold>Live Launcher:</Bold> Offline
+                                                    <Image Source="/Resources/glyphicons-193-remove-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
+                                                    <Bold>Since:</Bold> <Run Text="{Binding DataContext.DateTime, Mode=OneWay, Converter={c:DateTimeOrTimeSpanStringConverter},
+                                                                                            RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                                                             ToolTip="{Binding DataContext.DateTime, Mode=OneWay, StringFormat=g,
+                                                                                               RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                    <TextBlock Foreground="Green">
+                        <Bold>Live Launcher:</Bold> Online
+                        <Image Source="/Resources/glyphicons-194-ok-sign.png" Width="13" Height="13" VerticalAlignment="Center" /><LineBreak/>
+                        <Bold>Since:</Bold> <Run Text="{Binding DateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
+                                                 ToolTip="{Binding DateTime, StringFormat=g}"/>
+                    </TextBlock>
+                </ContentControl>
+                
+                <!-- Live Server Status -->
+                <ContentControl FontSize="14" Margin="5" DataContext="{Binding Server}" Visibility="{Binding Converter={c:NullToVisibilityConverter}}">
                     <ContentControl.Style>
                         <Style TargetType="ContentControl">
                             <Style.Triggers>

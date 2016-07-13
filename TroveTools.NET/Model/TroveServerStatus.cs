@@ -27,6 +27,8 @@ namespace TroveTools.NET.Model
 
         public ServerStatus Live { get; set; }
 
+        public ServerStatus Server { get; set; }
+
         public ServerStatus PTS { get; set; }
     }
 }
