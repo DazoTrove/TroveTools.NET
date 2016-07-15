@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,8 @@ namespace TroveTools.NET.View
     /// </summary>
     public partial class MainWindowView : Window
     {
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private System.Windows.Forms.NotifyIcon trayIcon;
         private bool showBalloonTip = true;
 
@@ -37,12 +40,6 @@ namespace TroveTools.NET.View
             trayIcon.Click += (s, e) => RestoreWindow();
             trayIcon.DoubleClick += (s, e) => RestoreWindow();
             trayIcon.BalloonTipClicked += (s, e) => RestoreWindow();
-
-            if (MainWindowViewModel.Instance.Settings.StartMinimized)
-            {
-                WindowState = WindowState.Minimized;
-                UpdateTrayIconMinimized();
-            }
         }
 
         protected override void OnStateChanged(EventArgs e)
@@ -72,6 +69,16 @@ namespace TroveTools.NET.View
                 }
             }
             else trayIcon.Visible = false;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (MainWindowViewModel.Instance.Settings.StartMinimized)
+            {
+                log.Info("Starting minimized");
+                WindowState = WindowState.Minimized;
+                UpdateTrayIconMinimized();
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

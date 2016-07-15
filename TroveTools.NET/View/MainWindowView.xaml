@@ -16,7 +16,7 @@
         Left="{vw:SettingBinding MainWindow_Left}"
         Top="{vw:SettingBinding MainWindow_Top}"
         WindowState="{vw:SettingBinding MainWindow_WindowState}"
-        Closing="Window_Closing">
+        Closing="Window_Closing" Loaded="Window_Loaded">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadDataCommand}"/>

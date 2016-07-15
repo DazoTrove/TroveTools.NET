@@ -12,9 +12,10 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
-## Version 1.1.4 Release (TBD)
+## Version 1.1.4 Release (7/15/2016)
 - Trovesaurus tab: added images to Calendar events
 - Trovesaurus tab: updated formatting of server status text
+- Background tasks (updating trove game status, auto updates, checking Trovesaurus mail, and server status updates) now startup upon launching the application. Previously when the start minimized option was enabled these tasks did not start until the window was restored and fully loaded
 
 ## Version 1.1.3 Release (7/13/2016)
 - Trovesaurus tab: added Live server status in addition to the Live launcher status - thanks to Etaew for adding this info to the API that is used and for all his hard work getting Trovesaurus restored.
