@@ -338,10 +338,10 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Margin="3" Grid.Row="0" Grid.Column="0">
+                                    <TextBlock Margin="3" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
                                         <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
                                                    CommandParameter="{Binding Url}" ToolTip="{Binding Url}" Foreground="{x:Null}">
-                                            <Image MaxHeight="50" MaxWidth="75" Source="{Binding ImagePath, Converter={c:ImagePathConverter}}">
+                                            <Image Width="75" MaxHeight="50" Source="{Binding ImagePath, Converter={c:ImagePathConverter}}">
                                                 <Image.ToolTip>
                                                     <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
                                                         <Image Source="{Binding Source}" MaxHeight="300" MaxWidth="300" />
