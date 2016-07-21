@@ -32,16 +32,30 @@ namespace TroveTools.NET.Model
         #endregion
 
         #region Public Properties
+        [JsonProperty("id")]
         public string PackId { get; set; }
 
+        [JsonProperty("url")]
         public string Url { get; set; }
 
+        [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("author")]
+        public string AuthorId { get; set; }
+
+        [JsonProperty("authorname")]
         public string Author { get; set; }
+
+        [JsonProperty("created")]
+        public string DateCreated { get; set; }
+
+        [JsonProperty("updated")]
+        public string DateUpdated { get; set; }
 
         public string Source { get; set; } = LocalSource;
 
+        [JsonProperty("mods")]
         public List<TroveMod> Mods { get; set; } = new List<TroveMod>();
         #endregion
 

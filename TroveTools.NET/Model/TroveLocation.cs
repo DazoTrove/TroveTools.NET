@@ -103,7 +103,7 @@ namespace TroveTools.NET.Model
             }
         }
 
-        private static void DetectLocations(List<TroveLocation> locations)
+        public static void DetectLocations(List<TroveLocation> locations)
         {
             try
             {

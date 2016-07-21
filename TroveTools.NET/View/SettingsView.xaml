@@ -14,24 +14,32 @@
                 <ResourceDictionary Source="Resources.xaml"/>
                 <ResourceDictionary>
                     <CollectionViewSource x:Key="LocationsView" Source="{Binding Locations}" />
-                    <Style TargetType="{x:Type TextBox}">
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                        <Setter Property="Margin" Value="0,2,40,2" />
-                        <Setter Property="Validation.ErrorTemplate">
-                            <Setter.Value>
-                                <ControlTemplate>
-                                    <DockPanel LastChildFill="true">
-                                        <Border Background="Red" DockPanel.Dock="right" Margin="5,0,0,0" Width="20" Height="20" CornerRadius="10"
+
+                    <ControlTemplate x:Key="ErrorTemplate">
+                        <DockPanel LastChildFill="true">
+                            <Border Background="Red" DockPanel.Dock="right" Margin="3,0,0,0" Width="14" Height="14" CornerRadius="7"
                                                 ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}">
-                                            <TextBlock Text="!" VerticalAlignment="center" HorizontalAlignment="center" FontWeight="Bold" Foreground="white" />
-                                        </Border>
-                                        <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
-                                            <Border BorderBrush="red" BorderThickness="1" />
-                                        </AdornedElementPlaceholder>
-                                    </DockPanel>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
+                                <TextBlock Text="!" VerticalAlignment="center" HorizontalAlignment="center" FontWeight="Bold" Foreground="white" />
+                            </Border>
+                            <Border BorderBrush="red" BorderThickness="2" Padding="2">
+                                <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center"/>
+                            </Border>
+                        </DockPanel>
+                    </ControlTemplate>
+
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="Validation.HasError" Value="true">
+                                <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <Trigger Property="Validation.HasError" Value="true">
+                                <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
@@ -59,11 +67,18 @@
                             <TextBlock Text="Remove Location" VerticalAlignment="Center" Margin="2" />
                         </StackPanel>
                     </Button>
+                    <Button HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False" Command="{Binding DetectLocationsCommand}"
+                            ToolTip="Attempt to automatically detect the Trove game locations using Registry data and common locations" >
+                        <StackPanel>
+                            <Image Source="/Resources/glyphicons-82-refresh.png" Width="26" Height="26" Stretch="None" />
+                            <TextBlock Text="Detect Locations" VerticalAlignment="Center" Margin="2" />
+                        </StackPanel>
+                    </Button>
                 </ToolBar>
                 <ListView Grid.IsSharedSizeScope="True" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Source={StaticResource LocationsView}}">
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
-                            <GridViewColumn Width="200">
+                            <GridViewColumn Width="210">
                                 <GridViewColumnHeader Content="Location Name"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -74,7 +89,7 @@
                                             </Grid.ColumnDefinitions>
 
                                             <CheckBox Grid.Column="0" IsChecked="{Binding Path=Enabled, UpdateSourceTrigger=PropertyChanged}" ToolTip="Enabled" VerticalAlignment="Center" />
-                                            <TextBox Grid.Column="1" Width="165" Margin="6,0,0,0" VerticalAlignment="Center" 
+                                            <TextBox Grid.Column="1" Width="160" Margin="6,0,0,0" VerticalAlignment="Center" Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
                                                      Text="{Binding LocationName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true, Delay=2000}" />
                                         </Grid>
                                     </DataTemplate>
@@ -83,7 +98,11 @@
                             <GridViewColumn Width="450" Header="Location Path">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock><Hyperlink Command="{Binding LaunchFolderCommand}"><Run Text="{Binding LocationPath}"/></Hyperlink></TextBlock>
+                                        <TextBlock>
+                                            <Hyperlink Command="{Binding LaunchFolderCommand}">
+                                                <TextBlock Text="{Binding LocationPath, ValidatesOnDataErrors=true}" Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+                                            </Hyperlink>
+                                        </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

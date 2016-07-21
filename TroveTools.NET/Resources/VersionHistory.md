@@ -12,7 +12,10 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
-## Version 1.1.5 Release (TBD)
+## Version 1.1.5 Release (7/21/2016)
+- Location Settings: added button to detect locations to attempt to automatically detect the Trove game locations using Registry data and common locations. Previously the application performed this automatic detecion only on the first startup
+- Location Settings: Trove game path locations are now also automatically detected using Registry settings for Steam
+- Trovesaurus API: updated account link key querystring parameter to be consistent across all requests
 - Style Update
   - Trovesaurus tab: aligned caledar event images
 

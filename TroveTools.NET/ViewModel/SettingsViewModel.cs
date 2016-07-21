@@ -21,6 +21,7 @@ namespace TroveTools.NET.ViewModel
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private DelegateCommand<TroveLocationViewModel> _removeLocationCommand;
         private DelegateCommand<string> _addLocationCommand;
+        private DelegateCommand _DetectLocationsCommand;
         private ObservableCollection<TimeSpan> _AutoUpdateIntervals = new ObservableCollection<TimeSpan>();
         private CollectionViewSource _AutoUpdateIntervalsView = new CollectionViewSource();
         private bool canSaveData = true;
@@ -62,8 +63,8 @@ namespace TroveTools.NET.ViewModel
 
                 // Setup auto update interval options
 #if DEBUG
-                _AutoUpdateIntervals.Add(new TimeSpan(0, 0, 30)); 
-                _AutoUpdateIntervals.Add(new TimeSpan(0, 1, 0)); 
+                _AutoUpdateIntervals.Add(new TimeSpan(0, 0, 30));
+                _AutoUpdateIntervals.Add(new TimeSpan(0, 1, 0));
 #endif
                 _AutoUpdateIntervals.Add(new TimeSpan(0, 5, 0));
                 _AutoUpdateIntervals.Add(new TimeSpan(0, 10, 0));
@@ -241,6 +242,14 @@ namespace TroveTools.NET.ViewModel
                 return _removeLocationCommand;
             }
         }
+        public DelegateCommand DetectLocationsCommand
+        {
+            get
+            {
+                if (_DetectLocationsCommand == null) _DetectLocationsCommand = new DelegateCommand(DetectLocations);
+                return _DetectLocationsCommand;
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -251,8 +260,7 @@ namespace TroveTools.NET.ViewModel
                 try
                 {
                     log.Info("Saving location settings");
-                    TroveLocation.Locations = (from loc in Locations
-                                               select loc.DataObject).ToList();
+                    TroveLocation.Locations = GetLocationsList();
                 }
                 catch (Exception ex) { log.Error("Error saving location settings", ex); }
             }
@@ -262,6 +270,26 @@ namespace TroveTools.NET.ViewModel
         {
             string locationName = string.Format("Trove {0}", Path.GetFileName(folder));
             Locations.Add(new TroveLocationViewModel(locationName, folder));
+        }
+
+        private List<TroveLocation> GetLocationsList()
+        {
+            return (from loc in Locations
+                    select loc.DataObject).ToList();
+        }
+
+        private void DetectLocations(object param = null)
+        {
+            var locations = GetLocationsList();
+            TroveLocation.DetectLocations(locations);
+            var ic = StringComparison.OrdinalIgnoreCase;
+            
+            foreach (var loc in locations)
+            {
+                // Add any locations detected that are not already present
+                if (!Locations.Any(l => l.DataObject.LocationPath.Equals(loc.LocationPath, ic)))
+                    Locations.Add(new TroveLocationViewModel(loc));
+            }
         }
         #endregion
     }

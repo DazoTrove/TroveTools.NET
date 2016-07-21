@@ -24,6 +24,9 @@ namespace TroveTools.NET.Model
         public const string ModDownloadUrl = TrovesaurusBaseUrl + "mod.php?id={0}&download={1}";
         public const string ModViewUrl = TrovesaurusBaseUrl + "mod.php?id={0}";
         public const string ModPacksUrl = TrovesaurusBaseUrl + "modpacks";
+        public const string ModPacksFeedUrl = TrovesaurusBaseUrl + "feeds/modpacks";
+        public const string ModPackCreateUrl = TrovesaurusBaseUrl + "feeds/createmodpack.php?name={0}&mods={1}";
+        public const string UserProfileUrl = TrovesaurusBaseUrl + "user={0}/{1}";
         public const string CalendarUrl = TrovesaurusBaseUrl + "toolbox/calendar.php";
         public const string CalendarPageUrl = TrovesaurusBaseUrl + "calendar";
         public const string NewsUrl = TrovesaurusBaseUrl + "feeds/news.php";
@@ -34,8 +37,8 @@ namespace TroveTools.NET.Model
         public const string ServerStatusPage = TrovesaurusBaseUrl + "status.php";
         public const string OnlineStreamsUrl = TrovesaurusBaseUrl + "feeds/onlinestreams.php";
         public const string OnlineStreamsPageUrl = TrovesaurusBaseUrl + "livestreams.php";
-        public const string TroveLaunchUrl = TrovesaurusBaseUrl + "toolbox/ping.php?id={0}&action=launch";
-        public const string TroveCloseUrl = TrovesaurusBaseUrl + "toolbox/ping.php?id={0}&action=close";
+        public const string TroveLaunchUrl = TrovesaurusBaseUrl + "toolbox/ping.php?action=launch";
+        public const string TroveCloseUrl = TrovesaurusBaseUrl + "toolbox/ping.php?action=close";
         public const string MailCountUrl = TrovesaurusBaseUrl + "toolbox/mailcount.php";
         public const string MailboxUrl = TrovesaurusBaseUrl + "mail";
 
@@ -268,26 +271,29 @@ namespace TroveTools.NET.Model
 
         public static void LaunchTrovesaurus(string url = TrovesaurusBaseUrl)
         {
-            // Launch site in default browser
             string launchUrl = AddQuerystring(url ?? TrovesaurusBaseUrl);
             if (!string.IsNullOrEmpty(launchUrl))
+            {
+                // Launch site in default browser
                 Process.Start(launchUrl);
+            }
             else
                 log.ErrorFormat("Invalid URL to launch passed: [{0}]", url);
         }
 
         public static void LaunchModSite(string id)
         {
-            // Launch site in default browser
-            string url = AddQuerystring(string.Format(ModViewUrl, id));
-            Process.Start(url);
+            LaunchTrovesaurus(string.Format(ModViewUrl, id));
         }
 
         public static void LaunchTrovesaurusNewsTag(string tag)
         {
-            // Launch site in default browser
-            string url = AddQuerystring(string.Format(NewsTagUrl, tag));
-            Process.Start(url);
+            LaunchTrovesaurus(string.Format(NewsTagUrl, tag));
+        }
+
+        public static void LaunchUserProfile(string userId, string userName)
+        {
+            LaunchTrovesaurus(string.Format(UserProfileUrl, userId, StandardizeNameForUrl(userName)));
         }
 
         public static string UpdateTroveGameStatus(bool online)
@@ -296,8 +302,7 @@ namespace TroveTools.NET.Model
             {
                 using (var client = OpenWebClient())
                 {
-                    string url = AddQuerystring(online ? string.Format(TroveLaunchUrl, SettingsDataProvider.TrovesaurusAccountLinkKey) :
-                        string.Format(TroveCloseUrl, SettingsDataProvider.TrovesaurusAccountLinkKey), includeKey: false);
+                    string url = AddQuerystring(online ? TroveLaunchUrl : TroveCloseUrl);
                     return client.DownloadString(url);
                 }
             }
@@ -330,6 +335,11 @@ namespace TroveTools.NET.Model
             if (includeKey && !string.IsNullOrEmpty(SettingsDataProvider.TrovesaurusAccountLinkKey)) newUrl.AppendFormat("&key={0}", SettingsDataProvider.TrovesaurusAccountLinkKey);
             if (includeTicks) newUrl.AppendFormat("&ticks={0}", DateTime.Now.Ticks);
             return newUrl.ToString();
+        }
+
+        private static string StandardizeNameForUrl(string name)
+        {
+            return Regex.Replace(name.ToLower(), @"[^ a-z]", "").Replace(" ", "-");
         }
         #endregion
     }
