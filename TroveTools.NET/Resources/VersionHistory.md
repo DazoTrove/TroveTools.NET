@@ -15,6 +15,7 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 ## Version 1.1.5 Release (7/21/2016)
 - Location Settings: added button to detect locations to attempt to automatically detect the Trove game locations using Registry data and common locations. Previously the application performed this automatic detecion only on the first startup
 - Location Settings: Trove game path locations are now also automatically detected using Registry settings for Steam
+- Location Settings: locations now show validation errors if the name is missing or the location path is not valid
 - Trovesaurus API: updated account link key querystring parameter to be consistent across all requests
 - Style Update
   - Trovesaurus tab: aligned caledar event images

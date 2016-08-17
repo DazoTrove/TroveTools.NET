@@ -281,7 +281,6 @@
     </Resource>
     <Resource Include="SampleData\DesignTimeTroveMod.json" />
     <Resource Include="SampleData\DesignTimeTroveMods.json" />
-    <None Include="TroveTools.NET_TemporaryKey.pfx" />
     <Resource Include="Resources\orbitron-bold.otf" />
     <Resource Include="Resources\orbitron-light.otf" />
   </ItemGroup>
