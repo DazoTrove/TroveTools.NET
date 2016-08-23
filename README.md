@@ -19,6 +19,7 @@ If you receive the error message "Application cannot be started. Contact the App
 ClickOnce troubleshooting references:
 * [MSDN Forum Post: Activation failed - The system cannot find the file specified error](https://social.msdn.microsoft.com/Forums/windows/en-US/aef681af-d560-4085-9101-eb4573e02028/activation-failed-the-system-cannot-find-the-file-specified-error?forum=winformssetup)
 * [MSDN Forum Post: ClickOnce Deployment "Application cannot start" error after latest publish](https://social.msdn.microsoft.com/Forums/windows/en-US/804a5ce6-7d22-4f10-8ae6-d75cf2766359/clickonce-deployment-application-cannot-start-error-after-latest-publish?forum=winformssetup)
+* [About ClickOnce deployment](https://msdn.microsoft.com/en-us/library/t71a733d%28v=vs.120%29.ASPX?f=255&MSPPError=-2147217396)
 
 ## Screenshots
 ![TroveTools.NET Trovesaurus Tab](Screenshots/TroveTools.NET-v1.0.0.5-Trovesaurus.png)
