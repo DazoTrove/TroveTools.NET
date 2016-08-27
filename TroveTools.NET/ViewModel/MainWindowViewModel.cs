@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using TroveTools.NET.Framework;
+using TroveTools.NET.DataAccess;
 using TroveTools.NET.Model;
 using TroveTools.NET.Properties;
 
 namespace TroveTools.NET.ViewModel
 {
-    class MainWindowViewModel : ViewModelBase
+    class MainWindowViewModel : ViewModelBase, IViewCommandSource
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly MainWindowViewModel _instance;
@@ -74,6 +75,15 @@ namespace TroveTools.NET.ViewModel
         }
         #endregion
 
+        #region IViewCommandSource
+        private ViewCommandManager _ViewCommandManager = new ViewCommandManager();
+
+        /// <summary>
+        /// Gets the ViewCommandManager instance.
+        /// </summary>
+        public ViewCommandManager ViewCommandManager { get { return _ViewCommandManager; } }
+        #endregion IViewCommandSource
+
         #region Commands
         public DelegateCommand LoadDataCommand
         {
@@ -111,7 +121,8 @@ namespace TroveTools.NET.ViewModel
                 if (!string.IsNullOrEmpty(_savedTroveUri)) ProcessTroveUri(_savedTroveUri);
 
                 // Process a URI from the command line args if there are any
-                ProcessTroveUri(ApplicationDetails.GetTroveUri());
+                var args = ApplicationDetails.GetTroveUri();
+                if (!string.IsNullOrEmpty(args)) ProcessTroveUri(args);
             }
             catch (Exception ex) { log.Error("Error loading main window data", ex); }
             finally { _dataLoaded = true; }
@@ -126,9 +137,11 @@ namespace TroveTools.NET.ViewModel
 
         public void ProcessTroveUri(string troveUri)
         {
-            if (string.IsNullOrEmpty(troveUri)) return;
             if (Application.Current.Dispatcher.CheckAccess())
             {
+                ViewCommandManager.InvokeLoaded(nameof(View.MainWindowView.RestoreWindow));
+                if (string.IsNullOrEmpty(troveUri)) return;
+
                 if (_dataLoaded)
                 {
                     log.InfoFormat("Processing Trove URI: {0}", troveUri);

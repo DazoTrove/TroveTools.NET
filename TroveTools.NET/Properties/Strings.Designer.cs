@@ -115,6 +115,24 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open TroveTools.NET.
+        /// </summary>
+        internal static string MainWindowView_OpenTroveTools {
+            get {
+                return ResourceManager.GetString("MainWindowView_OpenTroveTools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quit TroveTools.NET.
+        /// </summary>
+        internal static string MainWindowView_QuitTroveTools {
+            get {
+                return ResourceManager.GetString("MainWindowView_QuitTroveTools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TroveTools.NET: version {0} - created by Dazo.
         /// </summary>
         internal static string MainWindowViewModel_DisplayName {

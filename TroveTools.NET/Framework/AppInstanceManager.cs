@@ -35,7 +35,7 @@ namespace TroveTools.NET.Framework
                         catch (Exception ex) { log.Error("Error closing interprocess communication server", ex); }
                     };
                 }
-                else if (!string.IsNullOrEmpty(data))
+                else
                 {
                     using (IIpcClient client = new SharedMemoryClient(eventHandle)) client.Send(data);
                 }

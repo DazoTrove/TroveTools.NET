@@ -145,6 +145,14 @@
     <value>TroveTools.NET</value>
     <comment>Minimize Balloon Tip Title</comment>
   </data>
+  <data name="MainWindowView_OpenTroveTools" xml:space="preserve">
+    <value>Open TroveTools.NET</value>
+    <comment>Open application context menu text</comment>
+  </data>
+  <data name="MainWindowView_QuitTroveTools" xml:space="preserve">
+    <value>Quit TroveTools.NET</value>
+    <comment>Quit application context menu text</comment>
+  </data>
   <data name="MyModsViewModel_DisplayName" xml:space="preserve">
     <value>My Mods</value>
     <comment>The display name of the MyModsViewModel object</comment>

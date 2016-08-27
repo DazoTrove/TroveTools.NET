@@ -12,6 +12,11 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.1.6 Release (8/26/2016)
+- Settings: when Minimize to System Tray is enabled, closing the window will also minimize the application to the system tray
+- System Tray Icon: new right-click context menu to open or quit the application
+- Restores previous instance when opening second instance of application (launching Trove URI links or attempting to open a second instance when one is already open)
+
 ## Version 1.1.5 Release (7/21/2016)
 - Location Settings: added button to detect locations to attempt to automatically detect the Trove game locations using Registry data and common locations. Previously the application performed this automatic detecion only on the first startup
 - Location Settings: Trove game path locations are now also automatically detected using Registry settings for Steam

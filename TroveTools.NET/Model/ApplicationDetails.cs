@@ -73,7 +73,7 @@ namespace TroveTools.NET.Model
                 }
             }
             catch (Exception ex) { log.Error("Error parsing command line arguments for Trove URI", ex); }
-            return null;
+            return string.Empty;
         }
 
         /// <summary>
