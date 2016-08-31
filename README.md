@@ -16,6 +16,8 @@ If you receive the error message "Application cannot be started. Contact the App
 2. Uninstall the application from *Control Panel - Programs and Features*, and reinstall the application using the [latest setup application](https://github.com/DazoTrove/TroveTools.NET/raw/master/TroveTools.NET/publish/setup.exe).
 3. Check whether your antivirus software is quarantining any files during the download process. If it is try excluding the files.
 
+[View ClickOnce deployment issues recorded and additional troubleshooting steps](https://github.com/DazoTrove/TroveTools.NET/issues?utf8=%E2%9C%93&q=label%3A%22ClickOnce%20deployment%22%20)
+
 ClickOnce troubleshooting references:
 * [MSDN Forum Post: Activation failed - The system cannot find the file specified error](https://social.msdn.microsoft.com/Forums/windows/en-US/aef681af-d560-4085-9101-eb4573e02028/activation-failed-the-system-cannot-find-the-file-specified-error?forum=winformssetup)
 * [MSDN Forum Post: ClickOnce Deployment "Application cannot start" error after latest publish](https://social.msdn.microsoft.com/Forums/windows/en-US/804a5ce6-7d22-4f10-8ae6-d75cf2766359/clickonce-deployment-application-cannot-start-error-after-latest-publish?forum=winformssetup)
