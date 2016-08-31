@@ -12,6 +12,10 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.1.7 Release (8/31/2016)
+- Trovesaurus tab: added a tray notification for new Trovesaurus mail messages
+- Trovesaurus tab: added a tray notification for server status changes
+
 ## Version 1.1.6 Release (8/26/2016)
 - Settings: when Minimize to System Tray is enabled, closing the window will also minimize the application to the system tray
 - System Tray Icon: new right-click context menu to open or quit the application

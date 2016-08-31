@@ -139,7 +139,7 @@ namespace TroveTools.NET.ViewModel
         {
             if (Application.Current.Dispatcher.CheckAccess())
             {
-                ViewCommandManager.InvokeLoaded(nameof(View.MainWindowView.RestoreWindow));
+                ViewCommandManager.InvokeLoaded("RestoreWindow");
                 if (string.IsNullOrEmpty(troveUri)) return;
 
                 if (_dataLoaded)

@@ -22,7 +22,10 @@ namespace TroveTools.NET.View
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        private const int TipTimeout = 5000;
+
         private NotifyIcon trayIcon;
+        private Action tipAction = null;
         private bool showBalloonTip = true;
         private bool forceClose = false;
 
@@ -50,9 +53,10 @@ namespace TroveTools.NET.View
             trayIcon.BalloonTipText = Strings.MainWindowView_MinimizeBalloonTipText;
             trayIcon.BalloonTipTitle = Strings.MainWindowView_MinimizeBalloonTipTitle;
             trayIcon.Text = Strings.MainWindowView_MinimizeBalloonTipTitle;
-
+            
+            tipAction = RestoreWindow;
+            trayIcon.BalloonTipClicked += (s, e) => tipAction?.Invoke();
             trayIcon.MouseClick += (s, e) => { if (e.Button == MouseButtons.Left) RestoreWindow(); };
-            trayIcon.BalloonTipClicked += (s, e) => RestoreWindow();
 
             // Setup tray icon context menu
             var open = new ToolStripMenuItem(Strings.MainWindowView_OpenTroveTools, icon.ToBitmap());
@@ -84,6 +88,13 @@ namespace TroveTools.NET.View
             ShowInTaskbar = true;
         }
 
+        [ViewCommand]
+        public void ShowTrayTip(string balloonTipText, Action action = null)
+        {
+            if (action != null) tipAction = action;
+            trayIcon.ShowBalloonTip(TipTimeout, trayIcon.BalloonTipTitle, balloonTipText, trayIcon.BalloonTipIcon);
+        }
+
         private void QuitTroveTools()
         {
             forceClose = true;
@@ -98,7 +109,7 @@ namespace TroveTools.NET.View
                 ShowInTaskbar = false;
                 if (showBalloonTip)
                 {
-                    trayIcon.ShowBalloonTip(5000);
+                    ShowTrayTip(Strings.MainWindowView_MinimizeBalloonTipText, RestoreWindow);
                     showBalloonTip = false;
                 }
             }

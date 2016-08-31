@@ -124,8 +124,24 @@ namespace TroveTools.NET.ViewModel
             {
                 if (lastUpdated < DateTime.Now.AddSeconds(-25))
                 {
+                    var oldStatus = _ServerStatus;
+
                     lastUpdated = DateTime.Now;
                     ServerStatus = TrovesaurusApi.GetServerStatus();
+
+                    if (oldStatus != null)
+                    {
+                        StringBuilder status = new StringBuilder();
+                        if (_ServerStatus.Live.Online != oldStatus.Live.Online) status.AppendFormat("Live Launcher is now {0}{1}", _ServerStatus.Live.Online ? "online" : "offline", Environment.NewLine);
+                        if (_ServerStatus.Server.Online != oldStatus.Server.Online) status.AppendFormat("Live Server is now {0}{1}", _ServerStatus.Server.Online ? "online" : "offline", Environment.NewLine);
+                        if (_ServerStatus.PTS.Online != oldStatus.PTS.Online) status.AppendFormat("Public Test Server is now {0}{1}", _ServerStatus.PTS.Online ? "online" : "offline", Environment.NewLine);
+
+                        if (status.Length > 0)
+                        {
+                            Action launchStatus = () => LaunchServerStatusCommand.Execute(null);
+                            MainWindowViewModel.Instance.ViewCommandManager.InvokeLoaded("ShowTrayTip", status.ToString(), launchStatus);
+                        }
+                    }
                 }
             }
             catch (Exception ex) { log.Error("Error refreshing server status", ex); }
@@ -135,8 +151,15 @@ namespace TroveTools.NET.ViewModel
         {
             try
             {
+                int oldMailCount = MailCount;
                 MailCount = TrovesaurusApi.GetMailCount();
-                log.InfoFormat("Checked Trovesaurus mail: {0} new Trovesaurus mail message{1}", MailCount, MailCount == 1 ? "" : "s");
+                string message = string.Format("{0} new Trovesaurus mail message{1}", MailCount, MailCount == 1 ? "" : "s");
+                log.InfoFormat("Checked Trovesaurus mail: {0}", message);
+                if (MailCount > oldMailCount)
+                {
+                    Action launchMail = () => LaunchTrovesaurusMailCommand.Execute(null);
+                    MainWindowViewModel.Instance.ViewCommandManager.InvokeLoaded("ShowTrayTip", message, launchMail);
+                }
             }
             catch (Exception ex) { log.Error("Error checking Trovesaurus mail", ex); }
         }
@@ -162,7 +185,7 @@ namespace TroveTools.NET.ViewModel
             get { return _StreamsView.View; }
         }
 
-        private int _MailCount;
+        private int _MailCount = 0;
         public int MailCount
         {
             get { return _MailCount; }
