@@ -133,7 +133,7 @@ namespace TroveTools.NET.ViewModel
                     {
                         StringBuilder status = new StringBuilder();
                         if (_ServerStatus.Live.Online != oldStatus.Live.Online) status.AppendFormat("Live Launcher is now {0}{1}", _ServerStatus.Live.Online ? "online" : "offline", Environment.NewLine);
-                        if (_ServerStatus.Server.Online != oldStatus.Server.Online) status.AppendFormat("Live Server is now {0}{1}", _ServerStatus.Server.Online ? "online" : "offline", Environment.NewLine);
+                        //if (_ServerStatus.Server.Online != oldStatus.Server.Online) status.AppendFormat("Live Server is now {0}{1}", _ServerStatus.Server.Online ? "online" : "offline", Environment.NewLine);
                         if (_ServerStatus.PTS.Online != oldStatus.PTS.Online) status.AppendFormat("Public Test Server is now {0}{1}", _ServerStatus.PTS.Online ? "online" : "offline", Environment.NewLine);
 
                         if (status.Length > 0)
