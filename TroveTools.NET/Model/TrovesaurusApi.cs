@@ -206,7 +206,7 @@ namespace TroveTools.NET.Model
             finally { if (_StreamList == null) _StreamList = new List<TrovesaurusOnlineStream>(); }
         }
 
-        public static int GetMailCount()
+        public static int? GetMailCount()
         {
             string content = null;
             try
@@ -216,7 +216,7 @@ namespace TroveTools.NET.Model
                 return Convert.ToInt32(content);
             }
             catch (Exception ex) { log.ErrorFormat("Error getting Trovesaurus mail count (content {0}): {1}", content, ex.Message); }
-            return 0;
+            return null;
         }
 
         public static TroveServerStatus GetServerStatus()

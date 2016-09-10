@@ -124,22 +124,25 @@ namespace TroveTools.NET.ViewModel
             {
                 if (lastUpdated < DateTime.Now.AddSeconds(-25))
                 {
-                    var oldStatus = _ServerStatus;
-
+                    var oldStatus = _ServerStatus; // Check private variable for server status here to prevent a recursive issue
+                    var newStatus = TrovesaurusApi.GetServerStatus();
                     lastUpdated = DateTime.Now;
-                    ServerStatus = TrovesaurusApi.GetServerStatus();
 
-                    if (oldStatus != null)
+                    if (newStatus != null)
                     {
-                        StringBuilder status = new StringBuilder();
-                        if (_ServerStatus.Live.Online != oldStatus.Live.Online) status.AppendFormat("Live Launcher is now {0}{1}", _ServerStatus.Live.Online ? "online" : "offline", Environment.NewLine);
-                        //if (_ServerStatus.Server.Online != oldStatus.Server.Online) status.AppendFormat("Live Server is now {0}{1}", _ServerStatus.Server.Online ? "online" : "offline", Environment.NewLine);
-                        if (_ServerStatus.PTS.Online != oldStatus.PTS.Online) status.AppendFormat("Public Test Server is now {0}{1}", _ServerStatus.PTS.Online ? "online" : "offline", Environment.NewLine);
-
-                        if (status.Length > 0)
+                        ServerStatus = newStatus;
+                        if (oldStatus != null)
                         {
-                            Action launchStatus = () => LaunchServerStatusCommand.Execute(null);
-                            MainWindowViewModel.Instance.ViewCommandManager.InvokeLoaded("ShowTrayTip", status.ToString(), launchStatus);
+                            StringBuilder status = new StringBuilder();
+                            if (newStatus.Live.Online != oldStatus.Live.Online) status.AppendFormat("Live Launcher is now {0}{1}", newStatus.Live.Online ? "online" : "offline", Environment.NewLine);
+                            //if (newStatus.Server.Online != oldStatus.Server.Online) status.AppendFormat("Live Server is now {0}{1}", newStatus.Server.Online ? "online" : "offline", Environment.NewLine);
+                            if (newStatus.PTS.Online != oldStatus.PTS.Online) status.AppendFormat("Public Test Server is now {0}{1}", newStatus.PTS.Online ? "online" : "offline", Environment.NewLine);
+
+                            if (status.Length > 0)
+                            {
+                                Action launchStatus = () => LaunchServerStatusCommand.Execute(null);
+                                MainWindowViewModel.Instance.ViewCommandManager.InvokeLoaded("ShowTrayTip", status.ToString(), launchStatus);
+                            }
                         }
                     }
                 }
@@ -152,13 +155,17 @@ namespace TroveTools.NET.ViewModel
             try
             {
                 int oldMailCount = MailCount;
-                MailCount = TrovesaurusApi.GetMailCount();
-                string message = string.Format("{0} new Trovesaurus mail message{1}", MailCount, MailCount == 1 ? "" : "s");
-                log.InfoFormat("Checked Trovesaurus mail: {0}", message);
-                if (MailCount > oldMailCount)
+                int? newMailCount = TrovesaurusApi.GetMailCount();
+                if (newMailCount.HasValue)
                 {
-                    Action launchMail = () => LaunchTrovesaurusMailCommand.Execute(null);
-                    MainWindowViewModel.Instance.ViewCommandManager.InvokeLoaded("ShowTrayTip", message, launchMail);
+                    MailCount = newMailCount.Value;
+                    string message = string.Format("{0} new Trovesaurus mail message{1}", MailCount, MailCount == 1 ? "" : "s");
+                    log.InfoFormat("Checked Trovesaurus mail: {0}", message);
+                    if (MailCount > oldMailCount)
+                    {
+                        Action launchMail = () => LaunchTrovesaurusMailCommand.Execute(null);
+                        MainWindowViewModel.Instance.ViewCommandManager.InvokeLoaded("ShowTrayTip", message, launchMail);
+                    }
                 }
             }
             catch (Exception ex) { log.Error("Error checking Trovesaurus mail", ex); }

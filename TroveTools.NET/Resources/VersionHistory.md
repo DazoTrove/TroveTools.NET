@@ -12,6 +12,9 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.1.7.2 Release (9/9/2016)
+- Trovesaurus tab: fixed bug with mail and server status notifications if there are any errors retrieving status from the Trovesaurus API
+
 ## Version 1.1.7.1 Release (9/1/2016)
 - Trovesaurus tab: updated tray notification for server status changes to exclude Live server since this can fluctuate if the Trovesaurus web server has problems
 
