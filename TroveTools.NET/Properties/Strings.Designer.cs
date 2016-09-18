@@ -22,7 +22,7 @@ namespace TroveTools.NET.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Strings {
+    public class Strings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace TroveTools.NET.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TroveTools.NET.Properties.Strings", typeof(Strings).Assembly);
@@ -51,7 +51,7 @@ namespace TroveTools.NET.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
-        internal static string AboutViewModel_DisplayName {
+        public static string AboutViewModel_DisplayName {
             get {
                 return ResourceManager.GetString("AboutViewModel_DisplayName", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to All Subtypes.
         /// </summary>
-        internal static string GetMoreModsViewModel_AllSubTypes {
+        public static string GetMoreModsViewModel_AllSubTypes {
             get {
                 return ResourceManager.GetString("GetMoreModsViewModel_AllSubTypes", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to All Types.
         /// </summary>
-        internal static string GetMoreModsViewModel_AllTypes {
+        public static string GetMoreModsViewModel_AllTypes {
             get {
                 return ResourceManager.GetString("GetMoreModsViewModel_AllTypes", resourceCulture);
             }
@@ -90,16 +90,25 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Get More Mods.
         /// </summary>
-        internal static string GetMoreModsViewModel_DisplayName {
+        public static string GetMoreModsViewModel_DisplayName {
             get {
                 return ResourceManager.GetString("GetMoreModsViewModel_DisplayName", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for Updates.
+        /// </summary>
+        public static string MainWindowView_CheckForUpdates {
+            get {
+                return ResourceManager.GetString("MainWindowView_CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TroveTools.NET will continue running in the background while minimized.
         /// </summary>
-        internal static string MainWindowView_MinimizeBalloonTipText {
+        public static string MainWindowView_MinimizeBalloonTipText {
             get {
                 return ResourceManager.GetString("MainWindowView_MinimizeBalloonTipText", resourceCulture);
             }
@@ -108,7 +117,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to TroveTools.NET.
         /// </summary>
-        internal static string MainWindowView_MinimizeBalloonTipTitle {
+        public static string MainWindowView_MinimizeBalloonTipTitle {
             get {
                 return ResourceManager.GetString("MainWindowView_MinimizeBalloonTipTitle", resourceCulture);
             }
@@ -117,7 +126,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Open TroveTools.NET.
         /// </summary>
-        internal static string MainWindowView_OpenTroveTools {
+        public static string MainWindowView_OpenTroveTools {
             get {
                 return ResourceManager.GetString("MainWindowView_OpenTroveTools", resourceCulture);
             }
@@ -126,7 +135,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Quit TroveTools.NET.
         /// </summary>
-        internal static string MainWindowView_QuitTroveTools {
+        public static string MainWindowView_QuitTroveTools {
             get {
                 return ResourceManager.GetString("MainWindowView_QuitTroveTools", resourceCulture);
             }
@@ -135,7 +144,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to TroveTools.NET: version {0} - created by Dazo.
         /// </summary>
-        internal static string MainWindowViewModel_DisplayName {
+        public static string MainWindowViewModel_DisplayName {
             get {
                 return ResourceManager.GetString("MainWindowViewModel_DisplayName", resourceCulture);
             }
@@ -144,7 +153,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Zip files.
         /// </summary>
-        internal static string MyMods_OpenFileDialog_Filter {
+        public static string MyMods_OpenFileDialog_Filter {
             get {
                 return ResourceManager.GetString("MyMods_OpenFileDialog_Filter", resourceCulture);
             }
@@ -153,7 +162,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Select mod zip files.
         /// </summary>
-        internal static string MyMods_OpenFileDialog_Title {
+        public static string MyMods_OpenFileDialog_Title {
             get {
                 return ResourceManager.GetString("MyMods_OpenFileDialog_Title", resourceCulture);
             }
@@ -162,7 +171,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to My Mods.
         /// </summary>
-        internal static string MyModsViewModel_DisplayName {
+        public static string MyModsViewModel_DisplayName {
             get {
                 return ResourceManager.GetString("MyModsViewModel_DisplayName", resourceCulture);
             }
@@ -171,7 +180,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Trove executable.
         /// </summary>
-        internal static string Settings_AddLocationDialog_Filter {
+        public static string Settings_AddLocationDialog_Filter {
             get {
                 return ResourceManager.GetString("Settings_AddLocationDialog_Filter", resourceCulture);
             }
@@ -180,7 +189,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Add Trove location: select Trove.exe file.
         /// </summary>
-        internal static string Settings_AddLocationDialog_Title {
+        public static string Settings_AddLocationDialog_Title {
             get {
                 return ResourceManager.GetString("Settings_AddLocationDialog_Title", resourceCulture);
             }
@@ -189,7 +198,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
-        internal static string SettingsViewModel_DisplayName {
+        public static string SettingsViewModel_DisplayName {
             get {
                 return ResourceManager.GetString("SettingsViewModel_DisplayName", resourceCulture);
             }
@@ -198,7 +207,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Location name is missing.
         /// </summary>
-        internal static string TroveLocation_Error_LocationNameMissing {
+        public static string TroveLocation_Error_LocationNameMissing {
             get {
                 return ResourceManager.GetString("TroveLocation_Error_LocationNameMissing", resourceCulture);
             }
@@ -207,7 +216,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Location path is invalid: it does not contain the file Trove.exe.
         /// </summary>
-        internal static string TroveLocation_Error_LocationPathInvalid {
+        public static string TroveLocation_Error_LocationPathInvalid {
             get {
                 return ResourceManager.GetString("TroveLocation_Error_LocationPathInvalid", resourceCulture);
             }
@@ -216,7 +225,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Location path is missing.
         /// </summary>
-        internal static string TroveLocation_Error_LocationPathMissing {
+        public static string TroveLocation_Error_LocationPathMissing {
             get {
                 return ResourceManager.GetString("TroveLocation_Error_LocationPathMissing", resourceCulture);
             }
@@ -225,7 +234,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Version {0} ({3:N0} downloads, updated {1:d}, file ID {2}).
         /// </summary>
-        internal static string TroveMod_Download_ToStringFormat {
+        public static string TroveMod_Download_ToStringFormat {
             get {
                 return ResourceManager.GetString("TroveMod_Download_ToStringFormat", resourceCulture);
             }
@@ -234,7 +243,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Downloading.
         /// </summary>
-        internal static string TroveMod_Status_Downloading {
+        public static string TroveMod_Status_Downloading {
             get {
                 return ResourceManager.GetString("TroveMod_Status_Downloading", resourceCulture);
             }
@@ -243,7 +252,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Error: {0}.
         /// </summary>
-        internal static string TroveMod_Status_Error {
+        public static string TroveMod_Status_Error {
             get {
                 return ResourceManager.GetString("TroveMod_Status_Error", resourceCulture);
             }
@@ -252,7 +261,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Installing.
         /// </summary>
-        internal static string TroveMod_Status_Installing {
+        public static string TroveMod_Status_Installing {
             get {
                 return ResourceManager.GetString("TroveMod_Status_Installing", resourceCulture);
             }
@@ -261,7 +270,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to New Version Available.
         /// </summary>
-        internal static string TroveMod_Status_NewVersionAvailable {
+        public static string TroveMod_Status_NewVersionAvailable {
             get {
                 return ResourceManager.GetString("TroveMod_Status_NewVersionAvailable", resourceCulture);
             }
@@ -270,7 +279,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Up To Date.
         /// </summary>
-        internal static string TroveMod_Status_UpToDate {
+        public static string TroveMod_Status_UpToDate {
             get {
                 return ResourceManager.GetString("TroveMod_Status_UpToDate", resourceCulture);
             }
@@ -279,7 +288,7 @@ namespace TroveTools.NET.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Trovesaurus.
         /// </summary>
-        internal static string TrovesaurusViewModel_DisplayName {
+        public static string TrovesaurusViewModel_DisplayName {
             get {
                 return ResourceManager.GetString("TrovesaurusViewModel_DisplayName", resourceCulture);
             }

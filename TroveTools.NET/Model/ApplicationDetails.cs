@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace TroveTools.NET.Model
 {
@@ -45,6 +46,41 @@ namespace TroveTools.NET.Model
         public static string AssemblyLocation
         {
             get { return Assembly.GetEntryAssembly().Location; }
+        }
+
+        internal static bool UpdateAvailable()
+        {
+            try
+            {
+                if (ApplicationDeployment.IsNetworkDeployed)
+                {
+                    var ad = ApplicationDeployment.CurrentDeployment;
+                    var info = ad.CheckForDetailedUpdate();
+                    return info.UpdateAvailable;
+                }
+            }
+            catch (Exception ex) { log.Error("Error checking for updates", ex); }
+            return false;
+        }
+
+        internal static void UpdateApplication()
+        {
+            try
+            {
+                if (ApplicationDeployment.IsNetworkDeployed)
+                {
+                    var ad = ApplicationDeployment.CurrentDeployment;
+                    var info = ad.CheckForDetailedUpdate();
+                    if (info.UpdateAvailable)
+                    {
+                        ad.Update();
+                        log.InfoFormat("The application has been upgraded and will now restart.");
+                        System.Windows.Forms.Application.Restart();
+                        Application.Current.Shutdown();
+                    }
+                }
+            }
+            catch (Exception ex) { log.Error("Error updating application", ex); }
         }
 
         /// <summary>
@@ -88,6 +124,14 @@ namespace TroveTools.NET.Model
                 Match m = Regex.Match(uri, @"trove:[/\\]{0,2}(?<ModId>\d+);(?<FileId>\d+)", RegexOptions.IgnoreCase);
                 if (m.Success) return new AppArgs { LinkType = AppArgs.LinkTypes.Mod, ModId = m.Groups["ModId"].Value, FileId = m.Groups["FileId"].Value, Uri = uri };
 
+                m = Regex.Match(uri, @"trove:[/\\]{0,2}(?<FileName>.+\.zip)[/\\]?", RegexOptions.IgnoreCase);
+                if (m.Success) return new AppArgs
+                {
+                    LinkType = AppArgs.LinkTypes.LocalMod,
+                    FileName = m.Groups["FileName"].Value.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar),
+                    Uri = uri
+                };
+
                 m = Regex.Match(uri, TroveModPack.IdUriRegex, RegexOptions.IgnoreCase);
                 if (m.Success) return new AppArgs { LinkType = AppArgs.LinkTypes.ModPack, Uri = uri };
 
@@ -102,10 +146,11 @@ namespace TroveTools.NET.Model
 
         internal class AppArgs
         {
-            public enum LinkTypes { Mod, ModPack }
+            public enum LinkTypes { Mod, ModPack, LocalMod }
             public LinkTypes LinkType { get; set; }
             public string ModId { get; set; }
             public string FileId { get; set; }
+            public string FileName { get; set; }
             public string Uri { get; set; }
         }
     }

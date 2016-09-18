@@ -20,7 +20,7 @@ namespace TroveTools.NET.ViewModel
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly MainWindowViewModel _instance;
 
-        private DelegateCommand _LoadDataCommand, _ClosingCommand;
+        private DelegateCommand _LoadDataCommand, _ClosingCommand, _CheckForUpdatesCommand;
         private bool _dataLoaded = false;
         private string _savedTroveUri = null;
 
@@ -102,6 +102,15 @@ namespace TroveTools.NET.ViewModel
                 return _ClosingCommand;
             }
         }
+
+        public DelegateCommand CheckForUpdatesCommand
+        {
+            get
+            {
+                if (_CheckForUpdatesCommand == null) _CheckForUpdatesCommand = new DelegateCommand(CheckForUpdates);
+                return _CheckForUpdatesCommand;
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -135,6 +144,12 @@ namespace TroveTools.NET.ViewModel
             Trovesaurus.Closing();
         }
 
+        public void CheckForUpdates(object param = null)
+        {
+            try { Trovesaurus.CheckForUpdates(true); }
+            catch (Exception ex) { log.Error("Error checking for updates", ex); }
+        }
+
         public void ProcessTroveUri(string troveUri)
         {
             if (Application.Current.Dispatcher.CheckAccess())
@@ -150,6 +165,7 @@ namespace TroveTools.NET.ViewModel
                     {
                         SetActiveWorkspace(MyMods);
                         if (args.LinkType == ApplicationDetails.AppArgs.LinkTypes.Mod) TroveUriInstallMod(args.ModId, args.FileId);
+                        if (args.LinkType == ApplicationDetails.AppArgs.LinkTypes.LocalMod) TroveUriInstallMod(args.FileName);
                         if (args.LinkType == ApplicationDetails.AppArgs.LinkTypes.ModPack) MyMods.TroveUriInstallModPack(args.Uri);
                     }
                 }
@@ -166,6 +182,12 @@ namespace TroveTools.NET.ViewModel
                 modVm.InstallCommand.Execute(fileId);
             else
                 log.WarnFormat("Mod ID [{0}] not found", modId);
+        }
+
+        public void TroveUriInstallMod(string fileName)
+        {
+            log.InfoFormat("Installing mod file [{0}] from Trove URI argument", fileName);
+            MyMods.AddModCommand.Execute(fileName);
         }
 
         public void SetActiveWorkspace(ViewModelBase workspace)

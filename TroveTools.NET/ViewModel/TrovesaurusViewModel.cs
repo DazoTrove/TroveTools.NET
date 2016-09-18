@@ -23,7 +23,7 @@ namespace TroveTools.NET.ViewModel
         private DelegateCommand _RefreshDataCommand;
         private CollectionViewSource _NewsView = new CollectionViewSource(), _CalendarView = new CollectionViewSource(), _StreamsView = new CollectionViewSource();
         private DispatcherTimer _StatusTimer = null;
-        private DateTime lastUpdated = DateTime.MinValue;
+        private DateTime statusLastUpdated = DateTime.MinValue, lastUpdateCheck = DateTime.MinValue;
 
         public TrovesaurusViewModel()
         {
@@ -81,13 +81,16 @@ namespace TroveTools.NET.ViewModel
                     MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail = false;
                 }
                 TimeSpan checkInterval = new TimeSpan(0, 1, 0);
+                string intervalDisplay = checkInterval.ToUserFriendlyString();
 
                 if (MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail && MainWindowViewModel.Instance.Settings.TrovesaurusServerStatus)
-                    log.InfoFormat("Starting Trovesaurus server status and mail check timer, checking every {0}", checkInterval.ToUserFriendlyString());
+                    log.InfoFormat("Starting Trovesaurus server status and mail check timer, checking every {0}", intervalDisplay);
                 else if (MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail)
-                    log.InfoFormat("Starting Trovesaurus mail check timer, checking every {0}", checkInterval.ToUserFriendlyString());
+                    log.InfoFormat("Starting Trovesaurus mail check timer, checking every {0}", intervalDisplay);
                 else if (MainWindowViewModel.Instance.Settings.TrovesaurusServerStatus)
-                    log.InfoFormat("Starting Trovesaurus server status timer, checking every {0}", checkInterval.ToUserFriendlyString());
+                    log.InfoFormat("Starting Trovesaurus server status timer, checking every {0}", intervalDisplay);
+                else
+                    log.InfoFormat("Starting application update timer");
 
                 if (_StatusTimer == null)
                 {
@@ -114,19 +117,56 @@ namespace TroveTools.NET.ViewModel
             {
                 if (MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail) CheckMail();
                 if (MainWindowViewModel.Instance.Settings.TrovesaurusServerStatus) RefreshServerStatus();
+                CheckForUpdates();
             }
             catch (Exception ex) { log.Error("Trovesaurus check status error", ex); }
+        }
+
+        public void CheckForUpdates(bool update = false)
+        {
+            try
+            {
+                if (update || lastUpdateCheck < DateTime.Now.AddMinutes(-29.5))
+                {
+                    var updateAvailable = ApplicationDetails.UpdateAvailable();
+                    lastUpdateCheck = DateTime.Now;
+
+                    if (update)
+                    {
+                        if (updateAvailable)
+                            UpdateApplication();
+                        else
+                            log.Info("No new application updates available");
+                    }
+                    else if (updateAvailable)
+                    {
+                        Action updateApp = UpdateApplication;
+                        MainWindowViewModel.Instance.ViewCommandManager.InvokeLoaded("ShowTrayTip", "New application update available: click to install and restart application", updateApp);
+                    }
+                }
+            }
+            catch (Exception ex) { log.Error("Error checking for updates", ex); }
+        }
+
+        public void UpdateApplication()
+        {
+            try
+            {
+                log.Info("Updating application to latest version");
+                ApplicationDetails.UpdateApplication();
+            }
+            catch (Exception ex) { log.Error("Error updating application", ex); }
         }
 
         private void RefreshServerStatus()
         {
             try
             {
-                if (lastUpdated < DateTime.Now.AddSeconds(-25))
+                if (statusLastUpdated < DateTime.Now.AddSeconds(-25))
                 {
                     var oldStatus = _ServerStatus; // Check private variable for server status here to prevent a recursive issue
                     var newStatus = TrovesaurusApi.GetServerStatus();
-                    lastUpdated = DateTime.Now;
+                    statusLastUpdated = DateTime.Now;
 
                     if (newStatus != null)
                     {

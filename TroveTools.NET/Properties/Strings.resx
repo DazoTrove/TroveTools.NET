@@ -137,6 +137,10 @@
     <value>TroveTools.NET: version {0} - created by Dazo</value>
     <comment>Title of the main window</comment>
   </data>
+  <data name="MainWindowView_CheckForUpdates" xml:space="preserve">
+    <value>Check for Updates</value>
+    <comment>Check for updates context menu text</comment>
+  </data>
   <data name="MainWindowView_MinimizeBalloonTipText" xml:space="preserve">
     <value>TroveTools.NET will continue running in the background while minimized</value>
     <comment>Minimize Balloon Tip Text</comment>

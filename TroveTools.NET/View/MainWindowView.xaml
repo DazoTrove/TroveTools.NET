@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vw="clr-namespace:TroveTools.NET.View"
         xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
+        xmlns:pr="clr-namespace:TroveTools.NET.Properties"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         DataContext="{Binding Source={x:Static vm:MainWindowViewModel.Instance}}"
@@ -34,6 +35,23 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TabControl Name="WorkspaceTabs" ItemsSource="{Binding Workspaces}" ItemTemplate="{StaticResource TabItemTemplate}" IsSynchronizedWithCurrentItem="True" Margin="4,4,4,4" />
+        <Button Name="SettingsButton" Width="25" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="4" Click="SettingsButton_Click">
+            <Image Source="/Resources/glyphicons-137-cogwheel.png" />
+            <Button.ContextMenu>
+                <ContextMenu Placement="Bottom">
+                    <MenuItem Header="{x:Static pr:Strings.MainWindowView_CheckForUpdates}" Command="{Binding CheckForUpdatesCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/glyphicons-365-cloud-download.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static pr:Strings.MainWindowView_QuitTroveTools}" Click="QuitTroveTools">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/glyphicons-208-remove.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </Button.ContextMenu>
+        </Button>
         <Popup IsOpen="{Binding IsChecked, ElementName=LogMessagesButton}" PlacementTarget="{Binding ElementName=LogMessagesButton}" Placement="Top" StaysOpen="False">
             <Border BorderBrush="Black" BorderThickness="1" >
                 <RichTextBox Name="LogMessagesField" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextChanged="LogMessagesField_TextChanged" Width="{Binding ActualWidth,ElementName=WorkspaceTabs}" Height="300">

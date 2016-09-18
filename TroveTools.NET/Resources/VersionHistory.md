@@ -12,6 +12,11 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.1.8 Release (9/17/2016)
+- Added Trove:// URI scheme support for installing local mod files: pass a full file path ending with .zip with the trove URI scheme. The URI format is **trove://C:/example/path/test mod.zip**
+- Main Window: added a settings button with menu options to check for updates and to Quit the application
+- Added automatic application update checks every 30 minutes while application is running
+
 ## Version 1.1.7.2 Release (9/9/2016)
 - Trovesaurus tab: fixed bug with mail and server status notifications if there are any errors retrieving status from the Trovesaurus API
 

@@ -4,14 +4,25 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
+using System.Windows.Controls.Primitives;
+//using System.Windows.Forms;
 using TroveTools.NET.Framework;
 using TroveTools.NET.Properties;
 using TroveTools.NET.ViewModel;
 
-using Application = System.Windows.Application;
+using NotifyIcon = System.Windows.Forms.NotifyIcon;
+using ToolTipIcon = System.Windows.Forms.ToolTipIcon;
+using MouseButtons = System.Windows.Forms.MouseButtons;
+using ContextMenuStrip = System.Windows.Forms.ContextMenuStrip;
+using ToolStripItem = System.Windows.Forms.ToolStripItem;
+using ToolStripMenuItem = System.Windows.Forms.ToolStripMenuItem;
+using ToolStripSeparator = System.Windows.Forms.ToolStripSeparator;
+using System.Windows.Data;
+
+/*using Application = System.Windows.Application;
 using RichTextBox = System.Windows.Controls.RichTextBox;
 using ToolBar = System.Windows.Controls.ToolBar;
+using Button = System.Windows.Controls.Button;*/
 
 namespace TroveTools.NET.View
 {
@@ -24,7 +35,7 @@ namespace TroveTools.NET.View
 
         private const int TipTimeout = 5000;
 
-        private NotifyIcon trayIcon;
+        private System.Windows.Forms.NotifyIcon trayIcon;
         private Action tipAction = null;
         private bool showBalloonTip = true;
         private bool forceClose = false;
@@ -53,7 +64,7 @@ namespace TroveTools.NET.View
             trayIcon.BalloonTipText = Strings.MainWindowView_MinimizeBalloonTipText;
             trayIcon.BalloonTipTitle = Strings.MainWindowView_MinimizeBalloonTipTitle;
             trayIcon.Text = Strings.MainWindowView_MinimizeBalloonTipTitle;
-            
+
             tipAction = RestoreWindow;
             trayIcon.BalloonTipClicked += (s, e) => tipAction?.Invoke();
             trayIcon.MouseClick += (s, e) => { if (e.Button == MouseButtons.Left) RestoreWindow(); };
@@ -65,7 +76,7 @@ namespace TroveTools.NET.View
 
             var quitImage = System.Drawing.Image.FromStream(Application.GetResourceStream(new Uri("pack://application:,,,/Resources/glyphicons-208-remove.png")).Stream);
             var quit = new ToolStripMenuItem(Strings.MainWindowView_QuitTroveTools, quitImage);
-            quit.Click += (s, e) => QuitTroveTools();
+            quit.Click += QuitTroveTools;
 
             var menu = new ContextMenuStrip();
             menu.Items.AddRange(new ToolStripItem[] { open, new ToolStripSeparator(), quit });
@@ -95,7 +106,7 @@ namespace TroveTools.NET.View
             trayIcon.ShowBalloonTip(TipTimeout, trayIcon.BalloonTipTitle, balloonTipText, trayIcon.BalloonTipIcon);
         }
 
-        private void QuitTroveTools()
+        private void QuitTroveTools(object sender = null, EventArgs e = null)
         {
             forceClose = true;
             Close();
@@ -152,6 +163,15 @@ namespace TroveTools.NET.View
 
             var mainPanelBorder = toolBar.Template.FindName("MainPanelBorder", toolBar) as FrameworkElement;
             if (mainPanelBorder != null) mainPanelBorder.Margin = new Thickness(0);
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            button.ContextMenu.IsEnabled = true;
+            button.ContextMenu.PlacementTarget = button;
+            button.ContextMenu.Placement = PlacementMode.Bottom;
+            button.ContextMenu.IsOpen = true;
         }
     }
 }
