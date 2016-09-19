@@ -146,7 +146,10 @@ namespace TroveTools.NET.View
                 WindowState = WindowState.Minimized;
             }
             else
+            {
                 trayIcon.Visible = false;
+                if (MainWindowViewModel.Instance.ClosingCommand.CanExecute(null)) MainWindowViewModel.Instance.ClosingCommand.Execute(null);
+            }
         }
 
         private void LogMessagesField_TextChanged(object sender, TextChangedEventArgs e)

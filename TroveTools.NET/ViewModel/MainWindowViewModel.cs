@@ -139,6 +139,7 @@ namespace TroveTools.NET.ViewModel
 
         public void Closing(object param = null)
         {
+            log.Info("Main window closing: stopping background timers and saving settings");
             Settings.Closing();
             MyMods.Closing();
             Trovesaurus.Closing();
