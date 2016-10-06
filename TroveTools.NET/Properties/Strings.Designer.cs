@@ -151,7 +151,7 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Zip files.
+        ///   Looks up a localized string similar to Trove mod files (*.zip, *.tmod).
         /// </summary>
         public static string MyMods_OpenFileDialog_Filter {
             get {
@@ -160,7 +160,7 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select mod zip files.
+        ///   Looks up a localized string similar to Select mod files.
         /// </summary>
         public static string MyMods_OpenFileDialog_Title {
             get {

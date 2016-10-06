@@ -32,7 +32,7 @@ namespace TroveTools.NET.View
                 var vm = DataContext as MyModsViewModel;
                 OpenFileDialog dialog = new OpenFileDialog();
                 dialog.Title = Strings.MyMods_OpenFileDialog_Title;
-                dialog.Filter = string.Format("{0} (.zip)|*.zip", Strings.MyMods_OpenFileDialog_Filter);
+                dialog.Filter = string.Format("{0}|*.zip;*.tmod", Strings.MyMods_OpenFileDialog_Filter);
                 dialog.CheckFileExists = true;
                 dialog.Multiselect = true;
 

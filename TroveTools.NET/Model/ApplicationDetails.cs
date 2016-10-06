@@ -124,7 +124,7 @@ namespace TroveTools.NET.Model
                 Match m = Regex.Match(uri, @"trove:[/\\]{0,2}(?<ModId>\d+);(?<FileId>\d+)", RegexOptions.IgnoreCase);
                 if (m.Success) return new AppArgs { LinkType = AppArgs.LinkTypes.Mod, ModId = m.Groups["ModId"].Value, FileId = m.Groups["FileId"].Value, Uri = uri };
 
-                m = Regex.Match(uri, @"trove:[/\\]{0,2}(?<FileName>.+\.zip)[/\\]?", RegexOptions.IgnoreCase);
+                m = Regex.Match(uri, @"trove:[/\\]{0,2}(?<FileName>.+\.(?:zip|tmod))[/\\]?", RegexOptions.IgnoreCase);
                 if (m.Success) return new AppArgs
                 {
                     LinkType = AppArgs.LinkTypes.LocalMod,

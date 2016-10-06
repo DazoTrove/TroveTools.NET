@@ -336,7 +336,7 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*" MaxWidth="270"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Margin="3" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
                                         <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
@@ -350,7 +350,7 @@
                                             </Image>
                                         </Hyperlink>
                                     </TextBlock>
-                                    <TextBlock Grid.Column="1" TextWrapping="Wrap">
+                                    <TextBlock Grid.Column="1" MaxWidth="265" TextWrapping="Wrap">
                                         <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LaunchTrovesaurusCommand}"
                                                    CommandParameter="{Binding Url}" ToolTip="{Binding Url}">
                                             <Run FontWeight="Bold" Text="{Binding Name, Mode=OneWay}"/>

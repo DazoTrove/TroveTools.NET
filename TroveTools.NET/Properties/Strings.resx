@@ -162,11 +162,11 @@
     <comment>The display name of the MyModsViewModel object</comment>
   </data>
   <data name="MyMods_OpenFileDialog_Filter" xml:space="preserve">
-    <value>Zip files</value>
+    <value>Trove mod files (*.zip, *.tmod)</value>
     <comment>Add Mod open file dialog filter</comment>
   </data>
   <data name="MyMods_OpenFileDialog_Title" xml:space="preserve">
-    <value>Select mod zip files</value>
+    <value>Select mod files</value>
     <comment>Add Mod open file dialog title</comment>
   </data>
   <data name="SettingsViewModel_DisplayName" xml:space="preserve">

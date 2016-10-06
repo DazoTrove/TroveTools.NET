@@ -21,7 +21,7 @@
             <RowDefinition Height="{vw:SettingBinding ModDetailSplitterHeight}"/>
         </Grid.RowDefinitions>
         <ToolBar ToolBarTray.IsLocked="True" Grid.Row="0" Loaded="ToolBar_Loaded">
-            <Button Name="AddModsButton" HorizontalAlignment="Left" VerticalAlignment="Top" Click="AddModsButton_Click" Focusable="False" ToolTip="Add custom mod zip files">
+            <Button Name="AddModsButton" HorizontalAlignment="Left" VerticalAlignment="Top" Click="AddModsButton_Click" Focusable="False" ToolTip="Add custom mod files">
                 <StackPanel>
                     <Image Source="/Resources/glyphicons-191-plus-sign.png" Width="26" Height="26" Stretch="None" />
                     <TextBlock Text="Add Mods" VerticalAlignment="Center" Margin="2" />

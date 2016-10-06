@@ -254,8 +254,9 @@ namespace TroveTools.NET.Model
             if (mod?.Id == null) throw new ArgumentNullException("mod.Id");
             if (mod?.Downloads == null) throw new ArgumentNullException("mod.Downloads");
 
-            string unixDate = mod.Downloads.First(m => m.FileId == fileId).Date;
-            string fileName = string.Format("{0}+{1}.zip", TroveMod.FilterModFilename(mod.Name), unixDate);
+            var download = mod.Downloads.First(m => m.FileId == fileId);
+            string unixDate = download.Date;
+            string fileName = string.Format("{0}+{1}.{2}", TroveMod.FilterModFilename(mod.Name), unixDate, string.IsNullOrEmpty(download.Format) ? "zip" : download.Format);
             string localPath = Path.Combine(SettingsDataProvider.ModsFolder, fileName);
 
             using (var client = OpenWebClient())
