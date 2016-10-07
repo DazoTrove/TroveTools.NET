@@ -122,7 +122,7 @@
                                 <Button Grid.Column="0" Command="{Binding DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding FileId}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="3" Padding="2">
                                     <Button.ToolTip>
-                                        <TextBlock>File ID: <Run Text="{Binding FileId}"/></TextBlock>
+                                        <TextBlock>File ID: <Run Text="{Binding FileId}"/><LineBreak/>Format: <Run Text="{Binding Format}"/></TextBlock>
                                     </Button.ToolTip>
                                     <TextBlock>v <Run Text="{Binding Version}"/></TextBlock>
                                 </Button>

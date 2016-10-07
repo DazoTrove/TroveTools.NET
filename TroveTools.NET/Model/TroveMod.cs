@@ -30,6 +30,8 @@ namespace TroveTools.NET.Model
         public const string ZipFileTypeSearchPattern = "*.zip";
         public const string TmodFileTypeSearchPattern = "*.tmod";
         public const string TroveUriFormat = "trove://{0};{1}";
+        public const string TmodTitleValue = "title";
+        public const long PropertiesPosition = 12;
         private static List<TroveMod> _myMods;
 
         #region Constructors
@@ -42,7 +44,7 @@ namespace TroveTools.NET.Model
             this.FilePath = FilePath;
             this.ImagePath = ImagePath;
             this.Status = Status;
-            _enabled = Enabled; // do not set Enabled property when constructing since it installs/uninstalls
+            _Enabled = Enabled; // do not set Enabled property when constructing since it installs/uninstalls
             this.UnixTimeSeconds = UnixTimeSeconds;
         }
 
@@ -109,7 +111,7 @@ namespace TroveTools.NET.Model
         [JsonProperty("id"), AffectsProperty("CanUpdateMod")]
         public string Id { get; set; }
 
-        [JsonProperty("name")]
+        [JsonProperty("name"), AffectsProperty("ModTitle")]
         public string Name { get; set; }
 
         [JsonProperty("author")]
@@ -150,25 +152,39 @@ namespace TroveTools.NET.Model
         #endregion
 
         #region TroveTools.NET Properties
-        [AffectsProperty("TmodFormat")]
+        [AffectsProperty("TmodFormat"), AffectsProperty("ModTitle")]
         public string FilePath { get; set; }
 
-        public bool TmodFormat { get { return Path.GetExtension(FilePath).ToLower() == ".tmod"; } }
+        private string _ModTitle = null;
+        public string ModTitle
+        {
+            get
+            {
+                if (_ModTitle == null)
+                {
+                    if (TmodFormat && TmodProperties.ContainsKey(TmodTitleValue))
+                        _ModTitle = TmodProperties[TmodTitleValue];
+                    else
+                        _ModTitle = Name;
+                }
+                return _ModTitle;
+            }
+        }
 
         [AffectsProperty("CanUpdateMod")]
         public string Status { get; set; } = string.Empty;
 
-        private bool _enabled = true;
+        private bool _Enabled = true;
         [AffectsProperty("Status"), AffectsProperty("CanUpdateMod")]
         public bool Enabled
         {
-            get { return _enabled; }
+            get { return _Enabled; }
             set
             {
-                if (value == _enabled) return;
-                _enabled = value;
+                if (value == _Enabled) return;
+                _Enabled = value;
 
-                if (_enabled)
+                if (_Enabled)
                     InstallMod();
                 else
                     UninstallMod();
@@ -199,6 +215,48 @@ namespace TroveTools.NET.Model
         #endregion
 
         #region Derived Properties
+        private Dictionary<string, string> _TmodProperties = null;
+        [JsonIgnore]
+        public Dictionary<string, string> TmodProperties
+        {
+            get
+            {
+                if (_TmodProperties == null)
+                {
+                    _TmodProperties = new Dictionary<string, string>();
+                    if (TmodFormat)
+                    {
+                        try
+                        {
+                            using (var stream = File.OpenRead(FilePath))
+                            {
+                                using (var reader = new BinaryReader(stream))
+                                {
+                                    stream.Position = PropertiesPosition;
+                                    byte length;
+                                    string key, value;
+                                    do
+                                    {
+                                        length = reader.ReadByte();
+                                        if (length == 0) break;
+                                        key = Encoding.UTF8.GetString(reader.ReadBytes(length));
+
+                                        length = reader.ReadByte();
+                                        if (length == 0) break;
+                                        value = Encoding.UTF8.GetString(reader.ReadBytes(length));
+
+                                        _TmodProperties[key] = value;
+                                    } while (length != 0);
+                                }
+                            }
+                        }
+                        catch (Exception ex) { log.Error("Error parsing TMOD properties", ex); }
+                    }
+                }
+                return _TmodProperties;
+            }
+        }
+
         [JsonIgnore]
         public DateTime? LastUpdated
         {
@@ -259,6 +317,9 @@ namespace TroveTools.NET.Model
                 }
             }
         }
+
+        [JsonIgnore]
+        public bool TmodFormat { get { return Path.GetExtension(FilePath).ToLower() == ".tmod"; } }
         #endregion
 
         #region Individual Mod Action Methods
@@ -384,7 +445,7 @@ namespace TroveTools.NET.Model
         private string GetTmodFilePath(TroveLocation loc)
         {
             string modsFolder = SettingsDataProvider.ResolveFolder(Path.Combine(loc.LocationPath, ModsFolder));
-            return Path.Combine(modsFolder, Path.GetFileName(FilePath));
+            return Path.Combine(modsFolder, string.Format("{0}.tmod", ModTitle));
         }
 
         /// <summary>

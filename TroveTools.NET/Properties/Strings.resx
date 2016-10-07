@@ -157,6 +157,10 @@
     <value>Quit TroveTools.NET</value>
     <comment>Quit application context menu text</comment>
   </data>
+  <data name="ModderToolsViewModel_DisplayName" xml:space="preserve">
+    <value>Modder Tools</value>
+    <comment>The display name of the ModderToolsViewModel object</comment>
+  </data>
   <data name="MyModsViewModel_DisplayName" xml:space="preserve">
     <value>My Mods</value>
     <comment>The display name of the MyModsViewModel object</comment>

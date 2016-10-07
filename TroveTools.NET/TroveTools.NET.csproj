@@ -30,12 +30,12 @@
     <InstallUrl>https://raw.githubusercontent.com/DazoTrove/TroveTools.NET/master/TroveTools.NET/publish/</InstallUrl>
     <ProductName>TroveTools .NET</ProductName>
     <PublisherName>Dazo</PublisherName>
-    <MinimumRequiredVersion>1.1.8.1</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.1.9.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.1.8.1</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.1.9.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -178,6 +178,7 @@
     <Compile Include="SampleData\DesignTimeGetMoreModsViewModel.cs" />
     <Compile Include="SampleData\DesignTimeTroveModViewModel.cs" />
     <Compile Include="SampleData\DesignTimeMyModsViewModel.cs" />
+    <Compile Include="ViewModel\ModderToolsViewModel.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\GetMoreModsViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
@@ -188,6 +189,9 @@
     <Compile Include="ViewModel\TroveModViewModel.cs" />
     <Compile Include="ViewModel\TrovesaurusViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\ModderToolsView.xaml.cs">
+      <DependentUpon>ModderToolsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -208,6 +212,10 @@
     <Compile Include="View\TrovesaurusView.xaml.cs">
       <DependentUpon>TrovesaurusView.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\ModderToolsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

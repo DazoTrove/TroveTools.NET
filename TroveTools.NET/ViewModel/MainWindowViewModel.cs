@@ -36,13 +36,14 @@ namespace TroveTools.NET.ViewModel
 
             LogAppender = NotifyAppender.Appender;
 
+            Trovesaurus = new TrovesaurusViewModel();
             Settings = new SettingsViewModel();
             MyMods = new MyModsViewModel();
             GetMoreMods = new GetMoreModsViewModel();
+            ModderTools = new ModderToolsViewModel();
             About = new AboutViewModel();
-            Trovesaurus = new TrovesaurusViewModel();
 
-            Workspaces = new ObservableCollection<ViewModelBase>() { Trovesaurus, Settings, MyMods, GetMoreMods, About };
+            Workspaces = new ObservableCollection<ViewModelBase>() { Trovesaurus, Settings, MyMods, GetMoreMods, /*ModderTools,*/ About };
         }
         #endregion // Constructors
 
@@ -55,15 +56,17 @@ namespace TroveTools.NET.ViewModel
             get { return _instance; }
         }
 
+        public TrovesaurusViewModel Trovesaurus { get; }
+
         public SettingsViewModel Settings { get; }
 
         public MyModsViewModel MyMods { get; }
 
         public GetMoreModsViewModel GetMoreMods { get; }
 
-        public AboutViewModel About { get; }
+        public ModderToolsViewModel ModderTools { get; }
 
-        public TrovesaurusViewModel Trovesaurus { get; }
+        public AboutViewModel About { get; }
 
         public NotifyAppender LogAppender { get; }
 

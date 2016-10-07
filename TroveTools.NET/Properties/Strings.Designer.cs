@@ -151,6 +151,15 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modder Tools.
+        /// </summary>
+        public static string ModderToolsViewModel_DisplayName {
+            get {
+                return ResourceManager.GetString("ModderToolsViewModel_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trove mod files (*.zip, *.tmod).
         /// </summary>
         public static string MyMods_OpenFileDialog_Filter {

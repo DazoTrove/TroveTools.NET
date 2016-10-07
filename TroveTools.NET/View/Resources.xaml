@@ -117,9 +117,10 @@
                         </Border>
                     </DataTemplate>
                     <!-- Blank templates for all other tabs (if these aren't included the templates to display the content are used instead) -->
+                    <DataTemplate DataType="{x:Type vm:SettingsViewModel}" />
                     <DataTemplate DataType="{x:Type vm:MyModsViewModel}" />
                     <DataTemplate DataType="{x:Type vm:GetMoreModsViewModel}" />
-                    <DataTemplate DataType="{x:Type vm:SettingsViewModel}" />
+                    <DataTemplate DataType="{x:Type vm:ModderToolsViewModel}" />
                     <DataTemplate DataType="{x:Type vm:AboutViewModel}" />
                 </ContentControl.Resources>
             </ContentControl>
@@ -127,6 +128,14 @@
     </DataTemplate>
 
     <!-- DataTemplates to bind tab views to view models -->
+    <DataTemplate DataType="{x:Type vm:TrovesaurusViewModel}">
+        <vw:TrovesaurusView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+        <vw:SettingsView/>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type vm:MyModsViewModel}">
         <vw:MyModsView/>
     </DataTemplate>
@@ -135,16 +144,12 @@
         <vw:GetMoreModsView/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
-        <vw:SettingsView/>
+    <DataTemplate DataType="{x:Type vm:ModderToolsViewModel}">
+        <vw:ModderToolsView/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:AboutViewModel}">
         <vw:AboutView/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:TrovesaurusViewModel}">
-        <vw:TrovesaurusView/>
     </DataTemplate>
 
     <!-- Sorting column header template with direction arrows -->
