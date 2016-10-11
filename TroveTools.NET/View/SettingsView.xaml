@@ -67,6 +67,13 @@
                             <TextBlock Text="Remove Location" VerticalAlignment="Center" Margin="2" />
                         </StackPanel>
                     </Button>
+                    <Button HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False"
+                            Command="{Binding MakePrimaryCommand}" CommandParameter="{Binding Source={StaticResource LocationsView}, Path=/}">
+                        <StackPanel>
+                            <Image Source="/Resources/glyphicons-50-star.png" Width="26" Height="26" Stretch="None" />
+                            <TextBlock Text="Make Primary" VerticalAlignment="Center" Margin="2" />
+                        </StackPanel>
+                    </Button>
                     <Button HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False" Command="{Binding DetectLocationsCommand}"
                             ToolTip="Attempt to automatically detect the Trove game locations using Registry data and common locations" >
                         <StackPanel>
@@ -78,20 +85,25 @@
                 <ListView Grid.IsSharedSizeScope="True" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Source={StaticResource LocationsView}}">
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
-                            <GridViewColumn Width="210">
+                            <GridViewColumn Width="25">
+                                <GridViewColumnHeader IsHitTestVisible="False"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Grid.Column="0" IsChecked="{Binding Path=Enabled, UpdateSourceTrigger=PropertyChanged}" ToolTip="Enabled" VerticalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="250">
                                 <GridViewColumnHeader Content="Location Name"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition SharedSizeGroup="Enabled" />
-                                                <ColumnDefinition SharedSizeGroup="Location Name" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <CheckBox Grid.Column="0" IsChecked="{Binding Path=Enabled, UpdateSourceTrigger=PropertyChanged}" ToolTip="Enabled" VerticalAlignment="Center" />
-                                            <TextBox Grid.Column="1" Width="160" Margin="6,0,0,0" VerticalAlignment="Center" Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
-                                                     Text="{Binding LocationName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true, Delay=2000}" />
-                                        </Grid>
+                                        <TextBox x:Name="LocationName" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="235" Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                                                 Text="{Binding LocationName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true, Delay=2000}"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Primary}" Value="True">
+                                                <Setter TargetName="LocationName" Property="FontWeight" Value="Bold"/>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

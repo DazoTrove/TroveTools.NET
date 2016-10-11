@@ -15,6 +15,7 @@ using TroveTools.NET.Framework;
 using TroveTools.NET.Properties;
 using System.Runtime.Serialization;
 using System.Windows;
+using System.Net;
 
 namespace TroveTools.NET.Model
 {
@@ -31,7 +32,8 @@ namespace TroveTools.NET.Model
         public const string TmodFileTypeSearchPattern = "*.tmod";
         public const string TroveUriFormat = "trove://{0};{1}";
         public const string TmodTitleValue = "title";
-        public const long PropertiesPosition = 12;
+        public const string TmodAuthorValue = "author";
+        public const string TmodNotesValue = "notes";
         private static List<TroveMod> _myMods;
 
         #region Constructors
@@ -63,6 +65,14 @@ namespace TroveTools.NET.Model
                 UnixTimeSeconds = Convert.ToInt64(filenameMatch.Groups["UnixTimeSeconds"].Value);
             else
                 UnixTimeSeconds = new DateTimeOffset(new FileInfo(filePath).LastWriteTime).ToUnixTimeSeconds();
+
+            if (TmodFormat)
+            {
+                // Load properties set in the Tmod file
+                Name = ModTitle;
+                if (TmodProperties.ContainsKey(TmodAuthorValue)) Author = TmodProperties[TmodAuthorValue];
+                if (TmodProperties.ContainsKey(TmodNotesValue)) Description = TmodProperties[TmodNotesValue];
+            }
 
             // Attempt to find matching mod from Trovesaurus API and load additional data
             TroveMod mod = FindTrovesaurusMod();
@@ -155,19 +165,15 @@ namespace TroveTools.NET.Model
         [AffectsProperty("TmodFormat"), AffectsProperty("ModTitle")]
         public string FilePath { get; set; }
 
-        private string _ModTitle = null;
+        [JsonIgnore]
         public string ModTitle
         {
             get
             {
-                if (_ModTitle == null)
-                {
-                    if (TmodFormat && TmodProperties.ContainsKey(TmodTitleValue))
-                        _ModTitle = TmodProperties[TmodTitleValue];
-                    else
-                        _ModTitle = Name;
-                }
-                return _ModTitle;
+                if (TmodFormat && TmodProperties.ContainsKey(TmodTitleValue))
+                    return TmodProperties[TmodTitleValue];
+                else
+                    return Name;
             }
         }
 
@@ -232,21 +238,20 @@ namespace TroveTools.NET.Model
                             {
                                 using (var reader = new BinaryReader(stream))
                                 {
-                                    stream.Position = PropertiesPosition;
-                                    byte length;
-                                    string key, value;
-                                    do
+                                    // Start at beginning of the file, read headerSize (fixed64), tmodVersion (fixed16), and propertyCount (fixed16)
+                                    stream.Position = 0;
+                                    ulong headerSize = reader.ReadUInt64();
+                                    ushort tmodVersion = reader.ReadUInt16();
+                                    ushort propertyCount = reader.ReadUInt16();
+
+                                    // Read a number of properties based on the propertyCount value
+                                    for (int i = 0; i < propertyCount; i++)
                                     {
-                                        length = reader.ReadByte();
-                                        if (length == 0) break;
-                                        key = Encoding.UTF8.GetString(reader.ReadBytes(length));
+                                        string key = reader.ReadString();
+                                        string value = reader.ReadString();
 
-                                        length = reader.ReadByte();
-                                        if (length == 0) break;
-                                        value = Encoding.UTF8.GetString(reader.ReadBytes(length));
-
-                                        _TmodProperties[key] = value;
-                                    } while (length != 0);
+                                        if (!string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(value)) _TmodProperties[key] = value;
+                                    }
                                 }
                             }
                         }
@@ -320,6 +325,49 @@ namespace TroveTools.NET.Model
 
         [JsonIgnore]
         public bool TmodFormat { get { return Path.GetExtension(FilePath).ToLower() == ".tmod"; } }
+
+        [JsonIgnore]
+        public string CleanNotes
+        {
+            get
+            {
+                string desc = WebUtility.HtmlDecode(Regex.Replace(Regex.Replace(Description, "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", " ")).Trim();
+                string replaces = WebUtility.HtmlDecode(Regex.Replace(Regex.Replace(Replaces, "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", " ")).Trim();
+                if (replaces.Length > 0) replaces = "Replaces: " + replaces;
+                return string.Format("{0} {1}", desc, replaces).Trim();
+            }
+        }
+
+        [JsonIgnore]
+        public List<string> ModFiles
+        {
+            get
+            {
+                List<string> files = new List<string>();
+                if (!TmodFormat)
+                {
+                    using (FileStream file = File.OpenRead(FilePath))
+                    {
+                        using (ZipArchive zip = new ZipArchive(file, ZipArchiveMode.Read))
+                        {
+                            foreach (ZipArchiveEntry entry in zip.Entries)
+                            {
+                                // Skip over folder entries
+                                if (string.IsNullOrEmpty(entry.Name)) continue;
+
+                                // Get folder name (removing override folder if it exists)
+                                string folder = Path.GetDirectoryName(entry.FullName);
+                                if (folder.EndsWith(OverrideFolder, StringComparison.OrdinalIgnoreCase)) folder = Path.GetDirectoryName(folder);
+
+                                // Add file to list using the alt directory separator character
+                                files.Add(Path.Combine(folder, entry.Name).Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+                            }
+                        }
+                    }
+                }
+                return files;
+            }
+        }
         #endregion
 
         #region Individual Mod Action Methods
@@ -594,7 +642,7 @@ namespace TroveTools.NET.Model
         /// <summary>
         /// Downloads update for mod and installs mod
         /// </summary>
-        [AffectsProperty("Status"), AffectsProperty("CanUpdateMod")]
+        [AffectsProperty("Status"), AffectsProperty("CanUpdateMod"), AffectsProperty("FilePath")]
         public void UpdateMod(string fileId)
         {
             try
@@ -626,6 +674,44 @@ namespace TroveTools.NET.Model
         }
 
         /// <summary>
+        /// Replaces mod file path with provided new file path
+        /// </summary>
+        [AffectsProperty("Status"), AffectsProperty("CanUpdateMod"), AffectsProperty("FilePath")]
+        public void UpdateModPath(string newFilePath)
+        {
+            try
+            {
+                string newPath = Path.Combine(SettingsDataProvider.ModsFolder, Path.GetFileName(newFilePath));
+
+                // Uninstall existing mod prior to installing new version
+                string oldFile = FilePath;
+                if (Enabled && !string.IsNullOrEmpty(oldFile) && File.Exists(oldFile)) UninstallMod(true);
+
+                if (!string.IsNullOrEmpty(oldFile) && oldFile != newPath && File.Exists(oldFile))
+                {
+                    try { File.Delete(oldFile); }
+                    catch (Exception ex) { log.Warn("Error removing previous file: " + oldFile, ex); }
+                }
+
+                // Copy new mod file to TroveTools.NET mods folder
+                log.InfoFormat("Updating mod {0} with new file {1}", Name, Path.GetFileName(newPath));
+                File.Copy(newFilePath, newPath, true);
+                FilePath = newPath;
+                UnixTimeSeconds = new DateTimeOffset(new FileInfo(FilePath).LastWriteTime).ToUnixTimeSeconds();
+
+                if (Enabled)
+                    InstallMod();
+                else
+                    CheckForUpdates();
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error updating mod: " + Name, ex);
+                Status = string.Format(Strings.TroveMod_Status_Error, ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Updates the current mod's properties from the provided mod object from Trovesaurus API
         /// </summary>
         /// <param name="mod"></param>
@@ -638,10 +724,10 @@ namespace TroveTools.NET.Model
             {
                 Id = mod.Id;
                 Name = mod.Name;
-                Author = mod.Author;
+                if (!string.IsNullOrWhiteSpace(mod.Author)) Author = mod.Author;
                 Type = mod.Type;
                 SubType = mod.SubType;
-                Description = mod.Description;
+                if (!string.IsNullOrWhiteSpace(mod.Description)) Description = mod.Description;
                 DateCreated = mod.DateCreated;
                 TrovesaurusStatus = mod.TrovesaurusStatus;
                 Replaces = mod.Replaces;
@@ -675,14 +761,53 @@ namespace TroveTools.NET.Model
             log.InfoFormat("Copied mod installation URI for {0} to clipboard: {1}", Name, uri);
         }
 
+        public string DownloadImage(string folder)
+        {
+            string previewPath = null;
+            if (!ImagePath.EndsWith("modconstruction.jpg"))
+            {
+                previewPath = Path.Combine(folder, string.Format("{0}{1}", SettingsDataProvider.GetSafeFilename(Name), Path.GetExtension(ImagePath)));
+                TrovesaurusApi.DownloadFile(ImagePath, previewPath);
+            }
+            return previewPath;
+        }
+
         private TroveMod FindTrovesaurusMod()
         {
             return TrovesaurusApi.GetMod(Id, Name);
         }
-
         #endregion
 
         #region Public Static Methods and Properties
+        public static string MakeRelativePath(string fullPath, string basePath = "")
+        {
+            // Get folder name (removing override folder if it exists)
+            string folder = Path.GetDirectoryName(fullPath);
+            if (folder.EndsWith(OverrideFolder, StringComparison.OrdinalIgnoreCase)) folder = Path.GetDirectoryName(folder);
+
+            // Remove the base path and any directory separator characters from start of folder path
+            if (!string.IsNullOrEmpty(basePath) && folder.StartsWith(basePath, StringComparison.OrdinalIgnoreCase)) folder = folder.Substring(basePath.Length);
+            folder = folder.TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+            // Return a relative path using the alt directory separator character
+            return Path.Combine(folder, Path.GetFileName(fullPath)).Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        }
+
+        public static string GetOverridePath(string relativePath, string basePath = "")
+        {
+            // Replace alt directory separator with standard directory separator
+            string filename = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+
+            // Combine base path and folder path
+            string folder = Path.Combine(basePath, Path.GetDirectoryName(filename));
+
+            // Add override folder at deepest folder level if not already included in folder path
+            if (!folder.EndsWith(OverrideFolder, StringComparison.OrdinalIgnoreCase)) folder = Path.Combine(folder, OverrideFolder);
+
+            // Resolve folder path and combine with filename
+            return Path.Combine(SettingsDataProvider.ResolveFolder(folder), Path.GetFileName(filename));
+        }
+
         public static void RemoveModFolders()
         {
             try

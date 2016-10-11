@@ -16,7 +16,7 @@ namespace TroveTools.NET.ViewModel
     class TroveModViewModel : ViewModelBase<TroveMod>
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private DelegateCommand _UpdateCommand, _LaunchModSiteCommand, _CopyModUriCommand;
+        private DelegateCommand _UpdateCommand, _LaunchModSiteCommand, _CopyModUriCommand, _ConvertToTmodCommand, _AutoConvertToTmodCommand;
         private DelegateCommand<string> _InstallCommand, _LaunchPathCommand;
 
         #region Constructors
@@ -71,6 +71,24 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
+        public DelegateCommand ConvertToTmodCommand
+        {
+            get
+            {
+                if (_ConvertToTmodCommand == null) _ConvertToTmodCommand = new DelegateCommand(p => ConvertToTmod(), p => !DataObject.TmodFormat);
+                return _ConvertToTmodCommand;
+            }
+        }
+
+        public DelegateCommand AutoConvertToTmodCommand
+        {
+            get
+            {
+                if (_AutoConvertToTmodCommand == null) _AutoConvertToTmodCommand = new DelegateCommand(p => ConvertToTmod(true), p => !DataObject.TmodFormat);
+                return _AutoConvertToTmodCommand;
+            }
+        }
+
         public DelegateCommand LaunchModSiteCommand
         {
             get
@@ -109,6 +127,26 @@ namespace TroveTools.NET.ViewModel
         #endregion
 
         #region Private methods
+        private void ConvertToTmod(bool autoConvert = false)
+        {
+            try
+            {
+                if (DataObject.Enabled)
+                {
+                    var tools = MainWindowViewModel.Instance.ModderTools;
+                    tools.CurrentMod = this;
+                    MainWindowViewModel.Instance.SetActiveWorkspace(tools);
+
+                    if (autoConvert) tools.BuildTmodCommand.Execute(null);
+                }
+                else log.WarnFormat("Mod {0} must be enabled before converting to TMOD format", DisplayName);
+            }
+            catch (Exception ex)
+            {
+                log.Error(string.Format("Error converting {0} to TMOD format", DisplayName), ex);
+            }
+        }
+
         private void CallUpdateMod(object param = null)
         {
             dynamic mod = this;

@@ -214,5 +214,13 @@ namespace TroveTools.NET.DataAccess
             if (!Directory.Exists(path) && !File.Exists(path)) Directory.CreateDirectory(path);
             return path;
         }
+
+        /// <summary>
+        /// Returns a safe filename by replacing all invalid characters with underscores
+        /// </summary>
+        public static string GetSafeFilename(string filename)
+        {
+            return string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
+        }
     }
 }

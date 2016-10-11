@@ -45,15 +45,19 @@
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Title:" Margin="0,5,0,0"/>
                 <TextBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,5,0,0" Text="{Binding ModTitle, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock Grid.Column="0" Grid.Row="1" Text="Preview:" Margin="0,5,0,0">
+                <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" TextDecorations="Underline">
                     <TextBlock.ToolTip>
                         <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
-                            <Image Source="{Binding PreviewImage}" MaxHeight="230" MaxWidth="400" />
+                            <StackPanel>
+                                <TextBlock Margin="0,5,0,5">PNG, JPG or Blueprint file</TextBlock>
+                                <Image Source="{Binding DataContext.PreviewImage}" MaxHeight="230" MaxWidth="400" />
+                            </StackPanel>
                         </ToolTip>
                     </TextBlock.ToolTip>
+                    Preview:<LineBreak/>400 x 230
                 </TextBlock>
                 <TextBox Grid.Column="1" Grid.Row="1" Margin="5,5,0,0" Text="{Binding ModPreview, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Grid.Column="2" Grid.Row="1" Margin="5,5,0,0">
+                <Button Grid.Column="2" Grid.Row="1" Margin="5,5,0,0" Click="PreviewBrowseButton_Click">
                     Browse...
                 </Button>
 
@@ -64,12 +68,16 @@
                 <TextBox Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Margin="5,5,0,0" Text="{Binding ModNotes, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <TextBlock Grid.Column="0" Grid.Row="4" Text="Files:" Margin="0,5,0,0"/>
-                <ListBox Grid.Column="1" Grid.Row="4" Margin="5,5,0,0" Grid.RowSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding ModFiles}" >
+                <ListBox Grid.Column="1" Grid.Row="4" Margin="5,5,0,0" Grid.RowSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                         SelectionMode="Single" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding ModFilesView}">
+                    <ListBox.InputBindings>
+                        <KeyBinding Command="{Binding RemoveFileCommand}" CommandParameter="{Binding ModFilesView.CurrentItem}" Key="Delete" />
+                    </ListBox.InputBindings>
                 </ListBox>
 
-                <Button Grid.Column="2" Grid.Row="4" Margin="5,5,0,0">Add File</Button>
-                <Button Grid.Column="2" Grid.Row="5" Margin="5,5,0,0">Remove File</Button>
-                <Button Grid.Column="2" Grid.Row="7" Margin="5,5,0,0" FontWeight="Bold">Build TMod</Button>
+                <Button Grid.Column="2" Grid.Row="4" Margin="5,5,0,0" Click="AddFileButton_Click">Add File</Button>
+                <Button Grid.Column="2" Grid.Row="5" Margin="5,5,0,0" Command="{Binding RemoveFileCommand}" CommandParameter="{Binding ModFilesView.CurrentItem}">Remove File</Button>
+                <Button Grid.Column="2" Grid.Row="7" Margin="5,5,0,0" FontWeight="Bold" Command="{Binding BuildTmodCommand}">Build TMod</Button>
             </Grid>
         </GroupBox>
         <GroupBox Padding="5" Grid.Row="1">
@@ -79,7 +87,7 @@
             <RichTextBox IsReadOnly="True" VerticalScrollBarVisibility="Auto">
                 <FlowDocument>
                     <Paragraph>
-                        <Run Text="{Binding LogAppender.Messages, Mode=OneWay}" />
+                        <Run Text="{Binding DevToolOutput, Mode=OneWay}" />
                     </Paragraph>
                 </FlowDocument>
             </RichTextBox>

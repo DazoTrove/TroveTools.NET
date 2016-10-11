@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,14 +18,17 @@ namespace TroveTools.NET.Model
     public class TroveLocation : IDataErrorInfo
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public const string TroveAppDataFolder = "Trove";
+        public const string DevToolLogFileName = "DevTool.log";
         public const string TroveExecutableFileName = "Trove.exe";
         private static List<TroveLocation> _locations;
 
-        public TroveLocation(string locationName, string locationPath, bool enabled = true)
+        public TroveLocation(string locationName, string locationPath, bool enabled = true, bool primary = false)
         {
             LocationName = locationName;
             LocationPath = locationPath;
             Enabled = enabled;
+            Primary = primary;
         }
 
         public string LocationName { get; set; }
@@ -32,6 +36,8 @@ namespace TroveTools.NET.Model
         public string LocationPath { get; set; }
 
         public bool Enabled { get; set; } = true;
+
+        public bool Primary { get; set; } = false;
 
         #region IDataErrorInfo Members   
         /// <summary>
@@ -83,6 +89,44 @@ namespace TroveTools.NET.Model
             }
         }
 
+        public void RunDevTool(string commandLineArgs, Action<string> devToolOutput)
+        {
+            string devToolLog = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), TroveAppDataFolder, DevToolLogFileName);
+
+            // Rename DevTool.log to DevTool.{0:yyyy-MM-dd.HH-mm-ss}.log using file last write time
+            FileInfo file = new FileInfo(devToolLog);
+            if (file.Exists)
+            {
+                string oldLog = Path.Combine(file.DirectoryName, string.Format("{0}.{1:yyyy-MM-dd.HH-mm-ss}{2}", Path.GetFileNameWithoutExtension(file.Name), file.LastWriteTime, file.Extension));
+                file.MoveTo(oldLog);
+            }
+
+            // Run Trove.exe {command line args}
+            string path = Path.Combine(LocationPath, TroveExecutableFileName);
+            log.InfoFormat("Launching dev tool: {0} {1}", path, commandLineArgs);
+            var process = new Process() { StartInfo = new ProcessStartInfo(path, commandLineArgs) };
+            process.StartInfo.WorkingDirectory = LocationPath;
+            process.EnableRaisingEvents = true;
+            process.Exited += (s, e) =>
+            {
+                try
+                {
+                    // Return Results from DevTool.log
+                    if (File.Exists(devToolLog))
+                    {
+                        string output = File.ReadAllText(devToolLog);
+                        devToolOutput(output);
+                    }
+                    else log.ErrorFormat("Dev Tool ended with no results in {0}", devToolLog);
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error after Dev Tool exited", ex);
+                }
+            };
+            process.Start();
+        }
+
         public static List<TroveLocation> Locations
         {
             get
@@ -93,6 +137,9 @@ namespace TroveTools.NET.Model
 
                     // Attempt to auto-detect locations if none were loaded
                     if (_locations.Count == 0) DetectLocations(_locations);
+
+                    // Auto-set first location to primary if none are currently set
+                    if (_locations.Count > 0 && !_locations.Any(l => l.Primary)) _locations[0].Primary = true;
                 }
                 return _locations;
             }
@@ -101,6 +148,11 @@ namespace TroveTools.NET.Model
                 _locations = value;
                 SettingsDataProvider.Locations = _locations;
             }
+        }
+
+        public static TroveLocation PrimaryLocation
+        {
+            get { return Locations.FirstOrDefault(l => l.Primary); }
         }
 
         public static void DetectLocations(List<TroveLocation> locations)

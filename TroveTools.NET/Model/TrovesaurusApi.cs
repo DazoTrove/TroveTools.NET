@@ -310,6 +310,15 @@ namespace TroveTools.NET.Model
             catch (Exception ex) { log.Error("Error updating Trovesaurus online game status", ex); }
             return null;
         }
+
+        public static void DownloadFile(string downloadUrl, string localPath)
+        {
+            using (var client = OpenWebClient())
+            {
+                string url = AddQuerystring(downloadUrl);
+                client.DownloadFile(url, localPath);
+            }
+        }
         #endregion
 
         #region Private static methods

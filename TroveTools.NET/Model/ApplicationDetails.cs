@@ -74,9 +74,7 @@ namespace TroveTools.NET.Model
                     if (info.UpdateAvailable)
                     {
                         ad.Update();
-                        log.InfoFormat("The application has been upgraded and will now restart.");
-                        System.Windows.Forms.Application.Restart();
-                        Application.Current.Shutdown();
+                        log.InfoFormat("The application will be upgraded when you quit and restart the application.");
                     }
                 }
             }

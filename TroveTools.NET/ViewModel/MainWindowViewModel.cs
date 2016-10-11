@@ -43,7 +43,7 @@ namespace TroveTools.NET.ViewModel
             ModderTools = new ModderToolsViewModel();
             About = new AboutViewModel();
 
-            Workspaces = new ObservableCollection<ViewModelBase>() { Trovesaurus, Settings, MyMods, GetMoreMods, /*ModderTools,*/ About };
+            Workspaces = new ObservableCollection<ViewModelBase>() { Trovesaurus, Settings, MyMods, GetMoreMods, ModderTools, About };
         }
         #endregion // Constructors
 

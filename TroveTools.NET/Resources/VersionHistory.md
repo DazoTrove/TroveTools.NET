@@ -12,13 +12,17 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.1.9.1 Release (10/11/2016)
+- Get More Mods tab: added format dropdown filter to filter by mods that have been updated to support the new tmod format
+- Improved parsing of .tmod file format based on details provided by the Trove mod developer at Trion (Thanks Joe!). The properties are used to populate the Author, Mod Title, and Notes when adding a mod file in .tmod format.
+- Settings tab: added primary location setting which is used by the Modder Tools tab to determine the location to run commands
+- My Mods tab: added support for converting mods to the new .tmod file format by selecting the "Convert Mod to TMOD" option on the mod right click context menu
+- New Modder Tools tab: runs Trove command line build mod tool using a graphical interface
+  
 ## Version 1.1.9 Release (10/7/2016)
 - New Trove Mod format (.tmod) support: as of 10/7/2016 this is only supported on the Trove PTS client. Projected Live release date is 10/11/2016.
   - Added support for installing mods in the new .tmod file format to the Trove\mods folder
   - Mod Detail Pane: added format type in tooltip for mod version install button
-- Coming Soon:
-  - Support for converting mods to the new .tmod file format by selecting a Convert Mod option on the mod right click context menu
-  - New Modder Tools tab: runs Trove command line build mod tool using a graphical interface
 
 ## Version 1.1.8.1 Release (9/18/2016)
 - Bug fix: when minimize to system tray is enabled and the user clicks the close button, the application no longer performs tasks meant for application closing such as stopping background timers and saving settings

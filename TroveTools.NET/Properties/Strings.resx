@@ -121,6 +121,10 @@
     <value>About</value>
     <comment>The display name of the AboutViewModel object</comment>
   </data>
+  <data name="GetMoreModsViewModel_AllFormats" xml:space="preserve">
+    <value>All Formats</value>
+    <comment>All Formats text for the Get More Mods view</comment>
+  </data>
   <data name="GetMoreModsViewModel_AllSubTypes" xml:space="preserve">
     <value>All Subtypes</value>
     <comment>All Subtypes text for the Get More Mods view</comment>

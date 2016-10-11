@@ -20,7 +20,7 @@ namespace TroveTools.NET.ViewModel
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private DelegateCommand _refreshCommand, _clearSearchCommand, _launchTrovesaurusCommand;
         private DelegateCommand<string> _sortCommand;
-        private CollectionViewSource _modsView = new CollectionViewSource(), _typesView = new CollectionViewSource(), _subTypesView = new CollectionViewSource();
+        private CollectionViewSource _ModsView = new CollectionViewSource(), _TypesView = new CollectionViewSource(), _SubTypesView = new CollectionViewSource(), _FormatsView = new CollectionViewSource();
         private DateTime lastUpdated = DateTime.MinValue;
 
         #region Constructor
@@ -29,9 +29,10 @@ namespace TroveTools.NET.ViewModel
             DisplayName = Strings.GetMoreModsViewModel_DisplayName;
 
             // Set Collection View Source for collections for current item tracking, sorting, and filtering
-            _modsView.Source = TrovesaurusMods;
-            _typesView.Source = Types;
-            _subTypesView.Source = SubTypes;
+            _ModsView.Source = TrovesaurusMods;
+            _TypesView.Source = Types;
+            _SubTypesView.Source = SubTypes;
+            _FormatsView.Source = Formats;
         }
         #endregion // Constructor
 
@@ -51,6 +52,7 @@ namespace TroveTools.NET.ViewModel
                 // Setup current item changing events
                 TypesView.CurrentChanged += (s, e) => TypeFilter = TypesView.CurrentItem as string;
                 SubTypesView.CurrentChanged += (s, e) => SubTypeFilter = SubTypesView.CurrentItem as string;
+                FormatsView.CurrentChanged += (s, e) => FormatFilter = FormatsView.CurrentItem as string;
 
                 // Setup filter function
                 TrovesaurusModsView.Filter = ModFilter;
@@ -92,6 +94,17 @@ namespace TroveTools.NET.ViewModel
             {
                 SubTypes.Add(subtype);
             }
+
+            Formats.Clear();
+            Formats.Add(Strings.GetMoreModsViewModel_AllFormats);
+            //var formats = TrovesaurusMods.SelectMany(m => m.DataObject.Downloads).GroupBy(d => d.Format);
+            foreach (var format in from d in TrovesaurusMods.SelectMany(m => m.DataObject.Downloads)
+                                   group d by d.Format into g
+                                   orderby g.First().Format
+                                   select g.First().Format)
+            {
+                Formats.Add(format);
+            }
         }
 
         #region Properties
@@ -101,19 +114,26 @@ namespace TroveTools.NET.ViewModel
 
         public ObservableCollection<string> SubTypes { get; set; } = new ObservableCollection<string>();
 
+        public ObservableCollection<string> Formats { get; set; } = new ObservableCollection<string>();
+
         public ICollectionView TrovesaurusModsView
         {
-            get { return _modsView.View; }
+            get { return _ModsView.View; }
         }
 
         public ICollectionView TypesView
         {
-            get { return _typesView.View; }
+            get { return _TypesView.View; }
         }
 
         public ICollectionView SubTypesView
         {
-            get { return _subTypesView.View; }
+            get { return _SubTypesView.View; }
+        }
+
+        public ICollectionView FormatsView
+        {
+            get { return _FormatsView.View; }
         }
 
         private bool _IsLoading = false;
@@ -162,6 +182,20 @@ namespace TroveTools.NET.ViewModel
 
                 _SubTypeFilter = value;
                 RaisePropertyChanged("SubTypeFilter");
+                TrovesaurusModsView.Refresh();
+            }
+        }
+
+        private string _FormatFilter = Strings.GetMoreModsViewModel_AllFormats;
+        public string FormatFilter
+        {
+            get { return _FormatFilter; }
+            set
+            {
+                log.DebugFormat("Set FormatFilter to [{0}]", value);
+
+                _FormatFilter = value;
+                RaisePropertyChanged("FormatFilter");
                 TrovesaurusModsView.Refresh();
             }
         }
@@ -280,7 +314,7 @@ namespace TroveTools.NET.ViewModel
             TroveModViewModel mod = item as TroveModViewModel;
             var ic = StringComparison.OrdinalIgnoreCase;
 
-            bool search = true, types = true, subtypes = true;
+            bool search = true, types = true, subtypes = true, format = true;
             try
             {
                 search = string.IsNullOrEmpty(SearchFilter) || mod.DataObject.Name?.IndexOf(SearchFilter, ic) >= 0 || mod.DataObject.Author?.IndexOf(SearchFilter, ic) >= 0 ||
@@ -291,14 +325,17 @@ namespace TroveTools.NET.ViewModel
 
                 subtypes = string.IsNullOrEmpty(SubTypeFilter) || SubTypeFilter.Equals(Strings.GetMoreModsViewModel_AllSubTypes, ic) ||
                     mod.DataObject.SubType == null || mod.DataObject.SubType.Equals(SubTypeFilter, ic);
+
+                format = string.IsNullOrEmpty(FormatFilter) || FormatFilter.Equals(Strings.GetMoreModsViewModel_AllFormats, ic) ||
+                    mod.DataObject.Downloads.Any(d => d.Format.Equals(FormatFilter, ic));
             }
             catch (Exception ex)
             {
                 log.Error("Mod filter error", ex);
-                if (log.IsDebugEnabled) log.DebugFormat("Mod Name: [{0}], Author: [{1}], Type: [{2}], SubType: [{3}], SearchFilter: [{4}], TypeFilter: [{5}], SubTypeFilter: [{6}]",
-                    mod?.DataObject?.Name, mod?.DataObject?.Author, mod?.DataObject?.Type, mod?.DataObject?.SubType, SearchFilter, TypeFilter, SubTypeFilter);
+                if (log.IsDebugEnabled) log.DebugFormat("Mod Name: [{0}], Author: [{1}], Type: [{2}], SubType: [{3}], SearchFilter: [{4}], TypeFilter: [{5}], SubTypeFilter: [{6}], FormatFilter: [{7}]",
+                    mod?.DataObject?.Name, mod?.DataObject?.Author, mod?.DataObject?.Type, mod?.DataObject?.SubType, SearchFilter, TypeFilter, SubTypeFilter, FormatFilter);
             }
-            return search && types && subtypes;
+            return search && types && subtypes && format;
         }
 
         private void SortModList(string column)

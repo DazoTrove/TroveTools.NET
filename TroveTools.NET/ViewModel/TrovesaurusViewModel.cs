@@ -141,7 +141,7 @@ namespace TroveTools.NET.ViewModel
                     else if (updateAvailable)
                     {
                         Action updateApp = UpdateApplication;
-                        MainWindowViewModel.Instance.ViewCommandManager.InvokeLoaded("ShowTrayTip", "New application update available: click to install and restart application", updateApp);
+                        MainWindowViewModel.Instance.ViewCommandManager.InvokeLoaded("ShowTrayTip", "New application update available: please quit and restart the application to receive the update", updateApp);
                     }
                 }
             }

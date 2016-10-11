@@ -184,6 +184,9 @@
                     <MenuItem Header="Mod enabled" IsCheckable="True" IsChecked="{Binding SelectedItem.Enabled}"/>
                     <MenuItem Header="Remove Mod" Command="{Binding DataContext.RemoveModCommand}" CommandParameter="{Binding SelectedItem}"/>
                     <Separator/>
+                    <MenuItem Header="Convert Mod to TMOD..." Command="{Binding SelectedItem.ConvertToTmodCommand}"/>
+                    <MenuItem Header="Auto-Convert Mod to TMOD (no properties data entry)" Command="{Binding SelectedItem.AutoConvertToTmodCommand}"/>
+                    <Separator/>
                     <MenuItem Command="{Binding SelectedItem.UpdateCommand}">
                         <MenuItem.Header>
                             <TextBlock Text="{Binding SelectedItem.LatestDownload, Mode=OneWay, StringFormat='Update mod to latest: {0}'}"/>

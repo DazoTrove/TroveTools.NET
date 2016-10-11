@@ -70,6 +70,15 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Formats.
+        /// </summary>
+        public static string GetMoreModsViewModel_AllFormats {
+            get {
+                return ResourceManager.GetString("GetMoreModsViewModel_AllFormats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Subtypes.
         /// </summary>
         public static string GetMoreModsViewModel_AllSubTypes {

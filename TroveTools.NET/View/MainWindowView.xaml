@@ -36,11 +36,11 @@
             <Image Source="/Resources/glyphicons-137-cogwheel.png" />
             <Button.ContextMenu>
                 <ContextMenu Placement="Bottom">
-                    <MenuItem Header="{x:Static pr:Strings.MainWindowView_CheckForUpdates}" Command="{Binding CheckForUpdatesCommand}">
+                    <!--<MenuItem Header="{x:Static pr:Strings.MainWindowView_CheckForUpdates}" Command="{Binding CheckForUpdatesCommand}">
                         <MenuItem.Icon>
                             <Image Source="/Resources/glyphicons-365-cloud-download.png" />
                         </MenuItem.Icon>
-                    </MenuItem>
+                    </MenuItem>-->
                     <MenuItem Header="{x:Static pr:Strings.MainWindowView_QuitTroveTools}" Click="QuitTroveTools">
                         <MenuItem.Icon>
                             <Image Source="/Resources/glyphicons-208-remove.png" />

@@ -19,7 +19,7 @@ namespace TroveTools.NET.ViewModel
     class SettingsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private DelegateCommand<TroveLocationViewModel> _removeLocationCommand;
+        private DelegateCommand<TroveLocationViewModel> _removeLocationCommand, _MakePrimaryCommand;
         private DelegateCommand<string> _addLocationCommand;
         private DelegateCommand _DetectLocationsCommand;
         private ObservableCollection<TimeSpan> _AutoUpdateIntervals = new ObservableCollection<TimeSpan>();
@@ -233,15 +233,20 @@ namespace TroveTools.NET.ViewModel
         {
             get
             {
-                if (_removeLocationCommand == null)
-                {
-                    _removeLocationCommand = new DelegateCommand<TroveLocationViewModel>(
-                      currentItem => Locations.Remove(currentItem),
-                      currentItem => currentItem != null);
-                }
+                if (_removeLocationCommand == null) _removeLocationCommand = new DelegateCommand<TroveLocationViewModel>(loc => Locations.Remove(loc), loc => loc != null);
                 return _removeLocationCommand;
             }
         }
+
+        public DelegateCommand<TroveLocationViewModel> MakePrimaryCommand
+        {
+            get
+            {
+                if (_MakePrimaryCommand == null) _MakePrimaryCommand = new DelegateCommand<TroveLocationViewModel>(loc => MakePrimary(loc), loc => loc != null);
+                return _MakePrimaryCommand;
+            }
+        }
+
         public DelegateCommand DetectLocationsCommand
         {
             get
@@ -278,12 +283,21 @@ namespace TroveTools.NET.ViewModel
                     select loc.DataObject).ToList();
         }
 
+        private void MakePrimary(TroveLocationViewModel location)
+        {
+            // Set all other locations to false
+            foreach (dynamic loc in Locations) loc.Primary = false;
+
+            dynamic locVm = location;
+            locVm.Primary = true;
+        }
+
         private void DetectLocations(object param = null)
         {
             var locations = GetLocationsList();
             TroveLocation.DetectLocations(locations);
             var ic = StringComparison.OrdinalIgnoreCase;
-            
+
             foreach (var loc in locations)
             {
                 // Add any locations detected that are not already present
