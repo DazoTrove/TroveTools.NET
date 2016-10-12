@@ -14,29 +14,38 @@ namespace TroveTools.NET.View
     public partial class ModderToolsView : UserControl
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private ModderToolsViewModel vm = null;
 
         public ModderToolsView()
         {
             InitializeComponent();
         }
 
+        internal ModderToolsViewModel ViewModel
+        {
+            get
+            {
+                if (vm == null) vm = DataContext as ModderToolsViewModel;
+                return vm;
+            }
+        }
+
         private void AddFileButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             try
             {
-                var vm = DataContext as ModderToolsViewModel;
                 OpenFileDialog dialog = new OpenFileDialog();
-                dialog.Title = Strings.MyMods_OpenFileDialog_Title;
+                dialog.Title = Strings.ModderTools_AddFileDialog_Title;
                 dialog.Filter = "All Files|*.*";
                 dialog.CheckFileExists = true;
                 dialog.Multiselect = true;
-                dialog.InitialDirectory = vm.AddFileLocation;
+                dialog.InitialDirectory = ViewModel.AddFileLocation;
 
                 if (dialog.ShowDialog() == true)
                 {
                     foreach (string file in dialog.FileNames)
                     {
-                        vm.AddFileCommand.Execute(file);
+                        ViewModel.AddFileCommand.Execute(file);
                     }
                 }
             }
@@ -50,22 +59,65 @@ namespace TroveTools.NET.View
         {
             try
             {
-                var vm = DataContext as ModderToolsViewModel;
                 OpenFileDialog dialog = new OpenFileDialog();
-                dialog.Title = Strings.MyMods_OpenFileDialog_Title;
+                dialog.Title = Strings.ModderTools_PreviewDialog_Title;
                 dialog.Filter = "400 by 230 pixel image (PNG / JPG) or blueprint file|*.png;*.jpg;*.blueprint";
                 dialog.CheckFileExists = true;
                 dialog.Multiselect = false;
-                dialog.InitialDirectory = vm.PreviewLocation;
+                dialog.InitialDirectory = ViewModel.PreviewLocation;
 
                 if (dialog.ShowDialog() == true)
                 {
-                    vm.UpdatePreviewCommand.Execute(dialog.FileName);
+                    ViewModel.UpdatePreviewCommand.Execute(dialog.FileName);
                 }
             }
             catch (Exception ex)
             {
                 log.Error("Error updating preview file", ex);
+            }
+        }
+
+        private void LoadYamlButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Title = Strings.ModderTools_OpenYamlDialog_Title;
+                dialog.Filter = "YAML file|*.yaml";
+                dialog.CheckFileExists = true;
+                dialog.Multiselect = false;
+                dialog.InitialDirectory = ViewModel.ModsFolder;
+
+                if (dialog.ShowDialog() == true)
+                {
+                    ViewModel.LoadYamlCommand.Execute(dialog.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error loading YAML file", ex);
+            }
+        }
+
+        private void SaveYamlButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            try
+            {
+                SaveFileDialog dialog = new SaveFileDialog();
+                dialog.Title = Strings.ModderTools_SaveYamlDialog_Title;
+                dialog.Filter = "YAML file|*.yaml";
+                dialog.CheckFileExists = true;
+                dialog.InitialDirectory = ViewModel.ModsFolder;
+                dialog.FileName = Path.GetFileName(ViewModel.YamlPath);
+
+                if (dialog.ShowDialog() == true)
+                {
+                    ViewModel.SaveYamlCommand.Execute(dialog.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error saving YAML file", ex);
             }
         }
     }

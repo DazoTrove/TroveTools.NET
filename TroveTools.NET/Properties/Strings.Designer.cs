@@ -160,6 +160,42 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select mod component files.
+        /// </summary>
+        public static string ModderTools_AddFileDialog_Title {
+            get {
+                return ResourceManager.GetString("ModderTools_AddFileDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select mod YAML file.
+        /// </summary>
+        public static string ModderTools_OpenYamlDialog_Title {
+            get {
+                return ResourceManager.GetString("ModderTools_OpenYamlDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select mod preview file.
+        /// </summary>
+        public static string ModderTools_PreviewDialog_Title {
+            get {
+                return ResourceManager.GetString("ModderTools_PreviewDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save mod YAML file.
+        /// </summary>
+        public static string ModderTools_SaveYamlDialog_Title {
+            get {
+                return ResourceManager.GetString("ModderTools_SaveYamlDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modder Tools.
         /// </summary>
         public static string ModderToolsViewModel_DisplayName {

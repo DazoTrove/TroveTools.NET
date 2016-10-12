@@ -23,70 +23,89 @@
             <RowDefinition Height="3*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <GroupBox Padding="5">
-            <GroupBox.Header>
-                <TextBlock Text="Build TMod" FontWeight="Bold"/>
-            </GroupBox.Header>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" Text="Title:" Margin="0,5,0,0"/>
-                <TextBox Grid.Column="1" Grid.Row="0" Margin="5,5,0,0" Text="{Binding ModTitle, UpdateSourceTrigger=PropertyChanged}"/>
+        <TabControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Build TMod" Style="{StaticResource OribitronFontTextBlock}" FontSize="12" FontWeight="Bold" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Title:" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" Margin="5,5,0,0" Text="{Binding ModTitle, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <Button Grid.Column="2" Grid.Row="0" Margin="5,5,0,0" Command="{Binding ClearCommand}">Clear All</Button>
+                    <Button Grid.Column="2" Grid.Row="0" Margin="5,5,0,0" Command="{Binding ClearCommand}">Clear All</Button>
 
-                <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" TextDecorations="Underline">
-                    <TextBlock.ToolTip>
-                        <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
-                            <StackPanel>
-                                <TextBlock Margin="0,5,0,5">PNG, JPG or Blueprint file</TextBlock>
-                                <Image Source="{Binding DataContext.PreviewImage, Converter={c:UriToCachedImageConverter}}" MaxHeight="230" MaxWidth="400" />
-                            </StackPanel>
-                        </ToolTip>
-                    </TextBlock.ToolTip>
+                    <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" TextDecorations="Underline" HorizontalAlignment="Center">
+                        <TextBlock.ToolTip>
+                            <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                <StackPanel>
+                                    <TextBlock Margin="0,5,0,5">PNG, JPG or Blueprint file</TextBlock>
+                                    <Image Source="{Binding DataContext.PreviewImage, Converter={c:UriToCachedImageConverter}}" MaxHeight="230" MaxWidth="400" />
+                                </StackPanel>
+                            </ToolTip>
+                        </TextBlock.ToolTip>
                     Preview:<LineBreak/>400 x 230
                 </TextBlock>
-                <TextBox Grid.Column="1" Grid.Row="1" Margin="5,5,0,0" Text="{Binding ModPreview, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Grid.Column="2" Grid.Row="1" Margin="5,5,0,0" Click="PreviewBrowseButton_Click">
-                    Browse...
-                </Button>
+                    <TextBox Grid.Column="1" Grid.Row="1" Margin="5,5,0,0" Text="{Binding ModPreview, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Grid.Column="2" Grid.Row="1" Margin="5,5,0,0" x:Name="PreviewBrowseButton" Click="PreviewBrowseButton_Click">
+                        Browse...
+                    </Button>
 
-                <TextBlock Grid.Column="0" Grid.Row="2" Text="Author:" Margin="0,5,0,0"/>
-                <TextBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,0,0" Text="{Binding ModAuthor, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Author:" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,0,0" Text="{Binding ModAuthor, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock Grid.Column="0" Grid.Row="3" Text="Notes:" Margin="0,5,0,0"/>
-                <TextBox Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Margin="5,5,0,0" Text="{Binding ModNotes, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="3" Text="Notes:" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Margin="5,5,0,0" Text="{Binding ModNotes, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock Grid.Column="0" Grid.Row="4" Grid.RowSpan="4" Text="Files:" Margin="0,5,0,0">
-                    <TextBlock.ToolTip>Select multiple files by holding Ctrl or Shift and clicking</TextBlock.ToolTip>
-                </TextBlock>
-                <ListBox Grid.Column="1" Grid.Row="4" Margin="5,5,0,0" Grid.RowSpan="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    <TextBlock Grid.Column="0" Grid.Row="4" Text="Files:" Margin="0,5,0,0" HorizontalAlignment="Center">
+                        <TextBlock.ToolTip>Select multiple files by holding Ctrl or Shift and clicking</TextBlock.ToolTip>
+                    </TextBlock>
+                    <ListBox Grid.Column="1" Grid.Row="4" Margin="5,5,0,0" Grid.RowSpan="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                          x:Name="ModFilesListBox" SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding ModFilesView}">
-                    <ListBox.InputBindings>
-                        <KeyBinding CommandParameter="{Binding SelectedItems, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}" Key="Delete" />
-                    </ListBox.InputBindings>
-                </ListBox>
+                        <ListBox.InputBindings>
+                            <KeyBinding CommandParameter="{Binding SelectedItems, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}" Key="Delete" />
+                        </ListBox.InputBindings>
+                    </ListBox>
 
-                <Button Grid.Column="2" Grid.Row="4" Margin="5,5,0,0" Click="AddFileButton_Click">Add File</Button>
-                <Button Grid.Column="2" Grid.Row="5" Margin="5,5,0,0" CommandParameter="{Binding SelectedItems, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}">Remove Files</Button>
-                <Button Grid.Column="2" Grid.Row="6" Margin="5,5,0,0" CommandParameter="{Binding Items, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}">Remove All</Button>
-                <Button Grid.Column="2" Grid.Row="8" Margin="5,5,0,0" FontWeight="Bold" Command="{Binding BuildTmodCommand}">Build TMod</Button>
-            </Grid>
-        </GroupBox>
+                    <Button Grid.Row="5" Margin="0,5,0,0" x:Name="LoadYamlButton" Click="LoadYamlButton_Click" HorizontalAlignment="Center">
+                        <Button.ToolTip>Load settings from YAML file</Button.ToolTip>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Margin="3,0,3,0" Source="/Resources/glyphicons-416-disk-open.png" MaxHeight="12"/>
+                            <TextBlock>Load YAML</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Grid.Row="6" Margin="0,5,0,0" x:Name="SaveYamlButton" Click="SaveYamlButton_Click" HorizontalAlignment="Center">
+                        <Button.ToolTip>Save settings to YAML file</Button.ToolTip>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Margin="3,0,3,0" Source="/Resources/glyphicons-415-disk-save.png" MaxHeight="12"/>
+                            <TextBlock>Save YAML</TextBlock>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Column="2" Grid.Row="4" Margin="5,5,0,0" x:Name="AddFileButton" Click="AddFileButton_Click">Add File</Button>
+                    <Button Grid.Column="2" Grid.Row="5" Margin="5,5,0,0" CommandParameter="{Binding SelectedItems, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}">Remove Files</Button>
+                    <Button Grid.Column="2" Grid.Row="6" Margin="5,5,0,0" CommandParameter="{Binding Items, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}">Remove All</Button>
+                    <Button Grid.Column="2" Grid.Row="8" Margin="5,5,0,0" FontWeight="Bold" Command="{Binding BuildTmodCommand}">Build TMod</Button>
+                </Grid>
+            </TabItem>
+        </TabControl>
         <GroupBox Padding="5" Grid.Row="1">
             <GroupBox.Header>
                 <TextBlock Text="Dev Tool Output" FontWeight="Bold"/>

@@ -768,7 +768,7 @@ namespace TroveTools.NET.Model
         public string DownloadImage(string folder)
         {
             string previewPath = null;
-            if (!ImageFullPath.EndsWith("modconstruction.jpg"))
+            if (ImageFullPath != null && !ImageFullPath.EndsWith("modconstruction.jpg"))
             {
                 try
                 {

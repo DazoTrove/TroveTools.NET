@@ -12,6 +12,9 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.1.9.3 Release (10/12/2016)
+- Modder Tools tab: added Load YAML and Save YAML functionality
+
 ## Version 1.1.9.2 Release (10/11/2016)
 - Modder Tools tab: added **Clear All** button to clear all fields
 - Modder Tools tab: updated Files list box to allow selecting multiple items and changed **Remove File** button to **Remove Files**, and added tooltip to Files label instructing users to "Select multiple files by holding Ctrl or Shift and clicking"

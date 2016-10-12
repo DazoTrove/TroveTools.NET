@@ -14,6 +14,9 @@ using TroveTools.NET.DataAccess;
 using TroveTools.NET.Framework;
 using TroveTools.NET.Model;
 using TroveTools.NET.Properties;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Serialization.ObjectFactories;
 
 namespace TroveTools.NET.ViewModel
 {
@@ -21,7 +24,7 @@ namespace TroveTools.NET.ViewModel
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private DelegateCommand _BuildTmodCommand, _ClearCommand;
-        private DelegateCommand<string> _AddFileCommand, _UpdatePreviewCommand;
+        private DelegateCommand<string> _AddFileCommand, _UpdatePreviewCommand, _LoadYamlCommand, _SaveYamlCommand;
         private DelegateCommand<IList> _RemoveFilesCommand;
         private CollectionViewSource _ModFilesView = new CollectionViewSource();
 
@@ -119,16 +122,6 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
-        public string AddFileLocation
-        {
-            get { return TroveLocation.PrimaryLocation.LocationPath; }
-        }
-
-        public string PreviewLocation
-        {
-            get { return SettingsDataProvider.ResolveFolder(Path.Combine(TroveLocation.PrimaryLocation.LocationPath, "ui", TroveMod.OverrideFolder)); }
-        }
-
         private string _DevToolOutput = string.Empty;
         public string DevToolOutput
         {
@@ -139,9 +132,47 @@ namespace TroveTools.NET.ViewModel
                 RaisePropertyChanged("DevToolOutput");
             }
         }
+
+        public string YamlPath
+        {
+            get { return Path.Combine(SettingsDataProvider.ModsFolder, SettingsDataProvider.GetSafeFilename(string.Format("{0}.yaml", ModTitle))); }
+        }
+
+        public string AddFileLocation
+        {
+            get { return TroveLocation.PrimaryLocation.LocationPath; }
+        }
+
+        public string PreviewLocation
+        {
+            get { return SettingsDataProvider.ResolveFolder(Path.Combine(TroveLocation.PrimaryLocation.LocationPath, "ui", TroveMod.OverrideFolder)); }
+        }
+
+        public string ModsFolder
+        {
+            get { return SettingsDataProvider.ModsFolder; }
+        }
         #endregion
 
         #region Commands
+        public DelegateCommand<string> LoadYamlCommand
+        {
+            get
+            {
+                if (_LoadYamlCommand == null) _LoadYamlCommand = new DelegateCommand<string>(LoadYaml);
+                return _LoadYamlCommand;
+            }
+        }
+
+        public DelegateCommand<string> SaveYamlCommand
+        {
+            get
+            {
+                if (_SaveYamlCommand == null) _SaveYamlCommand = new DelegateCommand<string>(SaveYaml);
+                return _SaveYamlCommand;
+            }
+        }
+
         public DelegateCommand<string> UpdatePreviewCommand
         {
             get
@@ -188,7 +219,68 @@ namespace TroveTools.NET.ViewModel
         }
         #endregion
 
+        #region YAML details class
+        public class ModDetails
+        {
+            public string Author { get; set; }
+            public string Title { get; set; }
+            public string Notes { get; set; }
+            public string PreviewPath { get; set; }
+            public List<string> Files { get; set; }
+        }
+        #endregion
+
         #region Private methods
+        private void LoadYaml(string yamlPath)
+        {
+            try
+            {
+                log.InfoFormat("Loading YAML file: {0}", yamlPath);
+
+                string yamlContents = File.ReadAllText(yamlPath);
+                var deserializer = new DeserializerBuilder().WithNamingConvention(new CamelCaseNamingConvention()).Build();
+                var details = deserializer.Deserialize<ModDetails>(yamlContents);
+
+                Clear();
+                ModAuthor = details.Author;
+                ModTitle = details.Title;
+                ModNotes = details.Notes;
+                ModPreview = details.PreviewPath;
+                string preview = TroveMod.GetOverridePath(details.PreviewPath, AddFileLocation);
+                if (File.Exists(preview) && (preview.EndsWith(".png", StringComparison.OrdinalIgnoreCase) || preview.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)))
+                    PreviewImage = preview;
+
+                foreach (string file in details.Files)
+                {
+                    ModFiles.Add(file);
+                }
+            }
+            catch (Exception ex) { log.Error(string.Format("Error loading YAML file {0}", yamlPath), ex); }
+        }
+
+        private void SaveYaml(string yamlPath)
+        {
+            try
+            {
+                log.InfoFormat("Saving YAML file: {0}", yamlPath);
+                using (StreamWriter sw = new StreamWriter(yamlPath, false))
+                {
+                    sw.WriteLine("---");
+                    sw.WriteLine(string.Format("author: \"{0}\"", ModAuthor));
+                    sw.WriteLine(string.Format("title: \"{0}\"", ModTitle));
+                    sw.WriteLine(string.Format("notes: \"{0}\"", ModNotes));
+                    sw.WriteLine(string.Format("previewPath: \"{0}\"", ModPreview));
+                    sw.WriteLine("files:");
+                    foreach (string file in ModFiles)
+                    {
+                        sw.WriteLine(string.Format(" - {0}", file));
+                    }
+                    sw.WriteLine("...");
+                }
+            }
+            catch (Exception ex) { log.Error(string.Format("Error saving YAML file {0}", yamlPath), ex); }
+        }
+
         private void UpdatePreview(string file)
         {
             if (!file.Contains(TroveMod.OverrideFolder))
@@ -226,21 +318,8 @@ namespace TroveTools.NET.ViewModel
             try
             {
                 // Create YAML file in app data mods folder
-                string yamlPath = Path.Combine(SettingsDataProvider.ModsFolder, SettingsDataProvider.GetSafeFilename(string.Format("{0}.yaml", ModTitle)));
-                using (StreamWriter sw = new StreamWriter(yamlPath, false))
-                {
-                    sw.WriteLine("---");
-                    sw.WriteLine(string.Format("author: \"{0}\"", ModAuthor));
-                    sw.WriteLine(string.Format("title: \"{0}\"", ModTitle));
-                    sw.WriteLine(string.Format("notes: \"{0}\"", ModNotes));
-                    sw.WriteLine(string.Format("previewPath: \"{0}\"", ModPreview));
-                    sw.WriteLine("files:");
-                    foreach (string file in ModFiles)
-                    {
-                        sw.WriteLine(string.Format(" - {0}", file));
-                    }
-                    sw.WriteLine("...");
-                }
+                string yamlPath = YamlPath;
+                SaveYaml(yamlPath);
 
                 // Run Trove Build Mod command (Trove.exe -tool buildmod -meta "%AppData%\TroveTools.NET\mods\{0}.yaml") and show results
                 TroveLocation.PrimaryLocation.RunDevTool(string.Format("-tool buildmod -meta \"{0}\"", yamlPath), output =>
