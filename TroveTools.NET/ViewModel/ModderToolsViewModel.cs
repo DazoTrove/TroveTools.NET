@@ -138,7 +138,7 @@ namespace TroveTools.NET.ViewModel
             get { return Path.Combine(SettingsDataProvider.ModsFolder, SettingsDataProvider.GetSafeFilename(string.Format("{0}.yaml", ModTitle))); }
         }
 
-        public string AddFileLocation
+        public string PrimaryLocationPath
         {
             get { return TroveLocation.PrimaryLocation.LocationPath; }
         }
@@ -246,7 +246,7 @@ namespace TroveTools.NET.ViewModel
                 ModTitle = details.Title;
                 ModNotes = details.Notes;
                 ModPreview = details.PreviewPath;
-                string preview = TroveMod.GetOverridePath(details.PreviewPath, AddFileLocation);
+                string preview = TroveMod.GetOverridePath(details.PreviewPath, PrimaryLocationPath);
                 if (File.Exists(preview) && (preview.EndsWith(".png", StringComparison.OrdinalIgnoreCase) || preview.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)))
                     PreviewImage = preview;
 
@@ -263,18 +263,15 @@ namespace TroveTools.NET.ViewModel
             try
             {
                 log.InfoFormat("Saving YAML file: {0}", yamlPath);
+
+                var serializer = new SerializerBuilder().WithNamingConvention(new CamelCaseNamingConvention()).Build();
+                ModDetails details = new ModDetails() { Author = ModAuthor, Title = ModTitle, Notes = ModNotes, PreviewPath = ModPreview, Files = ModFiles.ToList() };
+                string yaml = serializer.Serialize(details);
+
                 using (StreamWriter sw = new StreamWriter(yamlPath, false))
                 {
                     sw.WriteLine("---");
-                    sw.WriteLine(string.Format("author: \"{0}\"", ModAuthor));
-                    sw.WriteLine(string.Format("title: \"{0}\"", ModTitle));
-                    sw.WriteLine(string.Format("notes: \"{0}\"", ModNotes));
-                    sw.WriteLine(string.Format("previewPath: \"{0}\"", ModPreview));
-                    sw.WriteLine("files:");
-                    foreach (string file in ModFiles)
-                    {
-                        sw.WriteLine(string.Format(" - {0}", file));
-                    }
+                    sw.Write(yaml);
                     sw.WriteLine("...");
                 }
             }
@@ -290,13 +287,13 @@ namespace TroveTools.NET.ViewModel
                 file = newFile;
             }
             if (file.EndsWith(".png", StringComparison.OrdinalIgnoreCase) || file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)) PreviewImage = file;
-            ModPreview = TroveMod.MakeRelativePath(file, AddFileLocation);
+            ModPreview = TroveMod.MakeRelativePath(file, PrimaryLocationPath);
             if (!ModFiles.Contains(ModPreview)) ModFiles.Add(ModPreview);
         }
 
         private void AddFile(string file)
         {
-            string relativePath = TroveMod.MakeRelativePath(file, AddFileLocation);
+            string relativePath = TroveMod.MakeRelativePath(file, PrimaryLocationPath);
             if (!ModFiles.Contains(relativePath)) ModFiles.Add(relativePath);
         }
 

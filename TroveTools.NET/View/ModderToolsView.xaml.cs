@@ -39,7 +39,7 @@ namespace TroveTools.NET.View
                 dialog.Filter = "All Files|*.*";
                 dialog.CheckFileExists = true;
                 dialog.Multiselect = true;
-                dialog.InitialDirectory = ViewModel.AddFileLocation;
+                dialog.InitialDirectory = ViewModel.PrimaryLocationPath;
 
                 if (dialog.ShowDialog() == true)
                 {
@@ -106,7 +106,7 @@ namespace TroveTools.NET.View
                 SaveFileDialog dialog = new SaveFileDialog();
                 dialog.Title = Strings.ModderTools_SaveYamlDialog_Title;
                 dialog.Filter = "YAML file|*.yaml";
-                dialog.CheckFileExists = true;
+                dialog.CheckFileExists = false;
                 dialog.InitialDirectory = ViewModel.ModsFolder;
                 dialog.FileName = Path.GetFileName(ViewModel.YamlPath);
 

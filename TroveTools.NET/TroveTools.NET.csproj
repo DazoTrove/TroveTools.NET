@@ -30,12 +30,12 @@
     <InstallUrl>https://raw.githubusercontent.com/DazoTrove/TroveTools.NET/master/TroveTools.NET/publish/</InstallUrl>
     <ProductName>TroveTools .NET</ProductName>
     <PublisherName>Dazo</PublisherName>
-    <MinimumRequiredVersion>1.1.9.3</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.1.9.4</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>3</ApplicationRevision>
-    <ApplicationVersion>1.1.9.3</ApplicationVersion>
+    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationVersion>1.1.9.4</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
