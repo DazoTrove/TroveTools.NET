@@ -12,6 +12,12 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.1.9.2 Release (10/11/2016)
+- Modder Tools tab: added **Clear All** button to clear all fields
+- Modder Tools tab: updated Files list box to allow selecting multiple items and changed **Remove File** button to **Remove Files**, and added tooltip to Files label instructing users to "Select multiple files by holding Ctrl or Shift and clicking"
+- Modder Tools: **Convert to TMOD** function now uses full size images for preview rather than thumbnail images
+- My Mods/Get More Mods tab: full size images are now shown when hovering over thumbnail images
+
 ## Version 1.1.9.1 Release (10/11/2016)
 - Get More Mods tab: added format dropdown filter to filter by mods that have been updated to support the new tmod format
 - Improved parsing of .tmod file format based on details provided by the Trove mod developer at Trion (Thanks Joe!). The properties are used to populate the Author, Mod Title, and Notes when adding a mod file in .tmod format.

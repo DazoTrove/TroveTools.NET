@@ -159,6 +159,9 @@ namespace TroveTools.NET.Model
 
         [JsonProperty("image")]
         public string ImagePath { get; set; }
+
+        [JsonProperty("image_full")]
+        public string ImageFullPath { get; set; }
         #endregion
 
         #region TroveTools.NET Properties
@@ -331,8 +334,8 @@ namespace TroveTools.NET.Model
         {
             get
             {
-                string desc = WebUtility.HtmlDecode(Regex.Replace(Regex.Replace(Description, "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", " ")).Trim();
-                string replaces = WebUtility.HtmlDecode(Regex.Replace(Regex.Replace(Replaces, "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", " ")).Trim();
+                string desc = WebUtility.HtmlDecode(Regex.Replace(Regex.Replace(Description ?? string.Empty, "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", " ")).Trim();
+                string replaces = WebUtility.HtmlDecode(Regex.Replace(Regex.Replace(Replaces ?? string.Empty, "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", " ")).Trim();
                 if (replaces.Length > 0) replaces = "Replaces: " + replaces;
                 return string.Format("{0} {1}", desc, replaces).Trim();
             }
@@ -717,7 +720,7 @@ namespace TroveTools.NET.Model
         /// <param name="mod"></param>
         [AffectsProperty("Id"), AffectsProperty("Name"), AffectsProperty("Author"), AffectsProperty("Type"), AffectsProperty("SubType"), AffectsProperty("Description"),
             AffectsProperty("DateCreated"), AffectsProperty("TrovesaurusStatus"), AffectsProperty("Replaces"), AffectsProperty("TotalDownloads"), AffectsProperty("Votes"),
-            AffectsProperty("Views"), AffectsProperty("Downloads"), AffectsProperty("ImagePath"), AffectsProperty("CurrentFileId")]
+            AffectsProperty("Views"), AffectsProperty("Downloads"), AffectsProperty("ImagePath"), AffectsProperty("ImageFullPath"), AffectsProperty("CurrentFileId")]
         public void UpdatePropertiesFromTrovesaurus(TroveMod mod)
         {
             if (mod != null)
@@ -736,6 +739,7 @@ namespace TroveTools.NET.Model
                 Views = mod.Views;
                 Downloads = new List<Download>(mod.Downloads);
                 ImagePath = mod.ImagePath;
+                ImageFullPath = mod.ImageFullPath;
 
                 // Get the current file ID using the file date if it is not already set
                 if (string.IsNullOrEmpty(CurrentFileId))
@@ -764,10 +768,28 @@ namespace TroveTools.NET.Model
         public string DownloadImage(string folder)
         {
             string previewPath = null;
-            if (!ImagePath.EndsWith("modconstruction.jpg"))
+            if (!ImageFullPath.EndsWith("modconstruction.jpg"))
             {
-                previewPath = Path.Combine(folder, string.Format("{0}{1}", SettingsDataProvider.GetSafeFilename(Name), Path.GetExtension(ImagePath)));
-                TrovesaurusApi.DownloadFile(ImagePath, previewPath);
+                try
+                {
+                    previewPath = Path.Combine(folder, string.Format("{0}{1}", SettingsDataProvider.GetSafeFilename(Name), Path.GetExtension(ImageFullPath)));
+                    TrovesaurusApi.DownloadFile(ImageFullPath, previewPath);
+                }
+                catch (Exception ex)
+                {
+                    log.Warn(string.Format("Error downloading image {0}, retrying with new filename", Path.GetFileName(previewPath)), ex);
+                    int i = 1;
+                    while (File.Exists(previewPath))
+                    {
+                        previewPath = Path.Combine(folder, string.Format("{0} {1}{2}", SettingsDataProvider.GetSafeFilename(Name), i++, Path.GetExtension(ImageFullPath)));
+                    }
+                    try { TrovesaurusApi.DownloadFile(ImageFullPath, previewPath); }
+                    catch (Exception e)
+                    {
+                        log.Error(string.Format("Error downloading image {0}", Path.GetFileName(previewPath)), e);
+                        previewPath = null;
+                    }
+                }
             }
             return previewPath;
         }

@@ -67,13 +67,32 @@ namespace TroveTools.NET.Framework
         [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            if (_canExecute == null) return true;
-            return _canExecute(parameter == null ? default(T) : (T)Convert.ChangeType(parameter, typeof(T)));
+            try
+            {
+                if (_canExecute == null) return true;
+                IConvertible convertible = parameter as IConvertible;
+                if (convertible != null)
+                    return _canExecute(parameter == null ? default(T) : (T)Convert.ChangeType(parameter, typeof(T)));
+                else
+                    return _canExecute(parameter == null ? default(T) : (T)parameter);
+            }
+            catch (Exception) { return true; }
         }
 
         public void Execute(object parameter)
         {
-            _execute(parameter == null ? default(T) : (T)Convert.ChangeType(parameter, typeof(T)));
+            try
+            {
+                IConvertible convertible = parameter as IConvertible;
+                if (convertible != null)
+                    _execute(parameter == null ? default(T) : (T)Convert.ChangeType(parameter, typeof(T)));
+                else
+                    _execute(parameter == null ? default(T) : (T)parameter);
+            }
+            catch (Exception ex)
+            {
+                log.Error(string.Format("Error executing command: {0}", GetType().FullName), ex);
+            }
         }
 
         public event EventHandler CanExecuteChanged

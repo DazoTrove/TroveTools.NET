@@ -40,7 +40,7 @@
             <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Source="{Binding ImagePath, Converter={c:ImagePathConverter}}" MaxHeight="90" MaxWidth="90" Margin="0,0,6,0">
                 <Image.ToolTip>
                     <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
-                        <Image Source="{Binding Source}" MaxHeight="300" MaxWidth="300" />
+                        <Image Source="{Binding DataContext.ImageFullPath}" MaxHeight="600" MaxWidth="600" StretchDirection="DownOnly" />
                     </ToolTip>
                 </Image.ToolTip>
             </Image>
@@ -101,11 +101,13 @@
                                 <ColumnDefinition Width="450" SharedSizeGroup="Changes"/>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Downloads"/>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Created"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Format"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Version" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
                             <TextBlock Grid.Column="1" Text="Changes" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
                             <TextBlock Grid.Column="2" Text="Downloads" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
                             <TextBlock Grid.Column="3" Text="Created" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
+                            <TextBlock Grid.Column="4" Text="Format" FontWeight="Bold" HorizontalAlignment="Center" Margin="3"/>
                         </Grid>
                     </DataTemplate>
                 </HeaderedItemsControl.HeaderTemplate>
@@ -118,6 +120,7 @@
                                     <ColumnDefinition Width="450" SharedSizeGroup="Changes"/>
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="Downloads"/>
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="Created"/>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Format"/>
                                 </Grid.ColumnDefinitions>
                                 <Button Grid.Column="0" Command="{Binding DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding FileId}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="3" Padding="2">
@@ -131,6 +134,7 @@
                                 <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Downloads, Mode=OneWay, StringFormat=N0}" HorizontalAlignment="Center" Margin="3"/>
                                 <TextBlock Grid.Column="3" VerticalAlignment="Center" FontStyle="Italic" ToolTip="{Binding DateTime, Converter={c:DateTimeOrTimeSpanStringConverter}, Mode=OneWay}"
                                        Text="{Binding DateTime, StringFormat=g, Mode=OneWay}" Margin="3"/>
+                                <TextBlock Grid.Column="4" VerticalAlignment="Center" Text="{Binding Format, Mode=OneWay}" HorizontalAlignment="Center" Margin="3"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

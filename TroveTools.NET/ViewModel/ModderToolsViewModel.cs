@@ -1,6 +1,7 @@
 ﻿using CommonMark;
 using log4net;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -19,8 +20,9 @@ namespace TroveTools.NET.ViewModel
     class ModderToolsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private DelegateCommand _BuildTmodCommand;
-        private DelegateCommand<string> _AddFileCommand, _RemoveFileCommand, _UpdatePreviewCommand;
+        private DelegateCommand _BuildTmodCommand, _ClearCommand;
+        private DelegateCommand<string> _AddFileCommand, _UpdatePreviewCommand;
+        private DelegateCommand<IList> _RemoveFilesCommand;
         private CollectionViewSource _ModFilesView = new CollectionViewSource();
 
         public ModderToolsViewModel()
@@ -44,16 +46,19 @@ namespace TroveTools.NET.ViewModel
             set
             {
                 ModFiles.Clear();
-                _CurrentMod = value;
-                ModTitle = value.DisplayName;
-                ModAuthor = value.DataObject.Author;
-                ModNotes = value.DataObject.CleanNotes;
-                string previewPath = value.DataObject.DownloadImage(PreviewLocation);
-                if (previewPath != null) UpdatePreview(previewPath);
-
-                foreach (var file in value.DataObject.ModFiles)
+                if (value != null)
                 {
-                    ModFiles.Add(file);
+                    _CurrentMod = value;
+                    ModTitle = value.DisplayName;
+                    ModAuthor = value.DataObject.Author;
+                    ModNotes = value.DataObject.CleanNotes;
+                    string previewPath = value.DataObject.DownloadImage(PreviewLocation);
+                    if (previewPath != null) UpdatePreview(previewPath);
+
+                    foreach (var file in value.DataObject.ModFiles)
+                    {
+                        ModFiles.Add(file);
+                    }
                 }
                 RaisePropertyChanged("CurrentMod");
             }
@@ -155,13 +160,12 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
-        public DelegateCommand<string> RemoveFileCommand
+        public DelegateCommand<IList> RemoveFilesCommand
         {
             get
             {
-                if (_RemoveFileCommand == null) _RemoveFileCommand = new DelegateCommand<string>(
-                    currentItem => RemoveFile(currentItem), currentItem => currentItem != null);
-                return _RemoveFileCommand;
+                if (_RemoveFilesCommand == null) _RemoveFilesCommand = new DelegateCommand<IList>(items => RemoveFiles(items), items => items != null && items.Count > 0);
+                return _RemoveFilesCommand;
             }
         }
 
@@ -173,11 +177,26 @@ namespace TroveTools.NET.ViewModel
                 return _BuildTmodCommand;
             }
         }
+
+        public DelegateCommand ClearCommand
+        {
+            get
+            {
+                if (_ClearCommand == null) _ClearCommand = new DelegateCommand(Clear);
+                return _ClearCommand;
+            }
+        }
         #endregion
 
         #region Private methods
         private void UpdatePreview(string file)
         {
+            if (!file.Contains(TroveMod.OverrideFolder))
+            {
+                string newFile = Path.Combine(PreviewLocation, Path.GetFileName(file));
+                File.Copy(file, newFile, true);
+                file = newFile;
+            }
             if (file.EndsWith(".png", StringComparison.OrdinalIgnoreCase) || file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)) PreviewImage = file;
             ModPreview = TroveMod.MakeRelativePath(file, AddFileLocation);
             if (!ModFiles.Contains(ModPreview)) ModFiles.Add(ModPreview);
@@ -189,12 +208,20 @@ namespace TroveTools.NET.ViewModel
             if (!ModFiles.Contains(relativePath)) ModFiles.Add(relativePath);
         }
 
-        private void RemoveFile(string currentItem)
+        private void RemoveFiles(IList items)
         {
-            ModFiles.Remove(currentItem);
+            if (items == null) return;
+            foreach (string item in items.Cast<string>().ToList()) ModFiles.Remove(item);
         }
 
-        private void BuildTmod(object obj)
+        private void Clear(object obj = null)
+        {
+            ModFiles.Clear();
+            CurrentMod = null;
+            ModTitle = ModAuthor = ModNotes = ModPreview = PreviewImage = DevToolOutput = null;
+        }
+
+        private void BuildTmod(object obj = null)
         {
             try
             {

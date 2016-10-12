@@ -82,7 +82,7 @@
                                 <Image Source="{Binding ImagePath, Converter={c:ImagePathConverter}}" MaxWidth="50" MaxHeight="50">
                                     <Image.ToolTip>
                                         <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
-                                            <Image Source="{Binding Source}" MaxHeight="300" MaxWidth="300" />
+                                            <Image Source="{Binding DataContext.ImageFullPath}" MaxHeight="600" MaxWidth="600" StretchDirection="DownOnly" />
                                         </ToolTip>
                                     </Image.ToolTip>
                                 </Image>

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:c="clr-namespace:TroveTools.NET.Converter"
              xmlns:vw="clr-namespace:TroveTools.NET.View"
              xmlns:vm="clr-namespace:TroveTools.NET.ViewModel"
              mc:Ignorable="d" 
@@ -34,6 +35,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -43,14 +45,16 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Title:" Margin="0,5,0,0"/>
-                <TextBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,5,0,0" Text="{Binding ModTitle, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Grid.Column="1" Grid.Row="0" Margin="5,5,0,0" Text="{Binding ModTitle, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Button Grid.Column="2" Grid.Row="0" Margin="5,5,0,0" Command="{Binding ClearCommand}">Clear All</Button>
 
                 <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" TextDecorations="Underline">
                     <TextBlock.ToolTip>
                         <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
                             <StackPanel>
                                 <TextBlock Margin="0,5,0,5">PNG, JPG or Blueprint file</TextBlock>
-                                <Image Source="{Binding DataContext.PreviewImage}" MaxHeight="230" MaxWidth="400" />
+                                <Image Source="{Binding DataContext.PreviewImage, Converter={c:UriToCachedImageConverter}}" MaxHeight="230" MaxWidth="400" />
                             </StackPanel>
                         </ToolTip>
                     </TextBlock.ToolTip>
@@ -67,17 +71,20 @@
                 <TextBlock Grid.Column="0" Grid.Row="3" Text="Notes:" Margin="0,5,0,0"/>
                 <TextBox Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Margin="5,5,0,0" Text="{Binding ModNotes, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock Grid.Column="0" Grid.Row="4" Text="Files:" Margin="0,5,0,0"/>
-                <ListBox Grid.Column="1" Grid.Row="4" Margin="5,5,0,0" Grid.RowSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                         SelectionMode="Single" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding ModFilesView}">
+                <TextBlock Grid.Column="0" Grid.Row="4" Grid.RowSpan="4" Text="Files:" Margin="0,5,0,0">
+                    <TextBlock.ToolTip>Select multiple files by holding Ctrl or Shift and clicking</TextBlock.ToolTip>
+                </TextBlock>
+                <ListBox Grid.Column="1" Grid.Row="4" Margin="5,5,0,0" Grid.RowSpan="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                         x:Name="ModFilesListBox" SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding ModFilesView}">
                     <ListBox.InputBindings>
-                        <KeyBinding Command="{Binding RemoveFileCommand}" CommandParameter="{Binding ModFilesView.CurrentItem}" Key="Delete" />
+                        <KeyBinding CommandParameter="{Binding SelectedItems, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}" Key="Delete" />
                     </ListBox.InputBindings>
                 </ListBox>
 
                 <Button Grid.Column="2" Grid.Row="4" Margin="5,5,0,0" Click="AddFileButton_Click">Add File</Button>
-                <Button Grid.Column="2" Grid.Row="5" Margin="5,5,0,0" Command="{Binding RemoveFileCommand}" CommandParameter="{Binding ModFilesView.CurrentItem}">Remove File</Button>
-                <Button Grid.Column="2" Grid.Row="7" Margin="5,5,0,0" FontWeight="Bold" Command="{Binding BuildTmodCommand}">Build TMod</Button>
+                <Button Grid.Column="2" Grid.Row="5" Margin="5,5,0,0" CommandParameter="{Binding SelectedItems, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}">Remove Files</Button>
+                <Button Grid.Column="2" Grid.Row="6" Margin="5,5,0,0" CommandParameter="{Binding Items, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}">Remove All</Button>
+                <Button Grid.Column="2" Grid.Row="8" Margin="5,5,0,0" FontWeight="Bold" Command="{Binding BuildTmodCommand}">Build TMod</Button>
             </Grid>
         </GroupBox>
         <GroupBox Padding="5" Grid.Row="1">

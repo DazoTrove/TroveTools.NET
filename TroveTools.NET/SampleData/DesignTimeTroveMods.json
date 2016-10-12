@@ -17,7 +17,8 @@
         "fileid": "12",
         "version": "12",
         "date": "1431713613",
-        "downloads": 8884
+        "downloads": 8884,
+        "format":  "zip"
       }
     ],
     "image": "https://www.trovesaurus.com/images/uploads/205.jpg",
@@ -44,7 +45,8 @@
         "fileid": "2428",
         "version": "2428",
         "date": "1465883619",
-        "downloads": 96
+        "downloads": 96,
+        "format":  "zip"
       }
     ],
     "image": "https://www.trovesaurus.com/images/uploads/3357.png",
@@ -70,31 +72,36 @@
         "fileid": "1446",
         "version": "X",
         "date": "1450555472",
-        "downloads": "2958"
+        "downloads": "2958",
+        "format":  "zip"
       },
       {
         "fileid": "1445",
         "version": "X ERA ORANGE",
         "date": "1450555159",
-        "downloads": "71"
+        "downloads": "71",
+        "format":  "zip"
       },
       {
         "fileid": "1444",
         "version": "X ERA GREEN",
         "date": "1450554949",
-        "downloads": "84"
+        "downloads": "84",
+        "format":  "zip"
       },
       {
         "fileid": "262",
         "version": "1.0 - Orange",
         "date": "1436181827",
-        "downloads": "3397"
+        "downloads": "3397",
+        "format":  "zip"
       },
       {
         "fileid": "261",
         "version": "1.0 - Green",
         "date": "1436181791",
-        "downloads": "563"
+        "downloads": "563",
+        "format":  "zip"
       }
     ],
     "votes": "7",
@@ -121,13 +128,15 @@
         "fileid": "1386",
         "version": "1386",
         "date": "1450148917",
-        "downloads": "256"
+        "downloads": "256",
+        "format":  "zip"
       },
       {
         "fileid": "1385",
         "version": "1385",
         "date": "1450148904",
-        "downloads": "36"
+        "downloads": "36",
+        "format":  "zip"
       }
     ],
     "votes": "0",
