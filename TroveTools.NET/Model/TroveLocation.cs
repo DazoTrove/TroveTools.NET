@@ -89,16 +89,19 @@ namespace TroveTools.NET.Model
             }
         }
 
-        public void RunDevTool(string commandLineArgs, Action<string> devToolOutput)
+        public void RunDevTool(string commandLineArgs, Action<string> devToolOutput, bool renameOldLog = true)
         {
             string devToolLog = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), TroveAppDataFolder, DevToolLogFileName);
 
-            // Rename DevTool.log to DevTool.{0:yyyy-MM-dd.HH-mm-ss}.log using file last write time
-            FileInfo file = new FileInfo(devToolLog);
-            if (file.Exists)
+            if (renameOldLog)
             {
-                string oldLog = Path.Combine(file.DirectoryName, string.Format("{0}.{1:yyyy-MM-dd.HH-mm-ss}{2}", Path.GetFileNameWithoutExtension(file.Name), file.LastWriteTime, file.Extension));
-                file.MoveTo(oldLog);
+                // Rename DevTool.log to DevTool.{0:yyyy-MM-dd.HH-mm-ss}.log using file last write time
+                FileInfo file = new FileInfo(devToolLog);
+                if (file.Exists)
+                {
+                    string oldLog = Path.Combine(file.DirectoryName, string.Format("{0}.{1:yyyy-MM-dd.HH-mm-ss}{2}", Path.GetFileNameWithoutExtension(file.Name), file.LastWriteTime, file.Extension));
+                    file.MoveTo(oldLog);
+                }
             }
 
             // Run Trove.exe {command line args}
@@ -112,12 +115,12 @@ namespace TroveTools.NET.Model
                 try
                 {
                     // Return Results from DevTool.log
+                    string output = null;
                     if (File.Exists(devToolLog))
-                    {
-                        string output = File.ReadAllText(devToolLog);
-                        devToolOutput(output);
-                    }
-                    else log.ErrorFormat("Dev Tool ended with no results in {0}", devToolLog);
+                        output = File.ReadAllText(devToolLog);
+                    else
+                        output = string.Format("Dev Tool ended with no results in {0}{1}", devToolLog, Environment.NewLine);
+                    devToolOutput(output);
                 }
                 catch (Exception ex)
                 {

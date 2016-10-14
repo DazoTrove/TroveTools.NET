@@ -108,6 +108,36 @@ namespace TroveTools.NET.ViewModel
 
         #region Properties
         public ObservableCollection<TroveLocationViewModel> Locations { get; } = new ObservableCollection<TroveLocationViewModel>();
+        
+        public bool? TroveUseOverrides
+        {
+            get { return TroveGameStatus.TroveUseOverrides; }
+            set
+            {
+                TroveGameStatus.TroveUseOverrides = value;
+                RaisePropertyChanged("TroveUseOverrides");
+            }
+        }
+
+        public bool? TroveDisableAllMods
+        {
+            get { return TroveGameStatus.TroveDisableAllMods; }
+            set
+            {
+                TroveGameStatus.TroveDisableAllMods = value;
+                RaisePropertyChanged("TroveDisableAllMods");
+            }
+        }
+
+        public bool? TroveMultithreaded
+        {
+            get { return TroveGameStatus.TroveMultithreaded; }
+            set
+            {
+                TroveGameStatus.TroveMultithreaded = value;
+                RaisePropertyChanged("TroveMultithreaded");
+            }
+        }
 
         public bool TroveUriEnabled
         {
@@ -216,7 +246,6 @@ namespace TroveTools.NET.ViewModel
         {
             get { return _AutoUpdateIntervalsView.View; }
         }
-
         #endregion
 
         #region Commands

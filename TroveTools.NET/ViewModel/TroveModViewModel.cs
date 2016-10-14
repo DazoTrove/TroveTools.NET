@@ -134,6 +134,7 @@ namespace TroveTools.NET.ViewModel
                 if (DataObject.Enabled)
                 {
                     var tools = MainWindowViewModel.Instance.ModderTools;
+                    tools.TabSelectedIndex = 0;
                     tools.CurrentMod = this;
                     MainWindowViewModel.Instance.SetActiveWorkspace(tools);
 

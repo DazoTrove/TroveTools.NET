@@ -169,6 +169,15 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select extract folder.
+        /// </summary>
+        public static string ModderTools_ExtractFolderDialog_Title {
+            get {
+                return ResourceManager.GetString("ModderTools_ExtractFolderDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select mod YAML file.
         /// </summary>
         public static string ModderTools_OpenYamlDialog_Title {

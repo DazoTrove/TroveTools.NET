@@ -169,6 +169,10 @@
     <value>Select mod component files</value>
     <comment>Add File open file dialog title</comment>
   </data>
+  <data name="ModderTools_ExtractFolderDialog_Title" xml:space="preserve">
+    <value>Select extract folder</value>
+    <comment>Select extract folder dialog title</comment>
+  </data>
   <data name="ModderTools_OpenYamlDialog_Title" xml:space="preserve">
     <value>Select mod YAML file</value>
     <comment>Open YAML file dialog title</comment>

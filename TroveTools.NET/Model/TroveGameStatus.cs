@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using SharpConfig;
 
 namespace TroveTools.NET.Model
 {
@@ -70,6 +71,49 @@ namespace TroveTools.NET.Model
                 }
             }
             catch (Exception ex) { log.Error("Error in Trove game status detection", ex); }
+        }
+
+        public static string TroveConfigPath
+        {
+            get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trove", "Trove.cfg"); }
+        }
+
+        public static Configuration TroveConfig
+        {
+            get { return Configuration.LoadFromFile(TroveConfigPath); }
+        }
+
+        public static bool? TroveUseOverrides
+        {
+            get { return TroveConfig["System"]["UseOverrides"].GetValue<bool?>(); }
+            set
+            {
+                var config = TroveConfig;
+                config["System"]["UseOverrides"].SetValue(value);
+                config.SaveToFile(TroveConfigPath);
+            }
+        }
+
+        public static bool? TroveDisableAllMods
+        {
+            get { return TroveConfig["Mods"]["DisableAllMods"].GetValue<bool?>(); }
+            set
+            {
+                var config = TroveConfig;
+                config["Mods"]["DisableAllMods"].SetValue(value);
+                config.SaveToFile(TroveConfigPath);
+            }
+        }
+
+        public static bool? TroveMultithreaded
+        {
+            get { return TroveConfig["User"]["Multithreaded"].GetValue<bool?>(); }
+            set
+            {
+                var config = TroveConfig;
+                config["User"]["Multithreaded"].SetValue(value);
+                config.SaveToFile(TroveConfigPath);
+            }
         }
     }
 }

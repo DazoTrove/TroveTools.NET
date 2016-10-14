@@ -23,12 +23,10 @@
             <RowDefinition Height="3*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TabControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <TabControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectedIndex="{Binding TabSelectedIndex}">
             <TabItem>
                 <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Build TMod" Style="{StaticResource OribitronFontTextBlock}" FontSize="12" FontWeight="Bold" />
-                    </StackPanel>
+                    <TextBlock Text="Build TMod" Style="{StaticResource OribitronFontTextBlock}" FontSize="12" FontWeight="Bold" />
                 </TabItem.Header>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -44,7 +42,7 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Grid.Row="0" Text="Title:" Margin="0,5,0,0" HorizontalAlignment="Center"/>
@@ -52,7 +50,7 @@
 
                     <Button Grid.Column="2" Grid.Row="0" Margin="5,5,0,0" Command="{Binding ClearCommand}">Clear All</Button>
 
-                    <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" TextDecorations="Underline" HorizontalAlignment="Center">
+                    <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" TextDecorations="Underline" HorizontalAlignment="Center" TextAlignment="Center">
                         <TextBlock.ToolTip>
                             <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
                                 <StackPanel>
@@ -61,8 +59,8 @@
                                 </StackPanel>
                             </ToolTip>
                         </TextBlock.ToolTip>
-                    Preview:<LineBreak/>400 x 230
-                </TextBlock>
+                        Preview:<LineBreak/>400 x 230
+                    </TextBlock>
                     <TextBox Grid.Column="1" Grid.Row="1" Margin="5,5,0,0" Text="{Binding ModPreview, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Grid.Column="2" Grid.Row="1" Margin="5,5,0,0" x:Name="PreviewBrowseButton" Click="PreviewBrowseButton_Click">
                         Browse...
@@ -103,6 +101,54 @@
                     <Button Grid.Column="2" Grid.Row="5" Margin="5,5,0,0" CommandParameter="{Binding SelectedItems, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}">Remove Files</Button>
                     <Button Grid.Column="2" Grid.Row="6" Margin="5,5,0,0" CommandParameter="{Binding Items, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}">Remove All</Button>
                     <Button Grid.Column="2" Grid.Row="8" Margin="5,5,0,0" FontWeight="Bold" Command="{Binding BuildTmodCommand}">Build TMod</Button>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Extract Archives" Style="{StaticResource OribitronFontTextBlock}" FontSize="12" FontWeight="Bold" />
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,5,0,0" Text="Extract Folder"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" Margin="5,0,0,0" Text="{Binding ExtractedPath, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Grid.Column="2" Grid.Row="0" Margin="5,0,0,0" Content="Browse..." x:Name="ExtractedFolderButton" Click="ExtractedFolderButton_Click"/>
+                    <Button Grid.Column="3" Grid.Row="0" Margin="5,0,0,0" Content="Open Folder" Command="{Binding OpenExtractedPathCommand}"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Archives:" Margin="0,5,0,0" HorizontalAlignment="Center">
+                        <TextBlock.ToolTip>Select multiple folders by holding Ctrl or Shift and clicking</TextBlock.ToolTip>
+                    </TextBlock>
+                    <ListBox Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Margin="5,5,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ExtractableFoldersListBox"
+                         SelectionMode="Extended" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding ExtractableFoldersView}"/>
+                    <Button Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,5,0,0" Command="{Binding ExtractAllCommand}">
+                        <TextBlock TextAlignment="Center">Extract All<LineBreak/>Archives</TextBlock>
+                    </Button>
+                    <Button Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,0,0"
+                            CommandParameter="{Binding SelectedItems, ElementName=ExtractableFoldersListBox}" Command="{Binding ExtractSelectedCommand}">
+                        <TextBlock TextAlignment="Center">Extract Selected<LineBreak/>Archives</TextBlock>
+                    </Button>
+                    <Button Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" Margin="5,5,0,0"
+                            CommandParameter="{Binding SelectedItems, ElementName=ExtractableFoldersListBox}" Command="{Binding ListSelectedContentsCommand}">
+                        <TextBlock TextAlignment="Center">List Selected<LineBreak/>Archive Contents</TextBlock>
+                    </Button>
+
+                    <ProgressBar Grid.Row="5" Grid.ColumnSpan="4" Margin="5,5,5,2" Height="20" Value="{Binding ProgressValue}"
+                                 Visibility="{Binding ProgressVisible, Converter={c:BooleanToVisibilityConverter}}"/>
+                    <TextBlock Grid.Row="5" Grid.ColumnSpan="4" Margin="5,5,5,2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Text="{Binding ProgressValue, StringFormat={}{0:0.0}%}" Visibility="{Binding ProgressVisible, Converter={c:BooleanToVisibilityConverter}}"/>
                 </Grid>
             </TabItem>
         </TabControl>

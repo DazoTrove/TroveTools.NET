@@ -817,17 +817,24 @@ namespace TroveTools.NET.Model
 
         public static string GetOverridePath(string relativePath, string basePath = "")
         {
-            // Replace alt directory separator with standard directory separator
-            string filename = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            try
+            {
+                if (string.IsNullOrWhiteSpace(relativePath)) return null;
 
-            // Combine base path and folder path
-            string folder = Path.Combine(basePath, Path.GetDirectoryName(filename));
+                // Replace alt directory separator with standard directory separator
+                string filename = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 
-            // Add override folder at deepest folder level if not already included in folder path
-            if (!folder.EndsWith(OverrideFolder, StringComparison.OrdinalIgnoreCase)) folder = Path.Combine(folder, OverrideFolder);
+                // Combine base path and folder path
+                string folder = Path.Combine(basePath, Path.GetDirectoryName(filename));
 
-            // Resolve folder path and combine with filename
-            return Path.Combine(SettingsDataProvider.ResolveFolder(folder), Path.GetFileName(filename));
+                // Add override folder at deepest folder level if not already included in folder path
+                if (!folder.EndsWith(OverrideFolder, StringComparison.OrdinalIgnoreCase)) folder = Path.Combine(folder, OverrideFolder);
+
+                // Resolve folder path and combine with filename
+                return Path.Combine(SettingsDataProvider.ResolveFolder(folder), Path.GetFileName(filename));
+            }
+            catch (Exception ex) { log.Error(string.Format("Error determining full path for relative path [{0}]", relativePath), ex); }
+            return null;
         }
 
         public static void RemoveModFolders()
@@ -888,6 +895,22 @@ namespace TroveTools.NET.Model
         public static string FilterModFilename(string name)
         {
             return Regex.Replace(name, @"[+.\\/:*?""<>|]", "");
+        }
+
+        public static List<string> ExtractableFolders
+        {
+            get
+            {
+                var folders = new List<string>();
+                var basePath = TroveLocation.PrimaryLocation.LocationPath;
+                if (!basePath.EndsWith(Path.DirectorySeparatorChar.ToString())) basePath += Path.DirectorySeparatorChar;
+
+                foreach (string file in Directory.GetFiles(basePath, IndexFile, SearchOption.AllDirectories))
+                {
+                    folders.Add(Path.GetDirectoryName(file).Remove(0, basePath.Length));
+                }
+                return folders;
+            }
         }
         #endregion
 

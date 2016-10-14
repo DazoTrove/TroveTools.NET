@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,18 +24,38 @@ namespace TroveTools.NET.ViewModel
     class ModderToolsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private DelegateCommand _BuildTmodCommand, _ClearCommand;
+        private DelegateCommand _BuildTmodCommand, _ClearCommand, _OpenExtractedPathCommand, _ExtractAllCommand;
         private DelegateCommand<string> _AddFileCommand, _UpdatePreviewCommand, _LoadYamlCommand, _SaveYamlCommand;
-        private DelegateCommand<IList> _RemoveFilesCommand;
-        private CollectionViewSource _ModFilesView = new CollectionViewSource();
+        private DelegateCommand<IList> _RemoveFilesCommand, _ExtractSelectedCommand, _ListSelectedContentsCommand;
+        private CollectionViewSource _ModFilesView = new CollectionViewSource(), _ExtractableFoldersView = new CollectionViewSource();
 
         public ModderToolsViewModel()
         {
             DisplayName = Strings.ModderToolsViewModel_DisplayName;
             _ModFilesView.Source = ModFiles;
+            _ExtractableFoldersView.Source = ExtractableFolders;
         }
 
+        #region Public Methods
+        public void LoadData()
+        {
+            ExtractedPath = Path.Combine(PrimaryLocationPath, "extracted");
+            foreach (var folder in TroveMod.ExtractableFolders) ExtractableFolders.Add(folder);
+        }
+        #endregion
+
         #region Public Properties
+        private int _TabSelectedIndex = 0;
+        public int TabSelectedIndex
+        {
+            get { return _TabSelectedIndex; }
+            set
+            {
+                _TabSelectedIndex = value;
+                RaisePropertyChanged("TabSelectedIndex");
+            }
+        }
+
         public ObservableCollection<string> ModFiles { get; } = new ObservableCollection<string>();
 
         public ICollectionView ModFilesView
@@ -152,6 +173,46 @@ namespace TroveTools.NET.ViewModel
         {
             get { return SettingsDataProvider.ModsFolder; }
         }
+
+        public ObservableCollection<string> ExtractableFolders { get; } = new ObservableCollection<string>();
+
+        public ICollectionView ExtractableFoldersView
+        {
+            get { return _ExtractableFoldersView.View; }
+        }
+
+        private string _ExtractedPath = string.Empty;
+        public string ExtractedPath
+        {
+            get { return _ExtractedPath; }
+            set
+            {
+                _ExtractedPath = value;
+                RaisePropertyChanged("ExtractedPath");
+            }
+        }
+
+        private bool _ProgressVisible = false;
+        public bool ProgressVisible
+        {
+            get { return _ProgressVisible; }
+            set
+            {
+                _ProgressVisible = value;
+                RaisePropertyChanged("ProgressVisible");
+            }
+        }
+
+        private double _ProgressValue = 0;
+        public double ProgressValue
+        {
+            get { return _ProgressValue; }
+            set
+            {
+                _ProgressValue = value;
+                RaisePropertyChanged("ProgressValue");
+            }
+        }
         #endregion
 
         #region Commands
@@ -217,6 +278,42 @@ namespace TroveTools.NET.ViewModel
                 return _ClearCommand;
             }
         }
+
+        public DelegateCommand OpenExtractedPathCommand
+        {
+            get
+            {
+                if (_OpenExtractedPathCommand == null) _OpenExtractedPathCommand = new DelegateCommand(OpenExtractedPath);
+                return _OpenExtractedPathCommand;
+            }
+        }
+
+        public DelegateCommand ExtractAllCommand
+        {
+            get
+            {
+                if (_ExtractAllCommand == null) _ExtractAllCommand = new DelegateCommand(ExtractAll);
+                return _ExtractAllCommand;
+            }
+        }
+
+        public DelegateCommand<IList> ExtractSelectedCommand
+        {
+            get
+            {
+                if (_ExtractSelectedCommand == null) _ExtractSelectedCommand = new DelegateCommand<IList>(items => ExtractSelected(items), items => items != null && items.Count > 0);
+                return _ExtractSelectedCommand;
+            }
+        }
+
+        public DelegateCommand<IList> ListSelectedContentsCommand
+        {
+            get
+            {
+                if (_ListSelectedContentsCommand == null) _ListSelectedContentsCommand = new DelegateCommand<IList>(items => ListSelectedContents(items), items => items != null && items.Count > 0);
+                return _ListSelectedContentsCommand;
+            }
+        }
         #endregion
 
         #region YAML details class
@@ -247,7 +344,7 @@ namespace TroveTools.NET.ViewModel
                 ModNotes = details.Notes;
                 ModPreview = details.PreviewPath;
                 string preview = TroveMod.GetOverridePath(details.PreviewPath, PrimaryLocationPath);
-                if (File.Exists(preview) && (preview.EndsWith(".png", StringComparison.OrdinalIgnoreCase) || preview.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)))
+                if (!string.IsNullOrWhiteSpace(preview) && File.Exists(preview) && (preview.EndsWith(".png", StringComparison.OrdinalIgnoreCase) || preview.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)))
                     PreviewImage = preview;
 
                 foreach (string file in details.Files)
@@ -280,34 +377,50 @@ namespace TroveTools.NET.ViewModel
 
         private void UpdatePreview(string file)
         {
-            if (!file.Contains(TroveMod.OverrideFolder))
+            try
             {
-                string newFile = Path.Combine(PreviewLocation, Path.GetFileName(file));
-                File.Copy(file, newFile, true);
-                file = newFile;
+                if (!file.Contains(TroveMod.OverrideFolder))
+                {
+                    string newFile = Path.Combine(PreviewLocation, Path.GetFileName(file));
+                    File.Copy(file, newFile, true);
+                    file = newFile;
+                }
+                if (file.EndsWith(".png", StringComparison.OrdinalIgnoreCase) || file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)) PreviewImage = file;
+                ModPreview = TroveMod.MakeRelativePath(file, PrimaryLocationPath);
+                if (!ModFiles.Contains(ModPreview)) ModFiles.Add(ModPreview);
             }
-            if (file.EndsWith(".png", StringComparison.OrdinalIgnoreCase) || file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)) PreviewImage = file;
-            ModPreview = TroveMod.MakeRelativePath(file, PrimaryLocationPath);
-            if (!ModFiles.Contains(ModPreview)) ModFiles.Add(ModPreview);
+            catch (Exception ex) { log.Error(string.Format("Error updating preview to {0}", file), ex); }
         }
 
         private void AddFile(string file)
         {
-            string relativePath = TroveMod.MakeRelativePath(file, PrimaryLocationPath);
-            if (!ModFiles.Contains(relativePath)) ModFiles.Add(relativePath);
+            try
+            {
+                string relativePath = TroveMod.MakeRelativePath(file, PrimaryLocationPath);
+                if (!ModFiles.Contains(relativePath)) ModFiles.Add(relativePath);
+            }
+            catch (Exception ex) { log.Error(string.Format("Error adding file {0}", file), ex); }
         }
 
         private void RemoveFiles(IList items)
         {
-            if (items == null) return;
-            foreach (string item in items.Cast<string>().ToList()) ModFiles.Remove(item);
+            try
+            {
+                if (items == null) return;
+                foreach (string item in items.Cast<string>().ToList()) ModFiles.Remove(item);
+            }
+            catch (Exception ex) { log.Error("Error removing selected files", ex); }
         }
 
         private void Clear(object obj = null)
         {
-            ModFiles.Clear();
-            CurrentMod = null;
-            ModTitle = ModAuthor = ModNotes = ModPreview = PreviewImage = DevToolOutput = null;
+            try
+            {
+                ModFiles.Clear();
+                CurrentMod = null;
+                ModTitle = ModAuthor = ModNotes = ModPreview = PreviewImage = DevToolOutput = null;
+            }
+            catch (Exception ex) { log.Error("Error clearing build mod settings", ex); }
         }
 
         private void BuildTmod(object obj = null)
@@ -343,6 +456,78 @@ namespace TroveTools.NET.ViewModel
                 });
             }
             catch (Exception ex) { log.Error(string.Format("Error building TMOD for {0}", ModTitle), ex); }
+        }
+
+        private void OpenExtractedPath(object obj = null)
+        {
+            try { Process.Start("explorer.exe", SettingsDataProvider.ResolveFolder(ExtractedPath)); }
+            catch (Exception ex) { log.Error(string.Format("Error opening extracted path: {0}", ExtractedPath), ex); }
+        }
+
+        private void ExtractAll(object obj = null)
+        {
+            try
+            {
+                try
+                {
+                    if (Directory.Exists(ExtractedPath))
+                    {
+                        log.InfoFormat("Clearing old files in {0}", ExtractedPath);
+                        Directory.Delete(ExtractedPath, true);
+                    }
+                }
+                catch { }
+
+                ExtractArchives(ExtractableFolders);
+            }
+            catch (Exception ex) { log.Error("Error extracting all archives", ex); }
+        }
+
+        private void ExtractSelected(IList items)
+        {
+            try { ExtractArchives(items.Cast<string>()); }
+            catch (Exception ex) { log.Error("Error extracting selected archives", ex); }
+        }
+
+        private void ExtractArchives(IEnumerable<string> folders)
+        {
+            string extractFolder = SettingsDataProvider.ResolveFolder(ExtractedPath);
+            if (extractFolder.StartsWith(PrimaryLocationPath, StringComparison.OrdinalIgnoreCase))
+                extractFolder = extractFolder.Remove(0, PrimaryLocationPath.Length + (PrimaryLocationPath.EndsWith(Path.DirectorySeparatorChar.ToString()) ? 0 : 1));
+
+            RunCommand(folders.ToList(), string.Format("-tool extractarchive \"{{0}}\" \"{0}\\{{0}}\"", extractFolder), 0);
+        }
+
+        private void ListSelectedContents(IList items)
+        {
+            try
+            {
+                var list = items.Cast<string>().ToList();
+                RunCommand(list, "-tool listarchive \"{0}\"", 0);
+            }
+            catch (Exception ex) { log.Error("Error listing selected archive contents", ex); }
+        }
+
+        private void RunCommand(List<string> list, string commandFormat, int i)
+        {
+            // Show progress of processing all folders
+            ProgressValue = (i + 1d) / list.Count * 100d;
+            ProgressVisible = true;
+
+            // Run Trove command on each folder and show results
+            TroveLocation.PrimaryLocation.RunDevTool(string.Format(commandFormat, list[i]), output =>
+            {
+                DevToolOutput = output;
+
+                // Recursively run command on remaining items in the list
+                if (i < list.Count - 1)
+                    RunCommand(list, commandFormat, i + 1);
+                else
+                {
+                    log.InfoFormat("Completed processing {0} folders", list.Count);
+                    ProgressVisible = false;
+                }
+            }, i == 0);
         }
         #endregion
     }

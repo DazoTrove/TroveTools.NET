@@ -3,8 +3,9 @@ using System.Windows.Controls;
 using TroveTools.NET.Properties;
 using TroveTools.NET.ViewModel;
 using log4net;
-using Microsoft.Win32;
 using System.IO;
+using Ookii.Dialogs.Wpf;
+using Microsoft.Win32;
 
 namespace TroveTools.NET.View
 {
@@ -118,6 +119,27 @@ namespace TroveTools.NET.View
             catch (Exception ex)
             {
                 log.Error("Error saving YAML file", ex);
+            }
+        }
+
+        private void ExtractedFolderButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            try
+            {
+                VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+                dialog.Description = Strings.ModderTools_ExtractFolderDialog_Title;
+                dialog.UseDescriptionForTitle = true;
+                dialog.ShowNewFolderButton = true;
+                dialog.SelectedPath = ViewModel.ExtractedPath;
+
+                if (dialog.ShowDialog() == true)
+                {
+                    ViewModel.ExtractedPath = dialog.SelectedPath;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error selecting extract folder", ex);
             }
         }
     }

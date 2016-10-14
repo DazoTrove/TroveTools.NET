@@ -126,6 +126,7 @@ namespace TroveTools.NET.ViewModel
                 Trovesaurus.LoadData();
                 GetMoreMods.LoadData();
                 MyMods.LoadData();
+                ModderTools.LoadData();
 
                 _dataLoaded = true;
 

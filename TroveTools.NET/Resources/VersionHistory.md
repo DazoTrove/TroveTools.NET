@@ -12,6 +12,14 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.1.9.5 Release (10/14/2016)
+- Settings tab: Added Trove.cfg game settings: Use Overrides, Disable All Mods, and Multithreaded
+- Modder Tools tab: added new tool to Extract Archives from the Trove folders. It is useful for modders to extract archive files after every patch to get any new or updated files
+  - **Extract All Archives**: extracts all current blueprint, particle, ui, prefab, block, placeable, etc. archives from the primary Trove location setup in the Settings tab
+  - **Extract Selected Archives**: specific archive folders can be selected and extracted individually
+  - **List Selected Archive Contents**: runs the list archive command which returns a file list of the contents of the archives in a specific folder to the Dev Tool Output text box
+  - A Progress bar appears when running this command on multiple archives to show the overall progress
+
 ## Version 1.1.9.4 Release (10/12/2016)
 - Modder Tools tab: fixed Save YAML bug requiring file to exist in order to save
 - Modder Tools tab: fixed Save YAML bug when quotes were used
