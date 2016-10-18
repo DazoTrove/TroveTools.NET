@@ -142,5 +142,48 @@ namespace TroveTools.NET.View
                 log.Error("Error selecting extract folder", ex);
             }
         }
+
+        private void TModFileBrowseButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Title = Strings.ModderTools_OpenTmodDialog_Title;
+                dialog.Filter = "TMOD file|*.tmod";
+                dialog.CheckFileExists = true;
+                dialog.Multiselect = false;
+                dialog.InitialDirectory = ViewModel.ModsFolder;
+
+                if (dialog.ShowDialog() == true)
+                {
+                    ViewModel.TmodFile = dialog.FileName;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error loading YAML file", ex);
+            }
+        }
+
+        private void TModExractFolderBrowseButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            try
+            {
+                VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+                dialog.Description = Strings.ModderTools_ExtractFolderDialog_Title;
+                dialog.UseDescriptionForTitle = true;
+                dialog.ShowNewFolderButton = true;
+                dialog.SelectedPath = ViewModel.TModExractFolder;
+
+                if (dialog.ShowDialog() == true)
+                {
+                    ViewModel.TModExractFolder = dialog.SelectedPath;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error selecting extract folder", ex);
+            }
+        }
     }
 }

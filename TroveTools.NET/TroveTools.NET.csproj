@@ -162,6 +162,7 @@
     <Compile Include="DataAccess\RegistrySettings.cs" />
     <Compile Include="DataAccess\SettingsDataProvider.cs" />
     <Compile Include="Framework\AppInstanceManager.cs" />
+    <Compile Include="Framework\BoyerMooreByteSearch.cs" />
     <Compile Include="Framework\IIpcClient.cs" />
     <Compile Include="Framework\NotifyAppender.cs" />
     <Compile Include="Framework\SharedMemoryCommon.cs" />
@@ -171,6 +172,7 @@
     </Compile>
     <Compile Include="Model\AboutTroveTools.cs" />
     <Compile Include="Model\ApplicationDetails.cs" />
+    <Compile Include="Model\TModFormat.cs" />
     <Compile Include="Model\TroveGameStatus.cs" />
     <Compile Include="Model\TroveModPack.cs" />
     <Compile Include="Model\TrovesaurusApi.cs" />

@@ -26,7 +26,7 @@
         <TabControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectedIndex="{Binding TabSelectedIndex}">
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Build TMod" Style="{StaticResource OribitronFontTextBlock}" FontSize="12" FontWeight="Bold" />
+                    <TextBlock Text="Build TMod" Style="{StaticResource OribitronFontTextBlock}" FontSize="12" FontWeight="Bold" Margin="3,3,3,3" />
                 </TabItem.Header>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -105,7 +105,7 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Extract Archives" Style="{StaticResource OribitronFontTextBlock}" FontSize="12" FontWeight="Bold" />
+                    <TextBlock Text="Extract Archives" Style="{StaticResource OribitronFontTextBlock}" FontSize="12" FontWeight="Bold" Margin="3,3,3,3" />
                 </TabItem.Header>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -126,7 +126,9 @@
                     <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,5,0,0" Text="Extract Folder"/>
                     <TextBox Grid.Column="1" Grid.Row="0" Margin="5,0,0,0" Text="{Binding ExtractedPath, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Grid.Column="2" Grid.Row="0" Margin="5,0,0,0" Content="Browse..." x:Name="ExtractedFolderButton" Click="ExtractedFolderButton_Click"/>
-                    <Button Grid.Column="3" Grid.Row="0" Margin="5,0,0,0" Content="Open Folder" Command="{Binding OpenExtractedPathCommand}"/>
+                    <Button Grid.Column="3" Grid.Row="0" Margin="5,0,0,0" Command="{Binding OpenPathCommand}" CommandParameter="{Binding ExtractedPath}">
+                        <TextBlock>Open Folder</TextBlock>
+                    </Button>
 
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Archives:" Margin="0,5,0,0" HorizontalAlignment="Center">
                         <TextBlock.ToolTip>Select multiple folders by holding Ctrl or Shift and clicking</TextBlock.ToolTip>
@@ -149,6 +151,43 @@
                                  Visibility="{Binding ProgressVisible, Converter={c:BooleanToVisibilityConverter}}"/>
                     <TextBlock Grid.Row="5" Grid.ColumnSpan="4" Margin="5,5,5,2" HorizontalAlignment="Center" VerticalAlignment="Center"
                                Text="{Binding ProgressValue, StringFormat={}{0:0.0}%}" Visibility="{Binding ProgressVisible, Converter={c:BooleanToVisibilityConverter}}"/>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Extract TMod" Style="{StaticResource OribitronFontTextBlock}" FontSize="12" FontWeight="Bold" Margin="3,3,3,3" />
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,5,0,0" Text="TMod File" HorizontalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" Margin="5,0,0,0" Text="{Binding TmodFile, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Grid.Column="2" Grid.Row="0" Margin="5,0,0,0" Content="Browse..." Grid.ColumnSpan="2" Click="TModFileBrowseButton_Click"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="Extract Folder"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Margin="5,5,0,0" Text="{Binding TModExractFolder, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Grid.Column="2" Grid.Row="1" Margin="5,5,0,0" Content="Browse..." Click="TModExractFolderBrowseButton_Click"/>
+                    <Button Grid.Column="3" Grid.Row="1" Margin="5,5,0,0" Command="{Binding OpenPathCommand}" CommandParameter="{Binding TModExractFolder}">
+                        <TextBlock>Open Folder</TextBlock>
+                    </Button>
+
+                    <CheckBox Grid.Column="1" Grid.Row="2" Margin="5,5,0,0" Content="Create subfolder" IsChecked="{Binding TModCreateSubfolder}"/>
+
+                    <Button Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,0,0" FontWeight="Bold" Command="{Binding ExtractTmodCommand}">Extract TMod</Button>
+
+                    <ProgressBar Grid.Row="3" Grid.ColumnSpan="4" Margin="5,5,5,2" Height="20" Value="{Binding ProgressValue}"
+                                 Visibility="{Binding ProgressVisible, Converter={c:BooleanToVisibilityConverter}}"/>
                 </Grid>
             </TabItem>
         </TabControl>

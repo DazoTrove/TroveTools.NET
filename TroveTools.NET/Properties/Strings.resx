@@ -173,6 +173,10 @@
     <value>Select extract folder</value>
     <comment>Select extract folder dialog title</comment>
   </data>
+  <data name="ModderTools_OpenTmodDialog_Title" xml:space="preserve">
+    <value>Select TMod file</value>
+    <comment>Open TMod file dialog title</comment>
+  </data>
   <data name="ModderTools_OpenYamlDialog_Title" xml:space="preserve">
     <value>Select mod YAML file</value>
     <comment>Open YAML file dialog title</comment>

@@ -235,29 +235,7 @@ namespace TroveTools.NET.Model
                     _TmodProperties = new Dictionary<string, string>();
                     if (TmodFormat)
                     {
-                        try
-                        {
-                            using (var stream = File.OpenRead(FilePath))
-                            {
-                                using (var reader = new BinaryReader(stream))
-                                {
-                                    // Start at beginning of the file, read headerSize (fixed64), tmodVersion (fixed16), and propertyCount (fixed16)
-                                    stream.Position = 0;
-                                    ulong headerSize = reader.ReadUInt64();
-                                    ushort tmodVersion = reader.ReadUInt16();
-                                    ushort propertyCount = reader.ReadUInt16();
-
-                                    // Read a number of properties based on the propertyCount value
-                                    for (int i = 0; i < propertyCount; i++)
-                                    {
-                                        string key = reader.ReadString();
-                                        string value = reader.ReadString();
-
-                                        if (!string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(value)) _TmodProperties[key] = value;
-                                    }
-                                }
-                            }
-                        }
+                        try { TModFormat.ReadTmodProperties(FilePath, _TmodProperties); }
                         catch (Exception ex) { log.Error("Error parsing TMOD properties", ex); }
                     }
                 }

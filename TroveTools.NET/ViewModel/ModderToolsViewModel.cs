@@ -24,8 +24,8 @@ namespace TroveTools.NET.ViewModel
     class ModderToolsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private DelegateCommand _BuildTmodCommand, _ClearCommand, _OpenExtractedPathCommand, _ExtractAllCommand;
-        private DelegateCommand<string> _AddFileCommand, _UpdatePreviewCommand, _LoadYamlCommand, _SaveYamlCommand;
+        private DelegateCommand _BuildTmodCommand, _ClearCommand, _ExtractAllCommand, _ExtractTmodCommand;
+        private DelegateCommand<string> _AddFileCommand, _UpdatePreviewCommand, _LoadYamlCommand, _SaveYamlCommand, _OpenPathCommand;
         private DelegateCommand<IList> _RemoveFilesCommand, _ExtractSelectedCommand, _ListSelectedContentsCommand;
         private CollectionViewSource _ModFilesView = new CollectionViewSource(), _ExtractableFoldersView = new CollectionViewSource();
 
@@ -41,6 +41,8 @@ namespace TroveTools.NET.ViewModel
         {
             ExtractedPath = Path.Combine(PrimaryLocationPath, "extracted");
             foreach (var folder in TroveMod.ExtractableFolders) ExtractableFolders.Add(folder);
+
+            TModExractFolder = SettingsDataProvider.ModsFolder;
         }
         #endregion
 
@@ -213,6 +215,39 @@ namespace TroveTools.NET.ViewModel
                 RaisePropertyChanged("ProgressValue");
             }
         }
+
+        private string _TmodFile = string.Empty;
+        public string TmodFile
+        {
+            get { return _TmodFile; }
+            set
+            {
+                _TmodFile = value;
+                RaisePropertyChanged("TmodFile");
+            }
+        }
+
+        private string _TModExractFolder = string.Empty;
+        public string TModExractFolder
+        {
+            get { return _TModExractFolder; }
+            set
+            {
+                _TModExractFolder = value;
+                RaisePropertyChanged("TModExractFolder");
+            }
+        }
+
+        private bool _TModCreateSubfolder = true;
+        public bool TModCreateSubfolder
+        {
+            get { return _TModCreateSubfolder; }
+            set
+            {
+                _TModCreateSubfolder = value;
+                RaisePropertyChanged("TModCreateSubfolder");
+            }
+        }
         #endregion
 
         #region Commands
@@ -279,12 +314,12 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
-        public DelegateCommand OpenExtractedPathCommand
+        public DelegateCommand<string> OpenPathCommand
         {
             get
             {
-                if (_OpenExtractedPathCommand == null) _OpenExtractedPathCommand = new DelegateCommand(OpenExtractedPath);
-                return _OpenExtractedPathCommand;
+                if (_OpenPathCommand == null) _OpenPathCommand = new DelegateCommand<string>(OpenPath);
+                return _OpenPathCommand;
             }
         }
 
@@ -312,6 +347,15 @@ namespace TroveTools.NET.ViewModel
             {
                 if (_ListSelectedContentsCommand == null) _ListSelectedContentsCommand = new DelegateCommand<IList>(items => ListSelectedContents(items), items => items != null && items.Count > 0);
                 return _ListSelectedContentsCommand;
+            }
+        }
+
+        public DelegateCommand ExtractTmodCommand
+        {
+            get
+            {
+                if (_ExtractTmodCommand == null) _ExtractTmodCommand = new DelegateCommand(ExtractTmod);
+                return _ExtractTmodCommand;
             }
         }
         #endregion
@@ -458,10 +502,10 @@ namespace TroveTools.NET.ViewModel
             catch (Exception ex) { log.Error(string.Format("Error building TMOD for {0}", ModTitle), ex); }
         }
 
-        private void OpenExtractedPath(object obj = null)
+        private void OpenPath(string path = null)
         {
-            try { Process.Start("explorer.exe", SettingsDataProvider.ResolveFolder(ExtractedPath)); }
-            catch (Exception ex) { log.Error(string.Format("Error opening extracted path: {0}", ExtractedPath), ex); }
+            try { Process.Start("explorer.exe", SettingsDataProvider.ResolveFolder(path)); }
+            catch (Exception ex) { log.Error(string.Format("Error opening folder: {0}", path), ex); }
         }
 
         private void ExtractAll(object obj = null)
@@ -528,6 +572,18 @@ namespace TroveTools.NET.ViewModel
                     ProgressVisible = false;
                 }
             }, i == 0);
+        }
+
+        private void ExtractTmod(object obj = null)
+        {
+            try
+            {
+                ProgressVisible = true;
+                string folder = SettingsDataProvider.ResolveFolder(TModCreateSubfolder ? Path.Combine(TModExractFolder, Path.GetFileNameWithoutExtension(TmodFile)) : TModExractFolder);
+                TModFormat.ExtractTmod(TmodFile, folder, p => ProgressValue = p);
+            }
+            catch (Exception ex) { log.Error(string.Format("Error extracting TMod file: {0} to {1}", TmodFile, TModExractFolder), ex); }
+            finally { ProgressVisible = false; }
         }
         #endregion
     }
