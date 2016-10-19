@@ -163,6 +163,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -178,15 +179,16 @@
                     <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="Extract Folder"/>
                     <TextBox Grid.Column="1" Grid.Row="1" Margin="5,5,0,0" Text="{Binding TModExractFolder, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Grid.Column="2" Grid.Row="1" Margin="5,5,0,0" Content="Browse..." Click="TModExractFolderBrowseButton_Click"/>
-                    <Button Grid.Column="3" Grid.Row="1" Margin="5,5,0,0" Command="{Binding OpenPathCommand}" CommandParameter="{Binding TModExractFolder}">
+                    <Button Grid.Column="3" Grid.Row="1" Margin="5,5,0,0" Command="{Binding OpenExtractFolderCommand}">
                         <TextBlock>Open Folder</TextBlock>
                     </Button>
 
-                    <CheckBox Grid.Column="1" Grid.Row="2" Margin="5,5,0,0" Content="Create subfolder" IsChecked="{Binding TModCreateSubfolder}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="2" Margin="5,5,0,0" Content="Create Subfolder" IsChecked="{Binding TModCreateSubfolder}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="3" Margin="5,5,0,0" Content="Create Override Folders" IsChecked="{Binding TModCreateOverrideFolders}"/>
 
-                    <Button Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,0,0" FontWeight="Bold" Command="{Binding ExtractTmodCommand}">Extract TMod</Button>
+                    <Button Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="5,5,0,0" FontWeight="Bold" Command="{Binding ExtractTmodCommand}">Extract TMod</Button>
 
-                    <ProgressBar Grid.Row="3" Grid.ColumnSpan="4" Margin="5,5,5,2" Height="20" Value="{Binding ProgressValue}"
+                    <ProgressBar Grid.Row="4" Grid.ColumnSpan="4" Margin="5,5,5,2" Height="20" Value="{Binding ProgressValue}"
                                  Visibility="{Binding ProgressVisible, Converter={c:BooleanToVisibilityConverter}}"/>
                 </Grid>
             </TabItem>

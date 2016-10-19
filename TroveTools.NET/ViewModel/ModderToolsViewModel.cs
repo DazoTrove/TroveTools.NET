@@ -1,5 +1,4 @@
-﻿using CommonMark;
-using log4net;
+﻿using log4net;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,16 +14,13 @@ using TroveTools.NET.DataAccess;
 using TroveTools.NET.Framework;
 using TroveTools.NET.Model;
 using TroveTools.NET.Properties;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
-using YamlDotNet.Serialization.ObjectFactories;
 
 namespace TroveTools.NET.ViewModel
 {
     class ModderToolsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private DelegateCommand _BuildTmodCommand, _ClearCommand, _ExtractAllCommand, _ExtractTmodCommand;
+        private DelegateCommand _BuildTmodCommand, _ClearCommand, _ExtractAllCommand, _OpenExtractFolderCommand, _ExtractTmodCommand;
         private DelegateCommand<string> _AddFileCommand, _UpdatePreviewCommand, _LoadYamlCommand, _SaveYamlCommand, _OpenPathCommand;
         private DelegateCommand<IList> _RemoveFilesCommand, _ExtractSelectedCommand, _ListSelectedContentsCommand;
         private CollectionViewSource _ModFilesView = new CollectionViewSource(), _ExtractableFoldersView = new CollectionViewSource();
@@ -235,6 +231,7 @@ namespace TroveTools.NET.ViewModel
             {
                 _TModExractFolder = value;
                 RaisePropertyChanged("TModExractFolder");
+                RaisePropertyChanged("TModExractFolderResolved");
             }
         }
 
@@ -246,7 +243,24 @@ namespace TroveTools.NET.ViewModel
             {
                 _TModCreateSubfolder = value;
                 RaisePropertyChanged("TModCreateSubfolder");
+                RaisePropertyChanged("TModExractFolderResolved");
             }
+        }
+
+        private bool _TModCreateOverrideFolders = false;
+        public bool TModCreateOverrideFolders
+        {
+            get { return _TModCreateOverrideFolders; }
+            set
+            {
+                _TModCreateOverrideFolders = value;
+                RaisePropertyChanged("TModCreateOverrideFolders");
+            }
+        }
+
+        public string TModExractFolderResolved
+        {
+            get { return SettingsDataProvider.ResolveFolder(TModCreateSubfolder ? Path.Combine(TModExractFolder, Path.GetFileNameWithoutExtension(TmodFile)) : TModExractFolder); }
         }
         #endregion
 
@@ -350,6 +364,15 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
+        public DelegateCommand OpenExtractFolderCommand
+        {
+            get
+            {
+                if (_OpenExtractFolderCommand == null) _OpenExtractFolderCommand = new DelegateCommand(o => OpenPath(TModExractFolderResolved));
+                return _OpenExtractFolderCommand;
+            }
+        }
+
         public DelegateCommand ExtractTmodCommand
         {
             get
@@ -357,17 +380,6 @@ namespace TroveTools.NET.ViewModel
                 if (_ExtractTmodCommand == null) _ExtractTmodCommand = new DelegateCommand(ExtractTmod);
                 return _ExtractTmodCommand;
             }
-        }
-        #endregion
-
-        #region YAML details class
-        public class ModDetails
-        {
-            public string Author { get; set; }
-            public string Title { get; set; }
-            public string Notes { get; set; }
-            public string PreviewPath { get; set; }
-            public List<string> Files { get; set; }
         }
         #endregion
 
@@ -379,8 +391,7 @@ namespace TroveTools.NET.ViewModel
                 log.InfoFormat("Loading YAML file: {0}", yamlPath);
 
                 string yamlContents = File.ReadAllText(yamlPath);
-                var deserializer = new DeserializerBuilder().WithNamingConvention(new CamelCaseNamingConvention()).Build();
-                var details = deserializer.Deserialize<ModDetails>(yamlContents);
+                var details = ModDetails.LoadFromYaml(yamlContents);
 
                 Clear();
                 ModAuthor = details.Author;
@@ -405,16 +416,8 @@ namespace TroveTools.NET.ViewModel
             {
                 log.InfoFormat("Saving YAML file: {0}", yamlPath);
 
-                var serializer = new SerializerBuilder().WithNamingConvention(new CamelCaseNamingConvention()).Build();
                 ModDetails details = new ModDetails() { Author = ModAuthor, Title = ModTitle, Notes = ModNotes, PreviewPath = ModPreview, Files = ModFiles.ToList() };
-                string yaml = serializer.Serialize(details);
-
-                using (StreamWriter sw = new StreamWriter(yamlPath, false))
-                {
-                    sw.WriteLine("---");
-                    sw.Write(yaml);
-                    sw.WriteLine("...");
-                }
+                details.SaveYamlFile(yamlPath);
             }
             catch (Exception ex) { log.Error(string.Format("Error saving YAML file {0}", yamlPath), ex); }
         }
@@ -504,7 +507,11 @@ namespace TroveTools.NET.ViewModel
 
         private void OpenPath(string path = null)
         {
-            try { Process.Start("explorer.exe", SettingsDataProvider.ResolveFolder(path)); }
+            try
+            {
+                log.InfoFormat("Opening folder {0}", path);
+                Process.Start("explorer.exe", SettingsDataProvider.ResolveFolder(path));
+            }
             catch (Exception ex) { log.Error(string.Format("Error opening folder: {0}", path), ex); }
         }
 
@@ -579,8 +586,8 @@ namespace TroveTools.NET.ViewModel
             try
             {
                 ProgressVisible = true;
-                string folder = SettingsDataProvider.ResolveFolder(TModCreateSubfolder ? Path.Combine(TModExractFolder, Path.GetFileNameWithoutExtension(TmodFile)) : TModExractFolder);
-                TModFormat.ExtractTmod(TmodFile, folder, p => ProgressValue = p);
+                log.InfoFormat("Extracting TMod: {0}", TmodFile);
+                TModFormat.ExtractTmod(TmodFile, TModExractFolderResolved, TModCreateOverrideFolders, p => ProgressValue = p);
             }
             catch (Exception ex) { log.Error(string.Format("Error extracting TMod file: {0} to {1}", TmodFile, TModExractFolder), ex); }
             finally { ProgressVisible = false; }

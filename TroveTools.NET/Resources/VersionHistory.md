@@ -12,6 +12,12 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.1.9.6 Release (10/19/2016)
+- Modder Tools tab: added new tool to Extract TMod file contents
+  - This is a custom TroveTools.NET tool that parses TMod format version 1 and extracts the selected TMod file to the extract folder
+  - Options include automatically creating a subfolder based on the TMod filename, and placing extracted files in override folders in the extract folder
+  - This tool creates a YAML file from the properties set in the TMod file
+
 ## Version 1.1.9.5 Release (10/14/2016)
 - Settings tab: Added Trove.cfg game settings: Use Overrides, Disable All Mods, and Multithreaded
 - Modder Tools tab: added new tool to Extract Archives from the Trove folders. It is useful for modders to extract archive files after every patch to get any new or updated files

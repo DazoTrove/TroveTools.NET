@@ -30,12 +30,12 @@
     <InstallUrl>https://raw.githubusercontent.com/DazoTrove/TroveTools.NET/master/TroveTools.NET/publish/</InstallUrl>
     <ProductName>TroveTools .NET</ProductName>
     <PublisherName>Dazo</PublisherName>
-    <MinimumRequiredVersion>1.1.9.5</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.1.9.6</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>5</ApplicationRevision>
-    <ApplicationVersion>1.1.9.5</ApplicationVersion>
+    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationVersion>1.1.9.6</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -94,6 +94,10 @@
     </Reference>
     <Reference Include="Humanizer, Version=2.1.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
       <HintPath>..\packages\Humanizer.Core.2.1.0\lib\netstandard1.0\Humanizer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -172,6 +176,7 @@
     </Compile>
     <Compile Include="Model\AboutTroveTools.cs" />
     <Compile Include="Model\ApplicationDetails.cs" />
+    <Compile Include="Model\ModDetails.cs" />
     <Compile Include="Model\TModFormat.cs" />
     <Compile Include="Model\TroveGameStatus.cs" />
     <Compile Include="Model\TroveModPack.cs" />

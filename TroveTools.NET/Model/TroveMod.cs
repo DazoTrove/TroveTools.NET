@@ -31,9 +31,6 @@ namespace TroveTools.NET.Model
         public const string ZipFileTypeSearchPattern = "*.zip";
         public const string TmodFileTypeSearchPattern = "*.tmod";
         public const string TroveUriFormat = "trove://{0};{1}";
-        public const string TmodTitleValue = "title";
-        public const string TmodAuthorValue = "author";
-        public const string TmodNotesValue = "notes";
         private static List<TroveMod> _myMods;
 
         #region Constructors
@@ -70,8 +67,8 @@ namespace TroveTools.NET.Model
             {
                 // Load properties set in the Tmod file
                 Name = ModTitle;
-                if (TmodProperties.ContainsKey(TmodAuthorValue)) Author = TmodProperties[TmodAuthorValue];
-                if (TmodProperties.ContainsKey(TmodNotesValue)) Description = TmodProperties[TmodNotesValue];
+                if (TmodProperties.ContainsKey(TModFormat.AuthorValue)) Author = TmodProperties[TModFormat.AuthorValue];
+                if (TmodProperties.ContainsKey(TModFormat.NotesValue)) Description = TmodProperties[TModFormat.NotesValue];
             }
 
             // Attempt to find matching mod from Trovesaurus API and load additional data
@@ -173,8 +170,8 @@ namespace TroveTools.NET.Model
         {
             get
             {
-                if (TmodFormat && TmodProperties.ContainsKey(TmodTitleValue))
-                    return TmodProperties[TmodTitleValue];
+                if (TmodFormat && TmodProperties.ContainsKey(TModFormat.TitleValue))
+                    return TmodProperties[TModFormat.TitleValue];
                 else
                     return Name;
             }
