@@ -12,6 +12,10 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.1.9.8 Release (10/21/2016)
+- Modder Tools tab: added Trove Dev Tool extractor option to Extract TMods tool (which is currently only available on PTS)
+- My Mods tab: changed filename format for .tmod to automatically rename to match the title of the mod (prevents name mis-match errors when manually copying to mods folder and with the Extract TMod Trove dev tool)
+
 ## Version 1.1.9.7 Release (10/20/2016)
 - Modder Tools tab: added option to Build TMod tool for [updating current mod](https://github.com/DazoTrove/TroveTools.NET/issues/42)
 - Modder Tools tab: added refresh button to Extract Archives tool to refresh the list of available Trove archives to extract

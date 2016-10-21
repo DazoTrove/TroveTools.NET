@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using Humanizer;
+using log4net;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,6 +27,8 @@ namespace TroveTools.NET.ViewModel
         private DelegateCommand<string> _AddFileCommand, _UpdatePreviewCommand, _LoadYamlCommand, _SaveYamlCommand, _OpenPathCommand;
         private DelegateCommand<IList> _RemoveFilesCommand, _ExtractSelectedCommand, _ListSelectedContentsCommand;
         private CollectionViewSource _ModFilesView = new CollectionViewSource(), _ExtractableFoldersView = new CollectionViewSource();
+
+        public enum ExtractMethod { TroveTools, TroveDevTool };
 
         public ModderToolsViewModel()
         {
@@ -265,6 +268,17 @@ namespace TroveTools.NET.ViewModel
                 _TModExractFolder = value;
                 RaisePropertyChanged("TModExractFolder");
                 RaisePropertyChanged("TModExractFolderResolved");
+            }
+        }
+
+        private ExtractMethod _ExtractTModMethod = ExtractMethod.TroveTools;
+        public ExtractMethod ExtractTModMethod
+        {
+            get { return _ExtractTModMethod; }
+            set
+            {
+                _ExtractTModMethod = value;
+                RaisePropertyChanged("ExtractTModMethod");
             }
         }
 
@@ -634,8 +648,18 @@ namespace TroveTools.NET.ViewModel
             try
             {
                 ProgressVisible = true;
-                log.InfoFormat("Extracting TMod: {0}", TmodFile);
-                TModFormat.ExtractTmod(TmodFile, TModExractFolderResolved, TModCreateOverrideFolders, p => ProgressValue = p);
+                log.InfoFormat("Extracting TMod using {0}: {1}", ExtractTModMethod.Humanize(LetterCasing.Title), TmodFile);
+                if (ExtractTModMethod == ExtractMethod.TroveTools)
+                    TModFormat.ExtractTmod(TmodFile, TModExractFolderResolved, TModCreateOverrideFolders, p => ProgressValue = p);
+                else
+                {
+                    // Run Trove Extract Mod command (Trove.exe -tool extractmod -file "{0}" -output "{1}") and show results
+                    TroveLocation.PrimaryLocation.RunDevTool(string.Format("-tool extractmod -file \"{0}\" -output \"{1}\"", TmodFile, TModExractFolderResolved), output =>
+                    {
+                        // Show output results
+                        DevToolOutput = output;
+                    });
+                }
             }
             catch (Exception ex) { log.Error(string.Format("Error extracting TMod file: {0} to {1}", TmodFile, TModExractFolder), ex); }
             finally { ProgressVisible = false; }

@@ -123,7 +123,8 @@ namespace TroveTools.NET.Model
             {
                 var ic = StringComparison.OrdinalIgnoreCase;
                 var mod = ModList.FirstOrDefault(m => m.Id.Equals(id, ic));
-                if (mod == null) mod = ModList.FirstOrDefault(m => TroveMod.FilterModFilename(m.Name).Equals(TroveMod.FilterModFilename(name), ic));
+                if (mod == null)
+                    mod = ModList.FirstOrDefault(m => TroveMod.FilterModFilename(m.Name).Equals(TroveMod.FilterModFilename(name), ic));
                 return mod;
             }
             catch (Exception ex) { log.ErrorFormat("Error retrieving matching mod from Trovesaurus for mod {0}: {1}", string.IsNullOrEmpty(name) ? "id " + id : name, ex.Message); }

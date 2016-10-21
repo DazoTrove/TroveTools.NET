@@ -153,7 +153,7 @@
                             <TextBlock Text="Refresh" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
-                    
+
                     <Button Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,0,0"
                             CommandParameter="{Binding SelectedItems, ElementName=ExtractableFoldersListBox}" Command="{Binding ExtractSelectedCommand}">
                         <TextBlock TextAlignment="Center">Extract Selected<LineBreak/>Archives</TextBlock>
@@ -179,32 +179,46 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,5,0,0" Text="TMod File" HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Grid.Row="0" Margin="5,0,0,0" Text="{Binding TmodFile, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Grid.Column="2" Grid.Row="0" Margin="5,0,0,0" Content="Browse..." Grid.ColumnSpan="2" Click="TModFileBrowseButton_Click"/>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Margin="10,5,9,0" Text="TMod File" HorizontalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" Margin="5,0,0,0" Text="{Binding TmodFile, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
+                    <Button Grid.Column="3" Grid.Row="0" Margin="5,0,0,0" Content="Browse..." Grid.ColumnSpan="2" Click="TModFileBrowseButton_Click"/>
 
                     <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="Extract Folder"/>
-                    <TextBox Grid.Column="1" Grid.Row="1" Margin="5,5,0,0" Text="{Binding TModExractFolder, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Grid.Column="2" Grid.Row="1" Margin="5,5,0,0" Content="Browse..." Click="TModExractFolderBrowseButton_Click"/>
-                    <Button Grid.Column="3" Grid.Row="1" Margin="5,5,0,0" Command="{Binding OpenExtractFolderCommand}">
+                    <TextBox Grid.Column="1" Grid.Row="1" Margin="5,5,0,0" Text="{Binding TModExractFolder, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
+                    <Button Grid.Column="3" Grid.Row="1" Margin="5,5,0,0" Content="Browse..." Click="TModExractFolderBrowseButton_Click"/>
+                    <Button Grid.Column="4" Grid.Row="1" Margin="5,5,0,0" Command="{Binding OpenExtractFolderCommand}">
                         <TextBlock>Open Folder</TextBlock>
                     </Button>
 
-                    <CheckBox Grid.Column="1" Grid.Row="2" Margin="5,5,0,0" Content="Create Subfolder" IsChecked="{Binding TModCreateSubfolder}"/>
-                    <CheckBox Grid.Column="1" Grid.Row="3" Margin="5,5,0,0" Content="Create Override Folders" IsChecked="{Binding TModCreateOverrideFolders}"/>
+                    <GroupBox Grid.Column="1" Grid.Row="2" Header="Extractor option">
+                        <StackPanel Orientation="Vertical">
+                            <RadioButton Margin="5,5,0,0" Content="TroveTools.NET (creates YAML)" GroupName="ExtractTModMethod"
+                                         IsChecked="{Binding ExtractTModMethod, Converter={c:EnumToBooleanConverter}, ConverterParameter=TroveTools}"/>
+                            <RadioButton Margin="5,5,0,0" Content="Trove Dev Tool (currently only on PTS)" GroupName="ExtractTModMethod"
+                                         IsChecked="{Binding ExtractTModMethod, Converter={c:EnumToBooleanConverter}, ConverterParameter=TroveDevTool}"
+                                         ToolTip="PTS must be set as the Primary Location on the Settings tab for this to work"/>
+                        </StackPanel>
+                    </GroupBox>
 
-                    <Button Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="5,5,0,0" FontWeight="Bold" Command="{Binding ExtractTmodCommand}">Extract TMod</Button>
+                    <GroupBox Grid.Column="2" Grid.Row="2" Header="TroveTools.NET Options">
+                        <StackPanel Orientation="Vertical">
+                            <CheckBox Margin="5,5,0,0" Content="Create Subfolder" IsChecked="{Binding TModCreateSubfolder}" VerticalAlignment="Center"/>
+                            <CheckBox Margin="5,5,0,0" Content="Create Override Folders" IsChecked="{Binding TModCreateOverrideFolders}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </GroupBox>
 
-                    <ProgressBar Grid.Row="4" Grid.ColumnSpan="4" Margin="5,5,5,2" Height="20" Value="{Binding ProgressValue}"
+                    <Button Grid.Column="3" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,0,0" FontWeight="Bold" Command="{Binding ExtractTmodCommand}">Extract TMod</Button>
+
+                    <ProgressBar Grid.Row="3" Grid.ColumnSpan="5" Margin="5,5,5,3" Height="20" Value="{Binding ProgressValue}"
                                  Visibility="{Binding ProgressVisible, Converter={c:BooleanToVisibilityConverter}}"/>
                 </Grid>
             </TabItem>

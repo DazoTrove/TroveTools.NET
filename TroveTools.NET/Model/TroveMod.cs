@@ -162,8 +162,30 @@ namespace TroveTools.NET.Model
         #endregion
 
         #region TroveTools.NET Properties
+        private string _FilePath = null;
         [AffectsProperty("TmodFormat"), AffectsProperty("ModTitle")]
-        public string FilePath { get; set; }
+        public string FilePath
+        {
+            get { return _FilePath; }
+            set
+            {
+                _FilePath = value;
+                if (TmodFormat)
+                {
+                    string newFile = Path.Combine(Path.GetDirectoryName(_FilePath), string.Format("{0}.tmod", ModTitle));
+                    if (!_FilePath.Equals(newFile, StringComparison.OrdinalIgnoreCase))
+                    {
+                        try
+                        {
+                            if (File.Exists(newFile)) File.Delete(newFile);
+                            File.Move(_FilePath, newFile);
+                            _FilePath = newFile;
+                        }
+                        catch (Exception ex) { log.Warn(string.Format("Error renaming file {0} to {1}", _FilePath, newFile), ex); }
+                    }
+                }
+            }
+        }
 
         [JsonIgnore]
         public string ModTitle
@@ -302,7 +324,7 @@ namespace TroveTools.NET.Model
         }
 
         [JsonIgnore]
-        public bool TmodFormat { get { return Path.GetExtension(FilePath).ToLower() == ".tmod"; } }
+        public bool TmodFormat { get { return !string.IsNullOrEmpty(FilePath) && Path.GetExtension(FilePath).ToLower() == ".tmod"; } }
 
         [JsonIgnore]
         public string CleanNotes
@@ -869,7 +891,7 @@ namespace TroveTools.NET.Model
 
         public static string FilterModFilename(string name)
         {
-            return Regex.Replace(name, @"[+.\\/:*?""<>|]", "");
+            return Regex.Replace(name, @"[+.\\/:*?""<>|-]", "");
         }
 
         public static List<string> ExtractableFolders
