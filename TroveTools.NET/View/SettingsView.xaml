@@ -131,7 +131,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <CheckBox IsChecked="{Binding TroveUseOverrides}" Content="Use Overrides" ToolTip="Use Override Folders: default (filled box) is true" Margin="0,5,0,0" Grid.Row="0" Grid.Column="0" IsThreeState="True" />
                 <CheckBox IsChecked="{Binding TroveDisableAllMods}" Content="Disable All Mods" ToolTip="Disable All TMods: default (filled box) is false"  Margin="0,5,0,0" Grid.Row="0" Grid.Column="1" IsThreeState="True" />
                 <CheckBox IsChecked="{Binding TroveMultithreaded}" Content="Multithreaded" Margin="0,5,0,0" Grid.Row="0" Grid.Column="2" IsThreeState="True" />
@@ -167,7 +167,10 @@
                 </ComboBox>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Trovesaurus Settings" Padding="5" Grid.Row="3">
+        <GroupBox Padding="5" Grid.Row="3">
+            <GroupBox.Header>
+                <TextBlock><Hyperlink Command="{Binding Path=Trovesaurus.LaunchTrovesaurusCommand, Source={x:Static vm:MainWindowViewModel.Instance}}">Trovesaurus</Hyperlink> Settings</TextBlock>
+            </GroupBox.Header>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

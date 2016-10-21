@@ -18,6 +18,8 @@ namespace TroveTools.NET.ViewModel
     class TrovesaurusViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static object _lockNewsItems = new object(), _lockCalendarItems = new object(), _lockOnlineStreams = new object();
+
         private DelegateCommand<string> _LaunchTrovesaurusCommand, _LaunchTrovesaurusMailCommand, _LaunchServerStatusCommand, _LaunchTrovesaurusLivestreamsCommand,
             _LaunchTrovesaurusNewCommand, _LaunchTrovesaurusNewsTagCommand, _LaunchTrovesaurusCalendarCommand;
         private DelegateCommand _RefreshDataCommand;
@@ -27,6 +29,11 @@ namespace TroveTools.NET.ViewModel
 
         public TrovesaurusViewModel()
         {
+            // Enable Collection Synchronization on all ObservableCollection objects
+            BindingOperations.EnableCollectionSynchronization(NewsItems, _lockNewsItems);
+            BindingOperations.EnableCollectionSynchronization(CalendarItems, _lockCalendarItems);
+            BindingOperations.EnableCollectionSynchronization(OnlineStreams, _lockOnlineStreams);
+
             DisplayName = Strings.TrovesaurusViewModel_DisplayName;
 
             _NewsView.Source = NewsItems;

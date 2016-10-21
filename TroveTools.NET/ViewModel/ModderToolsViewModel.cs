@@ -20,13 +20,19 @@ namespace TroveTools.NET.ViewModel
     class ModderToolsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private DelegateCommand _BuildTmodCommand, _ClearCommand, _ExtractAllCommand, _OpenExtractFolderCommand, _ExtractTmodCommand;
+        private static object _lockModFiles = new object(), _lockExtractableFolders = new object();
+
+        private DelegateCommand _BuildTmodCommand, _ClearCommand, _RefreshArchivesCommand, _ExtractAllCommand, _OpenExtractFolderCommand, _ExtractTmodCommand;
         private DelegateCommand<string> _AddFileCommand, _UpdatePreviewCommand, _LoadYamlCommand, _SaveYamlCommand, _OpenPathCommand;
         private DelegateCommand<IList> _RemoveFilesCommand, _ExtractSelectedCommand, _ListSelectedContentsCommand;
         private CollectionViewSource _ModFilesView = new CollectionViewSource(), _ExtractableFoldersView = new CollectionViewSource();
 
         public ModderToolsViewModel()
         {
+            // Enable Collection Synchronization on all ObservableCollection objects
+            BindingOperations.EnableCollectionSynchronization(ModFiles, _lockModFiles);
+            BindingOperations.EnableCollectionSynchronization(ExtractableFolders, _lockExtractableFolders);
+
             DisplayName = Strings.ModderToolsViewModel_DisplayName;
             _ModFilesView.Source = ModFiles;
             _ExtractableFoldersView.Source = ExtractableFolders;
@@ -36,7 +42,7 @@ namespace TroveTools.NET.ViewModel
         public void LoadData()
         {
             ExtractedPath = Path.Combine(PrimaryLocationPath, "extracted");
-            foreach (var folder in TroveMod.ExtractableFolders) ExtractableFolders.Add(folder);
+            LoadArchiveFolders();
 
             TModExractFolder = SettingsDataProvider.ModsFolder;
         }
@@ -68,9 +74,10 @@ namespace TroveTools.NET.ViewModel
             set
             {
                 ModFiles.Clear();
+                _CurrentMod = value;
                 if (value != null)
                 {
-                    _CurrentMod = value;
+                    CanUpdateCurrentMod = UpdateCurrentMod = true;
                     ModTitle = value.DisplayName;
                     ModAuthor = value.DataObject.Author;
                     ModNotes = value.DataObject.CleanNotes;
@@ -82,7 +89,33 @@ namespace TroveTools.NET.ViewModel
                         ModFiles.Add(file);
                     }
                 }
+                else
+                {
+                    CanUpdateCurrentMod = UpdateCurrentMod = false;
+                }
                 RaisePropertyChanged("CurrentMod");
+            }
+        }
+
+        private bool _CanUpdateCurrentMod = false;
+        public bool CanUpdateCurrentMod
+        {
+            get { return _CanUpdateCurrentMod; }
+            set
+            {
+                _CanUpdateCurrentMod = value;
+                RaisePropertyChanged("CanUpdateCurrentMod");
+            }
+        }
+
+        private bool _UpdateCurrentMod = false;
+        public bool UpdateCurrentMod
+        {
+            get { return _UpdateCurrentMod; }
+            set
+            {
+                _UpdateCurrentMod = value;
+                RaisePropertyChanged("UpdateCurrentMod");
             }
         }
 
@@ -337,6 +370,15 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
+        public DelegateCommand RefreshArchivesCommand
+        {
+            get
+            {
+                if (_RefreshArchivesCommand == null) _RefreshArchivesCommand = new DelegateCommand(LoadArchiveFolders);
+                return _RefreshArchivesCommand;
+            }
+        }
+
         public DelegateCommand ExtractAllCommand
         {
             get
@@ -487,7 +529,7 @@ namespace TroveTools.NET.ViewModel
                         DevToolOutput = output;
 
                         // Update current mod with new file
-                        if (CurrentMod != null)
+                        if (CurrentMod != null && UpdateCurrentMod)
                         {
                             string modPath = Path.Combine(TroveLocation.PrimaryLocation.LocationPath, TroveMod.ModsFolder, string.Format("{0}.tmod", ModTitle));
                             if (File.Exists(modPath))
@@ -513,6 +555,12 @@ namespace TroveTools.NET.ViewModel
                 Process.Start("explorer.exe", SettingsDataProvider.ResolveFolder(path));
             }
             catch (Exception ex) { log.Error(string.Format("Error opening folder: {0}", path), ex); }
+        }
+
+        private void LoadArchiveFolders(object obj = null)
+        {
+            ExtractableFolders.Clear();
+            foreach (var folder in TroveMod.ExtractableFolders) ExtractableFolders.Add(folder);
         }
 
         private void ExtractAll(object obj = null)

@@ -19,6 +19,8 @@ namespace TroveTools.NET.ViewModel
     class SettingsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static object _lockAutoUpdateIntervals = new object(), _lockLocations = new object();
+
         private DelegateCommand<TroveLocationViewModel> _removeLocationCommand, _MakePrimaryCommand;
         private DelegateCommand<string> _addLocationCommand;
         private DelegateCommand _DetectLocationsCommand;
@@ -27,9 +29,12 @@ namespace TroveTools.NET.ViewModel
         private bool canSaveData = true;
 
         #region Constructor
-
         public SettingsViewModel()
         {
+            // Enable Collection Synchronization on all ObservableCollection objects
+            BindingOperations.EnableCollectionSynchronization(_AutoUpdateIntervals, _lockAutoUpdateIntervals);
+            BindingOperations.EnableCollectionSynchronization(Locations, _lockLocations);
+
             DisplayName = Strings.SettingsViewModel_DisplayName;
             _AutoUpdateIntervalsView.Source = _AutoUpdateIntervals;
         }

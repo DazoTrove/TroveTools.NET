@@ -39,6 +39,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -100,7 +101,13 @@
                     <Button Grid.Column="2" Grid.Row="4" Margin="5,5,0,0" x:Name="AddFileButton" Click="AddFileButton_Click">Add File</Button>
                     <Button Grid.Column="2" Grid.Row="5" Margin="5,5,0,0" CommandParameter="{Binding SelectedItems, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}">Remove Files</Button>
                     <Button Grid.Column="2" Grid.Row="6" Margin="5,5,0,0" CommandParameter="{Binding Items, ElementName=ModFilesListBox}" Command="{Binding RemoveFilesCommand}">Remove All</Button>
-                    <Button Grid.Column="2" Grid.Row="8" Margin="5,5,0,0" FontWeight="Bold" Command="{Binding BuildTmodCommand}">Build TMod</Button>
+
+
+                    <CheckBox Grid.Column="1" Grid.Row="9" Margin="5,5,0,0" Content="Update current mod to TMod after build (removes all mod files from override folders)" IsEnabled="{Binding CanUpdateCurrentMod}" IsChecked="{Binding UpdateCurrentMod}"/>
+
+                    <Button Grid.Column="2" Grid.Row="8" Margin="5,5,0,0" Grid.RowSpan="2" FontWeight="Bold" Command="{Binding BuildTmodCommand}">
+                        <TextBlock TextAlignment="Center">Build<LineBreak/>TMod</TextBlock>
+                    </Button>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -138,6 +145,15 @@
                     <Button Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,5,0,0" Command="{Binding ExtractAllCommand}">
                         <TextBlock TextAlignment="Center">Extract All<LineBreak/>Archives</TextBlock>
                     </Button>
+
+                    <Button Grid.Column="0" Grid.Row="2" Margin="5,5,0,0" Command="{Binding RefreshArchivesCommand}">
+                        <Button.ToolTip>Refresh list of archives available to extract: this is useful if the list is blank or you just changed Trove location information in the Settings tab</Button.ToolTip>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/TroveTools.NET;component/Resources/glyphicons-82-refresh.png" Width="13" Height="13" />
+                            <TextBlock Text="Refresh" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    
                     <Button Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,0,0"
                             CommandParameter="{Binding SelectedItems, ElementName=ExtractableFoldersListBox}" Command="{Binding ExtractSelectedCommand}">
                         <TextBlock TextAlignment="Center">Extract Selected<LineBreak/>Archives</TextBlock>

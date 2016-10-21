@@ -18,6 +18,8 @@ namespace TroveTools.NET.ViewModel
     class GetMoreModsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static object _lockTrovesaurusMods = new object(), _lockTypes = new object(), _lockSubTypes = new object(), _lockFormats = new object();
+
         private DelegateCommand _refreshCommand, _clearSearchCommand, _launchTrovesaurusCommand;
         private DelegateCommand<string> _sortCommand;
         private CollectionViewSource _ModsView = new CollectionViewSource(), _TypesView = new CollectionViewSource(), _SubTypesView = new CollectionViewSource(), _FormatsView = new CollectionViewSource();
@@ -26,6 +28,12 @@ namespace TroveTools.NET.ViewModel
         #region Constructor
         public GetMoreModsViewModel()
         {
+            // Enable Collection Synchronization on all ObservableCollection objects
+            BindingOperations.EnableCollectionSynchronization(TrovesaurusMods, _lockTrovesaurusMods);
+            BindingOperations.EnableCollectionSynchronization(Types, _lockTypes);
+            BindingOperations.EnableCollectionSynchronization(SubTypes, _lockSubTypes);
+            BindingOperations.EnableCollectionSynchronization(Formats, _lockFormats);
+
             DisplayName = Strings.GetMoreModsViewModel_DisplayName;
 
             // Set Collection View Source for collections for current item tracking, sorting, and filtering

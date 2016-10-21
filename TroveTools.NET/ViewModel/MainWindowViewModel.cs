@@ -19,6 +19,7 @@ namespace TroveTools.NET.ViewModel
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly MainWindowViewModel _instance;
+        private static object _lockWorkspaces = new object();
 
         private DelegateCommand _LoadDataCommand, _ClosingCommand, _CheckForUpdatesCommand;
         private bool _dataLoaded = false;
@@ -44,6 +45,9 @@ namespace TroveTools.NET.ViewModel
             About = new AboutViewModel();
 
             Workspaces = new ObservableCollection<ViewModelBase>() { Trovesaurus, Settings, MyMods, GetMoreMods, ModderTools, About };
+            
+            // Enable Collection Synchronization on all ObservableCollection objects
+            BindingOperations.EnableCollectionSynchronization(Workspaces, _lockWorkspaces);
         }
         #endregion // Constructors
 

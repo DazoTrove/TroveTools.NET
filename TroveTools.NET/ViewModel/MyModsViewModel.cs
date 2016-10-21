@@ -19,6 +19,8 @@ namespace TroveTools.NET.ViewModel
     class MyModsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static object _lockMyMods = new object(), _lockModPacks = new object();
+
         private DelegateCommand _RefreshCommand, _UpdateAllCommand, _UninstallAllCommand, _LaunchModsFolderCommand, _ClearModPackNameCommand;
         private DelegateCommand<TroveModViewModel> _RemoveModCommand;
         private DelegateCommand<TroveModPackViewModel> _LoadModPackCommand, _RemoveModPackCommand, _CopyModPackLinkCommand;
@@ -31,6 +33,10 @@ namespace TroveTools.NET.ViewModel
 
         public MyModsViewModel()
         {
+            // Enable Collection Synchronization on all ObservableCollection objects
+            BindingOperations.EnableCollectionSynchronization(MyMods, _lockMyMods);
+            BindingOperations.EnableCollectionSynchronization(ModPacks, _lockModPacks);
+
             DisplayName = Strings.MyModsViewModel_DisplayName;
             _MyModsView.Source = MyMods;
             _MyModsView.IsLiveGroupingRequested = true;
