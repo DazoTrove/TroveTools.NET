@@ -201,18 +201,18 @@
 
                     <GroupBox Grid.Column="1" Grid.Row="2" Header="Extractor option">
                         <StackPanel Orientation="Vertical">
-                            <RadioButton Margin="5,5,0,0" Content="TroveTools.NET (creates YAML)" GroupName="ExtractTModMethod"
+                            <RadioButton Margin="5,5,0,0" Content="Trove Dev Tool" GroupName="ExtractTModMethod"
+                                         IsChecked="{Binding ExtractTModMethod, Converter={c:EnumToBooleanConverter}, ConverterParameter=TroveDevTool}"/>
+                            <RadioButton Margin="5,5,0,0" Content="TroveTools.NET" GroupName="ExtractTModMethod"
                                          IsChecked="{Binding ExtractTModMethod, Converter={c:EnumToBooleanConverter}, ConverterParameter=TroveTools}"/>
-                            <RadioButton Margin="5,5,0,0" Content="Trove Dev Tool (currently only on PTS)" GroupName="ExtractTModMethod"
-                                         IsChecked="{Binding ExtractTModMethod, Converter={c:EnumToBooleanConverter}, ConverterParameter=TroveDevTool}"
-                                         ToolTip="PTS must be set as the Primary Location on the Settings tab for this to work"/>
                         </StackPanel>
                     </GroupBox>
 
-                    <GroupBox Grid.Column="2" Grid.Row="2" Header="TroveTools.NET Options">
+                    <GroupBox Grid.Column="2" Grid.Row="2" Header="Options">
                         <StackPanel Orientation="Vertical">
                             <CheckBox Margin="5,5,0,0" Content="Create Subfolder" IsChecked="{Binding TModCreateSubfolder}" VerticalAlignment="Center"/>
                             <CheckBox Margin="5,5,0,0" Content="Create Override Folders" IsChecked="{Binding TModCreateOverrideFolders}" VerticalAlignment="Center"/>
+                            <CheckBox Margin="5,5,0,0" Content="Create YAML file" IsChecked="{Binding TModCreateYamlFile}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </GroupBox>
 

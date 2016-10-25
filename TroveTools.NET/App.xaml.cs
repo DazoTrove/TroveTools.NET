@@ -19,9 +19,12 @@ namespace TroveTools.NET
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        partial void OnLog4NetConfigured();
+
         protected override void OnStartup(StartupEventArgs se)
         {
             log4net.Config.XmlConfigurator.Configure();
+            OnLog4NetConfigured();
 
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
                 LogUnhandledException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");

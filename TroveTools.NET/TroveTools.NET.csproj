@@ -30,12 +30,12 @@
     <InstallUrl>https://raw.githubusercontent.com/DazoTrove/TroveTools.NET/master/TroveTools.NET/publish/</InstallUrl>
     <ProductName>TroveTools .NET</ProductName>
     <PublisherName>Dazo</PublisherName>
-    <MinimumRequiredVersion>1.1.9.8</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.1.9.9</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>8</ApplicationRevision>
-    <ApplicationVersion>1.1.9.8</ApplicationVersion>
+    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationVersion>1.1.9.9</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -104,6 +104,10 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Log4Slack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Log4Slack.1.1.4\lib\net40\Log4Slack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -151,6 +155,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="App.xaml.secret.cs" />
     <Compile Include="Converter\EnumToBooleanConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\ConverterMarkupExtension.cs" />

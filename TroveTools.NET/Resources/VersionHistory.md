@@ -12,6 +12,12 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.1.9.9 Release (10/25/2016)
+- Modder Tools tab: added Create YAML file option for Extract TMod file tool
+- Modder Tools tab: added Create override folders and create YAML file options to Trove Dev Tool command call
+- Modder Tools tab: Trove Dev Tool is now the default option for the Extract TMod tool since it was released to Live with [today's patch](http://forums.trovegame.com/showthread.php?110772-Patch-Notes-Loot-Collector-Vault-Clubs-Steam-Workshop-October-25-2016&amp;p=702425&amp;viewfull=1#post702425)
+- Error logs are now sent to a [Slack web service](https://github.com/DazoTrove/TroveTools.NET/issues/38) for investigation and resolution
+
 ## Version 1.1.9.8 Release (10/21/2016)
 - Modder Tools tab: added Trove Dev Tool extractor option to Extract TMods tool (which is currently only available on PTS)
 - My Mods tab: changed filename format for .tmod to automatically rename to match the title of the mod (prevents name mis-match errors when manually copying to mods folder and with the Extract TMod Trove dev tool)

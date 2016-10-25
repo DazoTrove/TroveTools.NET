@@ -44,7 +44,7 @@ namespace TroveTools.NET.Model
             }
         }
 
-        public static void ExtractTmod(string file, string folder, bool createOverrideFolders, Action<double> updateProgress)
+        public static void ExtractTmod(string file, string folder, bool createOverrideFolders, bool createYaml, Action<double> updateProgress)
         {
             var buffer = new byte[1048576];
             var properties = new Dictionary<string, string>();
@@ -112,19 +112,22 @@ namespace TroveTools.NET.Model
 
             try
             {
-                string title = properties.ContainsKey(TitleValue) ? properties[TitleValue] : Path.GetFileNameWithoutExtension(file);
-                string yamlPath = Path.Combine(folder, SettingsDataProvider.GetSafeFilename(title) + ".yaml");
-                log.InfoFormat("Generating YAML file: {0}", yamlPath);
-
-                ModDetails details = new ModDetails()
+                if (createYaml)
                 {
-                    Author = properties[AuthorValue],
-                    Title = properties[TitleValue],
-                    Notes = properties[NotesValue],
-                    PreviewPath = properties[PreviewPathValue],
-                    Files = archiveEntries.Select(e => e.file).ToList()
-                };
-                details.SaveYamlFile(yamlPath);
+                    string title = properties.ContainsKey(TitleValue) ? properties[TitleValue] : Path.GetFileNameWithoutExtension(file);
+                    string yamlPath = Path.Combine(folder, SettingsDataProvider.GetSafeFilename(title) + ".yaml");
+                    log.InfoFormat("Generating YAML file: {0}", yamlPath);
+
+                    ModDetails details = new ModDetails()
+                    {
+                        Author = properties[AuthorValue],
+                        Title = properties[TitleValue],
+                        Notes = properties[NotesValue],
+                        PreviewPath = properties[PreviewPathValue],
+                        Files = archiveEntries.Select(e => e.file).ToList()
+                    };
+                    details.SaveYamlFile(yamlPath);
+                }
             }
             catch (Exception ex) { log.Error("Error generating YAML file", ex); }
 

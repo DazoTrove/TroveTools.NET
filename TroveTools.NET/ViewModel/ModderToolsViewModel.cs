@@ -271,7 +271,7 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
-        private ExtractMethod _ExtractTModMethod = ExtractMethod.TroveTools;
+        private ExtractMethod _ExtractTModMethod = ExtractMethod.TroveDevTool;
         public ExtractMethod ExtractTModMethod
         {
             get { return _ExtractTModMethod; }
@@ -294,7 +294,7 @@ namespace TroveTools.NET.ViewModel
             }
         }
 
-        private bool _TModCreateOverrideFolders = false;
+        private bool _TModCreateOverrideFolders = true;
         public bool TModCreateOverrideFolders
         {
             get { return _TModCreateOverrideFolders; }
@@ -302,6 +302,17 @@ namespace TroveTools.NET.ViewModel
             {
                 _TModCreateOverrideFolders = value;
                 RaisePropertyChanged("TModCreateOverrideFolders");
+            }
+        }
+
+        private bool _TModCreateYamlFile = true;
+        public bool TModCreateYamlFile
+        {
+            get { return _TModCreateYamlFile; }
+            set
+            {
+                _TModCreateYamlFile = value;
+                RaisePropertyChanged("TModCreateYamlFile");
             }
         }
 
@@ -650,15 +661,14 @@ namespace TroveTools.NET.ViewModel
                 ProgressVisible = true;
                 log.InfoFormat("Extracting TMod using {0}: {1}", ExtractTModMethod.Humanize(LetterCasing.Title), TmodFile);
                 if (ExtractTModMethod == ExtractMethod.TroveTools)
-                    TModFormat.ExtractTmod(TmodFile, TModExractFolderResolved, TModCreateOverrideFolders, p => ProgressValue = p);
+                    TModFormat.ExtractTmod(TmodFile, TModExractFolderResolved, TModCreateOverrideFolders, TModCreateYamlFile, p => ProgressValue = p);
                 else
                 {
-                    // Run Trove Extract Mod command (Trove.exe -tool extractmod -file "{0}" -output "{1}") and show results
-                    TroveLocation.PrimaryLocation.RunDevTool(string.Format("-tool extractmod -file \"{0}\" -output \"{1}\"", TmodFile, TModExractFolderResolved), output =>
-                    {
-                        // Show output results
-                        DevToolOutput = output;
-                    });
+                    // Run Trove Extract Mod command (Trove.exe -tool extractmod -file "<file>" -override -output "<dir>" -meta "<file.yaml>") and show results
+                    TroveLocation.PrimaryLocation.RunDevTool(string.Format("-tool extractmod -file \"{0}\"{1} -output \"{2}\"{3}", TmodFile,
+                        TModCreateOverrideFolders ? " -override" : "", TModExractFolderResolved,
+                        TModCreateYamlFile ? string.Format(" -meta \"{0}.yaml\"", Path.Combine(TModExractFolderResolved, Path.GetFileNameWithoutExtension(TmodFile))) : ""),
+                        output => DevToolOutput = output);
                 }
             }
             catch (Exception ex) { log.Error(string.Format("Error extracting TMod file: {0} to {1}", TmodFile, TModExractFolder), ex); }
