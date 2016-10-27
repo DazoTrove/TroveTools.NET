@@ -12,6 +12,11 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.2.0.0 Release (10/27/2016)
+- Modder Tools tab: added support for [tags in Build TMod tool](https://github.com/DazoTrove/TroveTools.NET/issues/47) (currently only available on PTS)
+- Modder Tools tab: added support for reading tags from TMod files to the YAML file in extract TMod tool when TroveTools.NET is the extractor selected
+- Bug fix: fixed issue with Slack web service error logging
+
 ## Version 1.1.9.9 Release (10/25/2016)
 - Modder Tools tab: added Create YAML file option for Extract TMod file tool
 - Modder Tools tab: added Create override folders and create YAML file options to Trove Dev Tool command call
@@ -19,7 +24,7 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - Error logs are now sent to a [Slack web service](https://github.com/DazoTrove/TroveTools.NET/issues/38) for investigation and resolution
 
 ## Version 1.1.9.8 Release (10/21/2016)
-- Modder Tools tab: added Trove Dev Tool extractor option to Extract TMods tool (which is currently only available on PTS)
+- Modder Tools tab: added Trove Dev Tool extractor option to Extract TMods tool <del>(which is currently only available on PTS)</del>
 - My Mods tab: changed filename format for .tmod to automatically rename to match the title of the mod (prevents name mis-match errors when manually copying to mods folder and with the Extract TMod Trove dev tool)
 
 ## Version 1.1.9.7 Release (10/20/2016)
@@ -63,7 +68,7 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - New Modder Tools tab: runs Trove command line build mod tool using a graphical interface
   
 ## Version 1.1.9 Release (10/7/2016)
-- New Trove Mod format (.tmod) support: as of 10/7/2016 this is only supported on the Trove PTS client. Projected Live release date is 10/11/2016.
+- New Trove Mod format (.tmod) support: <del>as of 10/7/2016 this is only supported on the Trove PTS client.</del> Projected Live release date is 10/11/2016.
   - Added support for installing mods in the new .tmod file format to the Trove\mods folder
   - Mod Detail Pane: added format type in tooltip for mod version install button
 

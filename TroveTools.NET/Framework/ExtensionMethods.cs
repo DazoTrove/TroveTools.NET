@@ -16,12 +16,17 @@ namespace TroveTools.NET.Framework
             if (!dictionary.ContainsKey(key)) dictionary.Add(key, value);
         }
 
+        public static void AddIfMissing<T>(this IList<T> list, T value)
+        {
+            if (!list.Contains(value)) list.Add(value);
+        }
+
         /// <summary>
         /// Returns a boolean value indicating whether the string is missing
         /// </summary>
         public static bool IsStringMissing(this string value)
         {
-            return String.IsNullOrEmpty(value) || value.Trim() == String.Empty;
+            return string.IsNullOrEmpty(value) || value.Trim() == string.Empty;
         }
     }
 }

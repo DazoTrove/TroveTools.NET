@@ -1,4 +1,6 @@
 ﻿using log4net;
+using log4net.Repository.Hierarchy;
+using Log4Slack;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -19,12 +21,23 @@ namespace TroveTools.NET
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        partial void OnLog4NetConfigured();
+        /// <summary>
+        /// Simple partial method for updating the Slack Appender settings such as the WebhookUrl.
+        /// This method is to be defined in the partial App class in App.xaml.secret.cs
+        /// </summary>
+        partial void UpdateSlackAppenderSettings(SlackAppender slack);
 
         protected override void OnStartup(StartupEventArgs se)
         {
             log4net.Config.XmlConfigurator.Configure();
-            OnLog4NetConfigured();
+            foreach (Hierarchy hierarchy in LogManager.GetAllRepositories())
+            {
+                foreach (var appender in hierarchy.GetAppenders())
+                {
+                    var slack = appender as SlackAppender;
+                    if (slack != null) UpdateSlackAppenderSettings(slack);
+                }
+            }
 
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
                 LogUnhandledException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");

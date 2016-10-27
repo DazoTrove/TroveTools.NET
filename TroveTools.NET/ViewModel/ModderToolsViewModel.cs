@@ -1,5 +1,6 @@
 ﻿using Humanizer;
 using log4net;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,12 +22,12 @@ namespace TroveTools.NET.ViewModel
     class ModderToolsViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private static object _lockModFiles = new object(), _lockExtractableFolders = new object();
+        private static object _lockModFiles = new object(), _lockModTags = new object(), _lockExtractableFolders = new object();
 
         private DelegateCommand _BuildTmodCommand, _ClearCommand, _RefreshArchivesCommand, _ExtractAllCommand, _OpenExtractFolderCommand, _ExtractTmodCommand;
         private DelegateCommand<string> _AddFileCommand, _UpdatePreviewCommand, _LoadYamlCommand, _SaveYamlCommand, _OpenPathCommand;
         private DelegateCommand<IList> _RemoveFilesCommand, _ExtractSelectedCommand, _ListSelectedContentsCommand;
-        private CollectionViewSource _ModFilesView = new CollectionViewSource(), _ExtractableFoldersView = new CollectionViewSource();
+        private CollectionViewSource _ModFilesView = new CollectionViewSource(), _ModTagsView = new CollectionViewSource(), _ExtractableFoldersView = new CollectionViewSource();
 
         public enum ExtractMethod { TroveTools, TroveDevTool };
 
@@ -34,11 +35,26 @@ namespace TroveTools.NET.ViewModel
         {
             // Enable Collection Synchronization on all ObservableCollection objects
             BindingOperations.EnableCollectionSynchronization(ModFiles, _lockModFiles);
+            BindingOperations.EnableCollectionSynchronization(ModTags, _lockModTags);
             BindingOperations.EnableCollectionSynchronization(ExtractableFolders, _lockExtractableFolders);
 
             DisplayName = Strings.ModderToolsViewModel_DisplayName;
             _ModFilesView.Source = ModFiles;
+            _ModTagsView.Source = ModTags;
             _ExtractableFoldersView.Source = ExtractableFolders;
+
+            // Load mod tags
+            foreach (var tag in JsonConvert.DeserializeObject<List<ModTagViewModel>>(Resources.ModTags))
+            {
+                ModTags.Add(tag);
+            }
+
+            _ModTagsView.IsLiveGroupingRequested = true;
+            ModTagsView.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
+
+            ModTagsView.SortDescriptions.Clear();
+            ModTagsView.SortDescriptions.Add(new SortDescription("Category", ListSortDirection.Descending));
+            ModTagsView.SortDescriptions.Add(new SortDescription("Title", ListSortDirection.Ascending));
         }
 
         #region Public Methods
@@ -48,6 +64,55 @@ namespace TroveTools.NET.ViewModel
             LoadArchiveFolders();
 
             TModExractFolder = SettingsDataProvider.ModsFolder;
+        }
+        #endregion
+
+        #region Mod Tag Class
+        public class ModTagViewModel : ViewModelBase
+        {
+            private string _Category = string.Empty;
+            public string Category
+            {
+                get { return _Category; }
+                set
+                {
+                    _Category = value;
+                    RaisePropertyChanged("Category");
+                }
+            }
+
+            private string _Title = string.Empty;
+            public string Title
+            {
+                get { return _Title; }
+                set
+                {
+                    _Title = value;
+                    RaisePropertyChanged("Title");
+                }
+            }
+
+            private bool _Selected = false;
+            public bool Selected
+            {
+                get { return _Selected; }
+                set
+                {
+                    _Selected = value;
+                    RaisePropertyChanged("Selected");
+                }
+            }
+
+            private string _AltTitle = string.Empty;
+            public string AltTitle
+            {
+                get { return _AltTitle; }
+                set
+                {
+                    _AltTitle = value;
+                    RaisePropertyChanged("AltTitle");
+                }
+            }
         }
         #endregion
 
@@ -70,16 +135,22 @@ namespace TroveTools.NET.ViewModel
             get { return _ModFilesView.View; }
         }
 
+        public ObservableCollection<ModTagViewModel> ModTags { get; } = new ObservableCollection<ModTagViewModel>();
+
+        public ICollectionView ModTagsView
+        {
+            get { return _ModTagsView.View; }
+        }
+
         private TroveModViewModel _CurrentMod = null;
         public TroveModViewModel CurrentMod
         {
             get { return _CurrentMod; }
             set
             {
-                ModFiles.Clear();
-                _CurrentMod = value;
                 if (value != null)
                 {
+                    Clear();
                     CanUpdateCurrentMod = UpdateCurrentMod = true;
                     ModTitle = value.DisplayName;
                     ModAuthor = value.DataObject.Author;
@@ -91,11 +162,25 @@ namespace TroveTools.NET.ViewModel
                     {
                         ModFiles.Add(file);
                     }
+
+                    var ic = StringComparison.OrdinalIgnoreCase;
+                    foreach (var tag in ModTags)
+                    {
+                        string title = tag.Title ?? string.Empty;
+                        string altTitle = tag.AltTitle ?? string.Empty;
+
+                        if (!string.IsNullOrWhiteSpace(title) && (title.Equals(value.DataObject.Type, ic) || title.Equals(value.DataObject.SubType, ic)))
+                            tag.Selected = true;
+
+                        if (!string.IsNullOrWhiteSpace(altTitle) && (altTitle.Equals(value.DataObject.Type, ic) || altTitle.Equals(value.DataObject.SubType, ic)))
+                            tag.Selected = true;
+                    }
                 }
                 else
                 {
                     CanUpdateCurrentMod = UpdateCurrentMod = false;
                 }
+                _CurrentMod = value;
                 RaisePropertyChanged("CurrentMod");
             }
         }
@@ -174,6 +259,17 @@ namespace TroveTools.NET.ViewModel
             {
                 _PreviewImage = value;
                 RaisePropertyChanged("PreviewImage");
+            }
+        }
+
+        private string _AdditionalTags = string.Empty;
+        public string AdditionalTags
+        {
+            get { return _AdditionalTags; }
+            set
+            {
+                _AdditionalTags = value;
+                RaisePropertyChanged("AdditionalTags");
             }
         }
 
@@ -473,6 +569,15 @@ namespace TroveTools.NET.ViewModel
                 {
                     ModFiles.Add(file);
                 }
+
+                foreach (string tag in details.Tags)
+                {
+                    var modTag = ModTags.FirstOrDefault(t => t.Title.Equals(tag, StringComparison.OrdinalIgnoreCase));
+                    if (modTag != null)
+                        modTag.Selected = true;
+                    else
+                        AdditionalTags = string.IsNullOrWhiteSpace(AdditionalTags) ? tag : string.Format("{0}, {1}", AdditionalTags, tag);
+                }
             }
             catch (Exception ex) { log.Error(string.Format("Error loading YAML file {0}", yamlPath), ex); }
         }
@@ -483,7 +588,12 @@ namespace TroveTools.NET.ViewModel
             {
                 log.InfoFormat("Saving YAML file: {0}", yamlPath);
 
-                ModDetails details = new ModDetails() { Author = ModAuthor, Title = ModTitle, Notes = ModNotes, PreviewPath = ModPreview, Files = ModFiles.ToList() };
+                var tags = new List<string>();
+                foreach (var tag in ModTags) if (tag.Selected) tags.AddIfMissing(tag.Title);
+                if (!string.IsNullOrWhiteSpace(AdditionalTags))
+                    foreach (var tag in AdditionalTags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) tags.AddIfMissing(tag.Trim());
+
+                ModDetails details = new ModDetails() { Author = ModAuthor, Title = ModTitle, Notes = ModNotes, PreviewPath = ModPreview, Files = ModFiles.ToList(), Tags = tags };
                 details.SaveYamlFile(yamlPath);
             }
             catch (Exception ex) { log.Error(string.Format("Error saving YAML file {0}", yamlPath), ex); }
@@ -530,9 +640,10 @@ namespace TroveTools.NET.ViewModel
         {
             try
             {
-                ModFiles.Clear();
                 CurrentMod = null;
-                ModTitle = ModAuthor = ModNotes = ModPreview = PreviewImage = DevToolOutput = null;
+                ModFiles.Clear();
+                ModTitle = ModAuthor = ModNotes = ModPreview = PreviewImage = AdditionalTags = DevToolOutput = null;
+                foreach (var tag in ModTags) tag.Selected = false;
             }
             catch (Exception ex) { log.Error("Error clearing build mod settings", ex); }
         }

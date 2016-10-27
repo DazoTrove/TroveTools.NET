@@ -132,6 +132,53 @@ namespace TroveTools.NET.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [
+        ///  {
+        ///    &quot;category&quot;: &quot;Type&quot;,
+        ///    &quot;title&quot;: &quot;Ally&quot;
+        ///  },
+        ///  {
+        ///    &quot;category&quot;: &quot;Type&quot;,
+        ///    &quot;title&quot;: &quot;Ball&quot;
+        ///  },
+        ///  {
+        ///    &quot;category&quot;: &quot;Type&quot;,
+        ///    &quot;title&quot;: &quot;Boat&quot;
+        ///  },
+        ///  {
+        ///    &quot;category&quot;: &quot;Type&quot;,
+        ///    &quot;title&quot;: &quot;Cosmetics&quot;
+        ///  },
+        ///  {
+        ///    &quot;category&quot;: &quot;Type&quot;,
+        ///    &quot;title&quot;: &quot;Costume&quot;
+        ///  },
+        ///  {
+        ///    &quot;category&quot;: &quot;Type&quot;,
+        ///    &quot;title&quot;: &quot;Dragon&quot;
+        ///  },
+        ///  {
+        ///    &quot;category&quot;: &quot;Type&quot;,
+        ///    &quot;title&quot;: &quot;Fishing Pole&quot;
+        ///  },
+        ///  {
+        ///    &quot;category&quot;: &quot;Type&quot;,
+        ///    &quot;title&quot;: &quot;Guide&quot;
+        ///  },
+        ///  {
+        ///    &quot;category&quot;: &quot;Type&quot;,
+        ///    &quot;title&quot;: &quot;Helmet&quot;
+        ///  },
+        ///  {
+        ///    &quot;cat [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ModTags {
+            get {
+                return ResourceManager.GetString("ModTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /*******************************************************************************
         ///Slate Theme for GitHub Pages
         ///by Jason Costello, @jsncostello
@@ -154,13 +201,12 @@ namespace TroveTools.NET.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;div id=&quot;main_content_wrap&quot; class=&quot;outer&quot;&gt;&lt;section id=&quot;main_content&quot; class=&quot;inner&quot;&gt;
-        ///
-        ///## Version 1.0.0.6 Beta (TBD)
-        ///- Clicking on the tray icon balloon notification now restores the window in addition to clicking or double-clicking on the tray icon itself
-        ///- Trovesaurus tab: sort event calendar by end date, and moved refresh button
-        ///- Trovesaurus tab: refresh button now also refreshes mail and server status immediately
-        ///- Updated Trovesaurus mail URL
-        ///- All tabs with toolbars: hide overflow button (window [rest of string was truncated]&quot;;.
+        ///  
+        ///If you are a new player lower than Mastery Rank 20, you can earn a free class coin by **[clicking this link: http://bit.ly/DazoFriend](http://bit.ly/DazoFriend)**, and signing in with your Glyph account to apply my Refer a Friend code
+        ///  
+        ///### [Check out Dazo&apos;s Trove Resource Compilation Spreadsheet: http://bit.ly/DazoTrove](http://bit.ly/DazoTrove)
+        ///- Links to other guides, tools, and Trove resources
+        ///- **Forging &amp;amp; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string VersionHistory {
             get {

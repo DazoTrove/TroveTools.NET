@@ -14,11 +14,12 @@ namespace TroveTools.NET.Model
     /// </summary>
     public class ModDetails
     {
-        public string Author { get; set; }
-        public string Title { get; set; }
-        public string Notes { get; set; }
-        public string PreviewPath { get; set; }
-        public List<string> Files { get; set; }
+        public string Author { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string Notes { get; set; } = string.Empty;
+        public string PreviewPath { get; set; } = string.Empty;
+        public List<string> Files { get; set; } = new List<string>();
+        public List<string> Tags { get; set; } = new List<string>();
 
         public static ModDetails LoadFromYaml(string yamlContents)
         {

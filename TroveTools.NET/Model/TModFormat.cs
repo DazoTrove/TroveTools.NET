@@ -18,6 +18,7 @@ namespace TroveTools.NET.Model
         public const string AuthorValue = "author";
         public const string TitleValue = "title";
         public const string NotesValue = "notes";
+        public const string TagsValue = "tags";
         public const string PreviewPathValue = "previewPath";
 
         public static void ReadTmodProperties(string file, Dictionary<string, string> properties)
@@ -126,6 +127,11 @@ namespace TroveTools.NET.Model
                         PreviewPath = properties[PreviewPathValue],
                         Files = archiveEntries.Select(e => e.file).ToList()
                     };
+                    if (properties.ContainsKey(TagsValue))
+                    {
+                        string tags = properties[TagsValue];
+                        if (!string.IsNullOrWhiteSpace(tags)) details.Tags = tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    }
                     details.SaveYamlFile(yamlPath);
                 }
             }

@@ -1,0 +1,176 @@
+﻿[
+  {
+    "category": "Type",
+    "title": "Ally"
+  },
+  {
+    "category": "Type",
+    "title": "Ball"
+  },
+  {
+    "category": "Type",
+    "title": "Cosmetics"
+  },
+  {
+    "category": "Type",
+    "title": "Costume"
+  },
+  {
+    "category": "Type",
+    "title": "Dragon"
+  },
+  {
+    "category": "Type",
+    "title": "Fishing Pole"
+  },
+  {
+    "category": "Type",
+    "title": "Helmet"
+  },
+  {
+    "category": "Type",
+    "title": "Language"
+  },
+  {
+    "category": "Type",
+    "title": "Mag Rider"
+  },
+  {
+    "category": "Type",
+    "title": "Mount"
+  },
+  {
+    "category": "Type",
+    "title": "Npc"
+  },
+  {
+    "category": "Type",
+    "title": "Sail"
+  },
+  {
+    "category": "Type",
+    "title": "Ship",
+    "altTitle": "Boat"
+  },
+  {
+    "category": "Type",
+    "title": "Wings"
+  },
+  {
+    "category": "Type",
+    "title": "UI",
+    "altTitle": "GUI"
+  },
+  {
+    "category": "Type",
+    "title": "Vfx"
+  },
+  {
+    "category": "Class",
+    "title": "Boomeranger"
+  },
+  {
+    "category": "Class",
+    "title": "Candy Barbarian"
+  },
+  {
+    "category": "Class",
+    "title": "Chloromancer"
+  },
+  {
+    "category": "Class",
+    "title": "Dino Tamer"
+  },
+  {
+    "category": "Class",
+    "title": "Dracolyte"
+  },
+  {
+    "category": "Class",
+    "title": "Fae Trickster"
+  },
+  {
+    "category": "Class",
+    "title": "Gunslinger"
+  },
+  {
+    "category": "Class",
+    "title": "Ice Sage"
+  },
+  {
+    "category": "Class",
+    "title": "Knight"
+  },
+  {
+    "category": "Class",
+    "title": "Lunar Lancer"
+  },
+  {
+    "category": "Class",
+    "title": "Neon Ninja"
+  },
+  {
+    "category": "Class",
+    "title": "Pirate Captain"
+  },
+  {
+    "category": "Class",
+    "title": "Revenant"
+  },
+  {
+    "category": "Class",
+    "title": "Shadow Hunter"
+  },
+  {
+    "category": "Class",
+    "title": "Tombraiser"
+  },
+  {
+    "category": "Biome",
+    "title": "Candoria"
+  },
+  {
+    "category": "Biome",
+    "title": "Cursed Vale"
+  },
+  {
+    "category": "Biome",
+    "title": "Desert Frontier"
+  },
+  {
+    "category": "Biome",
+    "title": "Dragonfire Peaks"
+  },
+  {
+    "category": "Biome",
+    "title": "Fae Forest"
+  },
+  {
+    "category": "Biome",
+    "title": "Jurassic Jungle"
+  },
+  {
+    "category": "Biome",
+    "title": "Medieval Highlands"
+  },
+  {
+    "category": "Biome",
+    "title": "Neon City"
+  },
+  {
+    "category": "Biome",
+    "title": "Peaceful Hills"
+  },
+  {
+    "category": "Biome",
+    "title": "Permafrost"
+  },
+  {
+    "category": "Biome",
+    "title": "Radiant Runes"
+  },
+  {
+    "category": "Biome",
+    "title": "Treasure Isles"
+  }
+]
