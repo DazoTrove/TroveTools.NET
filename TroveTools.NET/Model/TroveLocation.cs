@@ -99,7 +99,14 @@ namespace TroveTools.NET.Model
                 FileInfo file = new FileInfo(devToolLog);
                 if (file.Exists)
                 {
+                    int i = 1;
                     string oldLog = Path.Combine(file.DirectoryName, string.Format("{0}.{1:yyyy-MM-dd.HH-mm-ss}{2}", Path.GetFileNameWithoutExtension(file.Name), file.LastWriteTime, file.Extension));
+                    
+                    // If the file for the old log file already exists, find a filename that doesn't exist by adding a number to the filename
+                    while (File.Exists(oldLog))
+                    {
+                        oldLog = Path.Combine(file.DirectoryName, string.Format("{0}.{1:yyyy-MM-dd.HH-mm-ss}.{2}{3}", Path.GetFileNameWithoutExtension(file.Name), file.LastWriteTime, i, file.Extension));
+                    }
                     file.MoveTo(oldLog);
                 }
             }

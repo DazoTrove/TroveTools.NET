@@ -216,11 +216,11 @@ namespace TroveTools.NET.DataAccess
         }
 
         /// <summary>
-        /// Returns a safe filename by replacing all invalid characters with underscores
+        /// Returns a safe filename by removing all invalid characters
         /// </summary>
         public static string GetSafeFilename(string filename)
         {
-            return string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
+            return string.Join("", filename.Split(Path.GetInvalidFileNameChars()));
         }
     }
 }

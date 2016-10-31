@@ -60,8 +60,12 @@ namespace TroveTools.NET.ViewModel
         #region Public Methods
         public void LoadData()
         {
-            ExtractedPath = Path.Combine(PrimaryLocationPath, "extracted");
-            LoadArchiveFolders();
+            var basePath = PrimaryLocationPath;
+            if (!string.IsNullOrEmpty(basePath))
+            {
+                ExtractedPath = Path.Combine(basePath, "extracted");
+                LoadArchiveFolders();
+            }
 
             TModExractFolder = SettingsDataProvider.ModsFolder;
         }
@@ -291,12 +295,17 @@ namespace TroveTools.NET.ViewModel
 
         public string PrimaryLocationPath
         {
-            get { return TroveLocation.PrimaryLocation.LocationPath; }
+            get { return TroveLocation.PrimaryLocation?.LocationPath; }
         }
 
         public string PreviewLocation
         {
-            get { return SettingsDataProvider.ResolveFolder(Path.Combine(TroveLocation.PrimaryLocation.LocationPath, "ui", TroveMod.OverrideFolder)); }
+            get
+            {
+                var basePath = PrimaryLocationPath;
+                if (string.IsNullOrEmpty(basePath)) return null;
+                return SettingsDataProvider.ResolveFolder(Path.Combine(basePath, "ui", TroveMod.OverrideFolder));
+            }
         }
 
         public string ModsFolder
@@ -652,12 +661,19 @@ namespace TroveTools.NET.ViewModel
         {
             try
             {
+                var loc = TroveLocation.PrimaryLocation;
+                if (loc == null)
+                {
+                    log.Info("No primary Trove location set: please update your settings before using the Build TMod tool");
+                    return;
+                }
+
                 // Create YAML file in app data mods folder
                 string yamlPath = YamlPath;
                 SaveYaml(yamlPath);
 
                 // Run Trove Build Mod command (Trove.exe -tool buildmod -meta "%AppData%\TroveTools.NET\mods\{0}.yaml") and show results
-                TroveLocation.PrimaryLocation.RunDevTool(string.Format("-tool buildmod -meta \"{0}\"", yamlPath), output =>
+                loc.RunDevTool(string.Format("-tool buildmod -meta \"{0}\"", yamlPath), output =>
                 {
                     try
                     {
@@ -667,7 +683,7 @@ namespace TroveTools.NET.ViewModel
                         // Update current mod with new file
                         if (CurrentMod != null && UpdateCurrentMod)
                         {
-                            string modPath = Path.Combine(TroveLocation.PrimaryLocation.LocationPath, TroveMod.ModsFolder, string.Format("{0}.tmod", ModTitle));
+                            string modPath = Path.Combine(loc.LocationPath, TroveMod.ModsFolder, string.Format("{0}.tmod", ModTitle));
                             if (File.Exists(modPath))
                             {
                                 dynamic mod = CurrentMod;
@@ -726,9 +742,16 @@ namespace TroveTools.NET.ViewModel
 
         private void ExtractArchives(IEnumerable<string> folders)
         {
+            var loc = TroveLocation.PrimaryLocation;
+            if (loc == null)
+            {
+                log.Info("No primary Trove location set: please update your settings before using the Extract Archives tool");
+                return;
+            }
+
             string extractFolder = SettingsDataProvider.ResolveFolder(ExtractedPath);
-            if (extractFolder.StartsWith(PrimaryLocationPath, StringComparison.OrdinalIgnoreCase))
-                extractFolder = extractFolder.Remove(0, PrimaryLocationPath.Length + (PrimaryLocationPath.EndsWith(Path.DirectorySeparatorChar.ToString()) ? 0 : 1));
+            if (extractFolder.StartsWith(loc.LocationPath, StringComparison.OrdinalIgnoreCase))
+                extractFolder = extractFolder.Remove(0, loc.LocationPath.Length + (loc.LocationPath.EndsWith(Path.DirectorySeparatorChar.ToString()) ? 0 : 1));
 
             RunCommand(folders.ToList(), string.Format("-tool extractarchive \"{{0}}\" \"{0}\\{{0}}\"", extractFolder), 0);
         }
@@ -745,12 +768,19 @@ namespace TroveTools.NET.ViewModel
 
         private void RunCommand(List<string> list, string commandFormat, int i)
         {
+            var loc = TroveLocation.PrimaryLocation;
+            if (loc == null)
+            {
+                log.Info("No primary Trove location set: please update your settings before using the Extract Archives tool");
+                return;
+            }
+
             // Show progress of processing all folders
             ProgressValue = (i + 1d) / list.Count * 100d;
             ProgressVisible = true;
 
             // Run Trove command on each folder and show results
-            TroveLocation.PrimaryLocation.RunDevTool(string.Format(commandFormat, list[i]), output =>
+            loc.RunDevTool(string.Format(commandFormat, list[i]), output =>
             {
                 DevToolOutput = output;
 
@@ -769,6 +799,13 @@ namespace TroveTools.NET.ViewModel
         {
             try
             {
+                var loc = TroveLocation.PrimaryLocation;
+                if (loc == null)
+                {
+                    log.Info("No primary Trove location set: please update your settings before using the Extract TMod tool");
+                    return;
+                }
+
                 ProgressVisible = true;
                 log.InfoFormat("Extracting TMod using {0}: {1}", ExtractTModMethod.Humanize(LetterCasing.Title), TmodFile);
                 if (ExtractTModMethod == ExtractMethod.TroveTools)
@@ -776,7 +813,7 @@ namespace TroveTools.NET.ViewModel
                 else
                 {
                     // Run Trove Extract Mod command (Trove.exe -tool extractmod -file "<file>" -override -output "<dir>" -meta "<file.yaml>") and show results
-                    TroveLocation.PrimaryLocation.RunDevTool(string.Format("-tool extractmod -file \"{0}\"{1} -output \"{2}\"{3}", TmodFile,
+                    loc.RunDevTool(string.Format("-tool extractmod -file \"{0}\"{1} -output \"{2}\"{3}", TmodFile,
                         TModCreateOverrideFolders ? " -override" : "", TModExractFolderResolved,
                         TModCreateYamlFile ? string.Format(" -meta \"{0}.yaml\"", Path.Combine(TModExractFolderResolved, Path.GetFileNameWithoutExtension(TmodFile))) : ""),
                         output => DevToolOutput = output);

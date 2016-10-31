@@ -20,24 +20,29 @@ namespace TroveTools.NET.Converter
         {
             if (value is TimeSpan)
             {
+                TimeSpan span = (TimeSpan)value;
                 try
                 {
-                    TimeSpan span = (TimeSpan)value;
                     string options = string.Empty;
                     try { if (parameter != null) options = parameter.ToString(); }
                     catch { }
-                    return span.ToUserFriendlyString(options);
+                    return span.ToUserFriendlyString(options, culture);
                 }
-                catch (Exception ex) { log.Error(string.Format("Error converting time span: [{0}]", value), ex); }
+                catch (Exception ex)
+                {
+                    log.Warn(string.Format("Issue converting time span: [{0}]", span), ex);
+                    return span.ToString();
+                }
             }
             if (value is DateTime)
             {
-                try
+                DateTime date = (DateTime)value;
+                try { return date.Humanize(false, culture: culture); }
+                catch (Exception ex)
                 {
-                    DateTime date = (DateTime)value;
-                    return date.Humanize(false);
+                    log.Warn(string.Format("Issue converting date time: [{0}]", value), ex);
+                    return date.ToString();
                 }
-                catch (Exception ex) { log.Error(string.Format("Error converting date time: [{0}]", value), ex); }
             }
             return null;
         }
@@ -53,20 +58,20 @@ namespace TroveTools.NET.Converter
         /// <summary>
         /// Constructs a user-friendly string for this TimeSpan instance.
         /// </summary>
-        public static string ToUserFriendlyString(this TimeSpan span, string parameter = "2")
+        public static string ToUserFriendlyString(this TimeSpan span, string parameter = "2", CultureInfo culture = null)
         {
             // Try parsing parameter as an integer for precision
             int precision;
-            if (int.TryParse(parameter, out precision)) return span.Humanize(precision, collectionSeparator: null);
+            if (int.TryParse(parameter, out precision)) return span.Humanize(precision, culture);
 
             // Set default value for precision to 2
             precision = 2;
 
             // Try parsing parameter as a TimeUnit for min unit
             TimeUnit minUnit;
-            if (Enum.TryParse(parameter, true, out minUnit)) return span.Humanize(precision, minUnit: minUnit, collectionSeparator: null);
+            if (Enum.TryParse(parameter, true, out minUnit)) return span.Humanize(precision, culture, minUnit: minUnit);
 
-            return span.Humanize(precision, collectionSeparator: null);
+            return span.Humanize(precision, culture);
         }
     }
 }

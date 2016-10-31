@@ -55,8 +55,7 @@ namespace TroveTools.NET.Model
                 if (ApplicationDeployment.IsNetworkDeployed)
                 {
                     var ad = ApplicationDeployment.CurrentDeployment;
-                    var info = ad.CheckForDetailedUpdate();
-                    return info.UpdateAvailable;
+                    return ad?.CheckForUpdate() ?? false;
                 }
             }
             catch (Exception ex) { log.Error("Error checking for updates", ex); }
@@ -69,11 +68,9 @@ namespace TroveTools.NET.Model
             {
                 if (ApplicationDeployment.IsNetworkDeployed)
                 {
-                    var ad = ApplicationDeployment.CurrentDeployment;
-                    var info = ad.CheckForDetailedUpdate();
-                    if (info.UpdateAvailable)
+                    if (UpdateAvailable())
                     {
-                        ad.Update();
+                        ApplicationDeployment.CurrentDeployment?.Update();
                         log.InfoFormat("The application will be upgraded when you quit and restart the application.");
                     }
                 }

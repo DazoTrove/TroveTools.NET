@@ -30,12 +30,12 @@
     <InstallUrl>https://raw.githubusercontent.com/DazoTrove/TroveTools.NET/master/TroveTools.NET/publish/</InstallUrl>
     <ProductName>TroveTools .NET</ProductName>
     <PublisherName>Dazo</PublisherName>
-    <MinimumRequiredVersion>1.2.0.0</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.2.0.1</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.2.0.0</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.2.0.1</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -104,8 +104,8 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Log4Slack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Log4Slack.1.1.4\lib\net40\Log4Slack.dll</HintPath>
+    <Reference Include="log4net-loggly, Version=7.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net-loggly.7.2.1\lib\net40\log4net-loggly.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -309,12 +309,15 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.manifest" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\TroveFoldersByExtension.json" />
     <Resource Include="Resources\ModTags.json" />
     <Resource Include="Resources\VersionHistory.md">
       <SubType>Designer</SubType>

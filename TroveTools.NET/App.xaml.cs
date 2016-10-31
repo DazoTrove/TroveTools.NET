@@ -1,11 +1,7 @@
 ﻿using log4net;
+using log4net.loggly;
 using log4net.Repository.Hierarchy;
-using Log4Slack;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using TroveTools.NET.Framework;
@@ -22,20 +18,19 @@ namespace TroveTools.NET
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
-        /// Simple partial method for updating the Slack Appender settings such as the WebhookUrl.
+        /// Simple partial method for updating the Loggly Appender settings such as the inputKey.
         /// This method is to be defined in the partial App class in App.xaml.secret.cs
         /// </summary>
-        partial void UpdateSlackAppenderSettings(SlackAppender slack);
+        partial void UpdateLogglyAppenderSettings(LogglyAppender loggly);
 
         protected override void OnStartup(StartupEventArgs se)
         {
-            log4net.Config.XmlConfigurator.Configure();
             foreach (Hierarchy hierarchy in LogManager.GetAllRepositories())
             {
                 foreach (var appender in hierarchy.GetAppenders())
                 {
-                    var slack = appender as SlackAppender;
-                    if (slack != null) UpdateSlackAppenderSettings(slack);
+                    var loggly = appender as LogglyAppender;
+                    if (loggly != null) UpdateLogglyAppenderSettings(loggly);
                 }
             }
 

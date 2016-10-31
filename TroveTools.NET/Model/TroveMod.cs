@@ -172,7 +172,7 @@ namespace TroveTools.NET.Model
                 _FilePath = value;
                 if (TmodFormat)
                 {
-                    string newFile = Path.Combine(Path.GetDirectoryName(_FilePath), string.Format("{0}.tmod", ModTitle));
+                    string newFile = Path.Combine(Path.GetDirectoryName(_FilePath), string.Format("{0}.tmod", SettingsDataProvider.GetSafeFilename(ModTitle)));
                     if (!_FilePath.Equals(newFile, StringComparison.OrdinalIgnoreCase))
                     {
                         try
@@ -252,11 +252,8 @@ namespace TroveTools.NET.Model
                 if (_TmodProperties == null)
                 {
                     _TmodProperties = new Dictionary<string, string>();
-                    if (TmodFormat)
-                    {
-                        try { TModFormat.ReadTmodProperties(FilePath, _TmodProperties); }
-                        catch (Exception ex) { log.Error("Error parsing TMOD properties", ex); }
-                    }
+                    try { if (TmodFormat && File.Exists(FilePath)) TModFormat.ReadTmodProperties(FilePath, _TmodProperties); }
+                    catch (Exception ex) { log.Error("Error parsing TMOD properties", ex); }
                 }
                 return _TmodProperties;
             }
@@ -344,7 +341,8 @@ namespace TroveTools.NET.Model
             get
             {
                 List<string> files = new List<string>();
-                if (!TmodFormat)
+                int errorCount = 0;
+                if (!TmodFormat && !string.IsNullOrEmpty(FilePath) && File.Exists(FilePath))
                 {
                     using (FileStream file = File.OpenRead(FilePath))
                     {
@@ -355,8 +353,14 @@ namespace TroveTools.NET.Model
                                 // Skip over folder entries
                                 if (string.IsNullOrEmpty(entry.Name)) continue;
 
-                                // Get folder name (removing override folder if it exists)
-                                string folder = Path.GetDirectoryName(entry.FullName);
+                                // Get folder name
+                                string folder = GetZipEntryExtractFolder(TroveLocation.PrimaryLocation?.LocationPath, entry, ref errorCount);
+                                if (string.IsNullOrEmpty(folder))
+                                {
+                                    // Attempt to use the zip entry as-is if there are any incorrectly packaged files
+                                    folder = Path.GetDirectoryName(entry.FullName);
+                                }
+                                // Remove override folder if it exists
                                 if (folder.EndsWith(OverrideFolder, StringComparison.OrdinalIgnoreCase)) folder = Path.GetDirectoryName(folder);
 
                                 // Add file to list using the alt directory separator character
@@ -438,16 +442,18 @@ namespace TroveTools.NET.Model
             try
             {
                 log.InfoFormat("Installing mod: {0}", Name);
+                int errorCount = 0, totalErrors = 0;
                 Status = Strings.TroveMod_Status_Installing;
 
                 // Install mod to each enabled location
                 foreach (TroveLocation loc in TroveLocation.Locations.Where(l => l.Enabled))
                 {
+                    errorCount = 0;
                     log.DebugFormat("Installing in path: [{0}], name: [{1}]", loc.LocationPath, loc.LocationName);
                     if (TmodFormat)
                     {
                         string modPath = GetTmodFilePath(loc);
-                        if (log.IsInfoEnabled && File.Exists(modPath)) log.InfoFormat("Overwriting existing file: {0}", modPath);
+                        if (File.Exists(modPath)) log.InfoFormat("Overwriting existing file: {0}", modPath);
                         File.Copy(FilePath, modPath, true);
                     }
                     else
@@ -461,10 +467,10 @@ namespace TroveTools.NET.Model
                                     // Skip over folder entries
                                     if (string.IsNullOrEmpty(entry.Name)) continue;
 
-                                    string extractPath = GetZipEntryExtractPath(loc, entry);
-                                    if (extractPath != null)
+                                    string extractPath = GetZipEntryExtractPath(loc.LocationPath, entry, ref totalErrors);
+                                    if (!string.IsNullOrEmpty(extractPath))
                                     {
-                                        if (log.IsInfoEnabled && File.Exists(extractPath)) log.InfoFormat("Overwriting existing file: {0}", extractPath);
+                                        if (File.Exists(extractPath)) log.InfoFormat("Overwriting existing file: {0}", extractPath);
 
                                         // Extract entry from zip file
                                         using (var outputStream = File.Create(extractPath))
@@ -475,11 +481,14 @@ namespace TroveTools.NET.Model
                                             }
                                         }
                                     }
+                                    else errorCount++;
                                 }
                             }
                         }
                     }
                 }
+
+                if (errorCount > 0) log.ErrorFormat("Incorrectly packaged mod: {0} error{1} while installing {2}", errorCount, errorCount == 1 ? "" : "s", Name);
 
                 CheckForUpdates();
             }
@@ -493,7 +502,7 @@ namespace TroveTools.NET.Model
         private string GetTmodFilePath(TroveLocation loc)
         {
             string modsFolder = SettingsDataProvider.ResolveFolder(Path.Combine(loc.LocationPath, ModsFolder));
-            return Path.Combine(modsFolder, string.Format("{0}.tmod", ModTitle));
+            return Path.Combine(modsFolder, string.Format("{0}.tmod", SettingsDataProvider.GetSafeFilename(ModTitle)));
         }
 
         /// <summary>
@@ -510,6 +519,8 @@ namespace TroveTools.NET.Model
                 else
                     log.InfoFormat("Uninstalling mod: {0}", Name);
 
+                int totalErrors = 0;
+
                 // Uninstall mod from each enabled location
                 foreach (TroveLocation loc in TroveLocation.Locations.Where(l => l.Enabled))
                 {
@@ -517,13 +528,16 @@ namespace TroveTools.NET.Model
                     if (TmodFormat)
                     {
                         string modPath = GetTmodFilePath(loc);
-                        if (File.Exists(modPath))
+                        if (!string.IsNullOrEmpty(modPath))
                         {
-                            log.DebugFormat("Removing file: {0}", modPath);
-                            File.Delete(modPath);
+                            if (File.Exists(modPath))
+                            {
+                                log.DebugFormat("Removing file: {0}", modPath);
+                                File.Delete(modPath);
+                            }
+                            else
+                                log.WarnFormat("File [{0}] does not exist, skipping file", modPath);
                         }
-                        else
-                            log.WarnFormat("File {0} does not exist, skipping file", modPath);
                     }
                     else
                     {
@@ -536,20 +550,23 @@ namespace TroveTools.NET.Model
                                     // Skip over folder entries
                                     if (string.IsNullOrEmpty(entry.Name)) continue;
 
-                                    string entryFilePath = GetZipEntryExtractPath(loc, entry);
-                                    if (File.Exists(entryFilePath))
+                                    string entryFilePath = GetZipEntryExtractPath(loc.LocationPath, entry, ref totalErrors);
+                                    if (!string.IsNullOrEmpty(entryFilePath))
                                     {
                                         FileInfo info = new FileInfo(entryFilePath);
-                                        if (info.Length == entry.Length)
+                                        if (info.Exists)
                                         {
-                                            log.DebugFormat("Removing file: {0}", entryFilePath);
-                                            File.Delete(entryFilePath);
+                                            if (info.Length == entry.Length)
+                                            {
+                                                log.DebugFormat("Removing file: {0}", entryFilePath);
+                                                File.Delete(entryFilePath);
+                                            }
+                                            else
+                                                log.WarnFormat("File size of {0} [{1}] does not match size in mod zip file [{2}], skipping file", entryFilePath, info.Length, entry.Length);
                                         }
                                         else
-                                            log.WarnFormat("File size of {0} [{1:N}] does not match size in mod zip file [{2:N}], skipping file", entryFilePath, info.Length, entry.Length);
+                                            log.WarnFormat("File [{0}] does not exist, skipping file", entryFilePath);
                                     }
-                                    else
-                                        log.WarnFormat("File {0} does not exist, skipping file", entryFilePath);
                                 }
                             }
                         }
@@ -795,6 +812,78 @@ namespace TroveTools.NET.Model
         {
             return TrovesaurusApi.GetMod(Id, Name);
         }
+
+        /// <summary>
+        /// Builds and returns the extract path for the given Trove base path and zip entry
+        /// </summary>
+        private string GetZipEntryExtractPath(string basePath, ZipArchiveEntry entry, ref int errorCount)
+        {
+            string folder = GetZipEntryExtractFolder(basePath, entry, ref errorCount);
+            if (string.IsNullOrEmpty(folder)) return null;
+
+            // Resolve folder path and combine with zip entry filename
+            return Path.Combine(SettingsDataProvider.ResolveFolder(Path.Combine(basePath, folder)), entry.Name);
+        }
+
+        /// <summary>
+        /// Builds and returns the extract folder for the given Trove base path and zip entry
+        /// </summary>
+        private string GetZipEntryExtractFolder(string basePath, ZipArchiveEntry entry, ref int errorCount)
+        {
+            bool validFolder = false, correctedFolder = false;
+
+            // Build extract folder path
+            string folder = Path.GetDirectoryName(entry.FullName);
+
+            // Add override folder at deepest folder level if not already included in zip file
+            if (!folder.EndsWith(OverrideFolder, StringComparison.OrdinalIgnoreCase)) folder = Path.Combine(folder, OverrideFolder);
+
+            // Check for valid installation location
+            validFolder = File.Exists(Path.Combine(basePath, Path.GetDirectoryName(folder), IndexFile));
+            if (!validFolder)
+            {
+                correctedFolder = true;
+
+                // Try removing top level folders from zip entry path
+                int lastLength;
+                do
+                {
+                    lastLength = folder.Length;
+                    folder = Regex.Replace(folder, @"^[^/\\]+[/\\]", "");
+                    validFolder = File.Exists(Path.Combine(basePath, Path.GetDirectoryName(folder), IndexFile));
+                } while (!validFolder && !string.IsNullOrEmpty(folder) && folder.Length < lastLength);
+
+                if (!validFolder)
+                {
+                    // Try detecting intended location based on extension (ex: .blueprint files are usually placed in the blueprints folder)
+                    string extension = Path.GetExtension(entry.Name).ToLower();
+                    if (FoldersByExtension.ContainsKey(extension))
+                    {
+                        folder = Path.Combine(FoldersByExtension[extension], OverrideFolder);
+                        validFolder = File.Exists(Path.Combine(basePath, Path.GetDirectoryName(folder), IndexFile));
+                    }
+
+                    if (!validFolder)
+                    {
+                        if (errorCount == 0)
+                            log.ErrorFormat("Incorrectly packaged mod file: [{0}] is not an overridable folder (zip entry path: {1}, mod: {2})", Path.GetDirectoryName(folder), entry.FullName, Name);
+                        else if (log.IsDebugEnabled)
+                            log.DebugFormat("Incorrectly packaged mod file: [{0}] is not an overridable folder (zip entry path: {1}, mod: {2})", Path.GetDirectoryName(folder), entry.FullName, Name);
+
+                        errorCount++;
+                    }
+                }
+            }
+
+            if (validFolder)
+            {
+                if (correctedFolder) log.InfoFormat("Incorrectly packaged mod file (zip entry path: {0}, mod: {1}) was automatically corrected to folder: {2}",
+                    entry.FullName, Name, Path.GetDirectoryName(folder));
+
+                return folder;
+            }
+            return null;
+        }
         #endregion
 
         #region Public Static Methods and Properties
@@ -899,12 +988,15 @@ namespace TroveTools.NET.Model
             get
             {
                 var folders = new List<string>();
-                var basePath = TroveLocation.PrimaryLocation.LocationPath;
-                if (!basePath.EndsWith(Path.DirectorySeparatorChar.ToString())) basePath += Path.DirectorySeparatorChar;
-
-                foreach (string file in Directory.GetFiles(basePath, IndexFile, SearchOption.AllDirectories))
+                var basePath = TroveLocation.PrimaryLocation?.LocationPath;
+                if (!string.IsNullOrEmpty(basePath))
                 {
-                    folders.Add(Path.GetDirectoryName(file).Remove(0, basePath.Length));
+                    if (!basePath.EndsWith(Path.DirectorySeparatorChar.ToString())) basePath += Path.DirectorySeparatorChar;
+
+                    foreach (string file in Directory.GetFiles(basePath, IndexFile, SearchOption.AllDirectories))
+                    {
+                        folders.Add(Path.GetDirectoryName(file).Remove(0, basePath.Length));
+                    }
                 }
                 return folders;
             }
@@ -912,27 +1004,6 @@ namespace TroveTools.NET.Model
         #endregion
 
         #region Private Static Helper Methods
-        /// <summary>
-        /// Builds and returns the extract path for the given Trove location and zip entry
-        /// </summary>
-        private static string GetZipEntryExtractPath(TroveLocation loc, ZipArchiveEntry entry)
-        {
-            // Build extract folder path
-            string folder = Path.Combine(loc.LocationPath, Path.GetDirectoryName(entry.FullName));
-
-            // Add override folder at deepest folder level if not already included in zip file
-            if (!folder.EndsWith(OverrideFolder, StringComparison.OrdinalIgnoreCase)) folder = Path.Combine(folder, OverrideFolder);
-
-            // Check for valid installation location
-            if (!File.Exists(Path.Combine(Path.GetDirectoryName(folder), IndexFile)))
-            {
-                log.ErrorFormat("Incorrectly packaged mod: {0} is not an overridable folder (zip entry path: {1})", Path.GetDirectoryName(folder), entry.FullName);
-                return null;
-            }
-
-            // Resolve folder path and combine with zip entry filename
-            return Path.Combine(SettingsDataProvider.ResolveFolder(folder), entry.Name);
-        }
 
         private static void DetectMyMods(List<TroveMod> myMods)
         {
@@ -965,6 +1036,16 @@ namespace TroveTools.NET.Model
             catch (Exception ex)
             {
                 log.Warn("Error detecting my mods", ex);
+            }
+        }
+
+        private static Dictionary<string, string> _FoldersByExtension = null;
+        private static Dictionary<string, string> FoldersByExtension
+        {
+            get
+            {
+                if (_FoldersByExtension == null) _FoldersByExtension = JsonConvert.DeserializeObject<Dictionary<string, string>>(Resources.TroveFoldersByExtension);
+                return _FoldersByExtension;
             }
         }
         #endregion

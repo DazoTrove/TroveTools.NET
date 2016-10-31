@@ -12,6 +12,17 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.2.0.1 Release (10/30/2016)
+- Improved support for [incorrectly packaged mods](https://github.com/DazoTrove/TroveTools.NET/issues/59)
+- Online error logging: changed web service provider from Slack to [Loggly](https://github.com/DazoTrove/TroveTools.NET/issues/60) and raised threshold for logging from warnings to errors
+- Attempted corrections for many bugs based on online error logging feedback:
+  - Trove primary location not setup: [Issue #48](https://github.com/DazoTrove/TroveTools.NET/issues/48) and [Issue #57](https://github.com/DazoTrove/TroveTools.NET/issues/57)
+  - Date time and time span string conversions: [Issue #49](https://github.com/DazoTrove/TroveTools.NET/issues/49)
+  - Mod file not found: [Issue #50](https://github.com/DazoTrove/TroveTools.NET/issues/50), [Issue #51](https://github.com/DazoTrove/TroveTools.NET/issues/51), and [Issue #54](https://github.com/DazoTrove/TroveTools.NET/issues/54)
+  - Application updates: [Issue #52](https://github.com/DazoTrove/TroveTools.NET/issues/52) and [Issue #53](https://github.com/DazoTrove/TroveTools.NET/issues/53)
+  - Safe filenames: [Issue #55](https://github.com/DazoTrove/TroveTools.NET/issues/55)
+  - Rename DevTool.log file without causing a duplicate error: [Issue #56](https://github.com/DazoTrove/TroveTools.NET/issues/56)
+
 ## Version 1.2.0.0 Release (10/27/2016)
 - Modder Tools tab: added support for [tags in Build TMod tool](https://github.com/DazoTrove/TroveTools.NET/issues/47) (currently only available on PTS)
 - Modder Tools tab: added support for reading tags from TMod files to the YAML file in extract TMod tool when TroveTools.NET is the extractor selected

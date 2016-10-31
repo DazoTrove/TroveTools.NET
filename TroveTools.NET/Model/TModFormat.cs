@@ -25,22 +25,9 @@ namespace TroveTools.NET.Model
         {
             using (var stream = File.OpenRead(file))
             {
-                using (var reader = new BinaryReader(stream))
+                using (var reader = new MyBinaryReader(stream))
                 {
-                    // Start at beginning of the file, read headerSize (fixed64), tmodVersion (fixed16), and propertyCount (fixed16)
-                    stream.Position = 0;
-                    ulong headerSize = reader.ReadUInt64();
-                    ushort tmodVersion = reader.ReadUInt16();
-                    ushort propertyCount = reader.ReadUInt16();
-
-                    // Read a number of properties based on the propertyCount value
-                    for (int i = 0; i < propertyCount; i++)
-                    {
-                        string key = reader.ReadString();
-                        string value = reader.ReadString();
-
-                        if (!string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(value)) properties[key] = value;
-                    }
+                    ReadProperties(properties, stream, reader);
                 }
             }
         }
@@ -51,26 +38,12 @@ namespace TroveTools.NET.Model
             var properties = new Dictionary<string, string>();
             var archiveEntries = new List<ArchiveIndexEntry>();
             ulong headerSize = 0;
-            ushort tmodVersion = 0, propertyCount = 0;
 
             using (var stream = File.OpenRead(file))
             {
                 using (var reader = new MyBinaryReader(stream))
                 {
-                    // Start at beginning of the file, read headerSize (fixed64), tmodVersion (fixed16), and propertyCount (fixed16)
-                    stream.Position = 0;
-                    headerSize = reader.ReadUInt64();
-                    tmodVersion = reader.ReadUInt16();
-                    propertyCount = reader.ReadUInt16();
-
-                    // Read a number of properties based on the propertyCount value
-                    for (int i = 0; i < propertyCount; i++)
-                    {
-                        string key = reader.ReadString();
-                        string value = reader.ReadString();
-
-                        if (!string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(value)) properties[key] = value;
-                    }
+                    headerSize = ReadProperties(properties, stream, reader);
 
                     // Read archive index entries (remainder of header)
                     while ((ulong)stream.Position < headerSize)
@@ -138,6 +111,26 @@ namespace TroveTools.NET.Model
             catch (Exception ex) { log.Error("Error generating YAML file", ex); }
 
             log.InfoFormat("Completed extracting files from {0}", file);
+        }
+
+        private static ulong ReadProperties(Dictionary<string, string> properties, FileStream stream, MyBinaryReader reader)
+        {
+            // Start at beginning of the file, read headerSize (fixed64), tmodVersion (fixed16), and propertyCount (fixed16)
+            stream.Position = 0;
+            ulong headerSize = reader.ReadUInt64();
+            ushort tmodVersion = reader.ReadUInt16();
+            ushort propertyCount = reader.ReadUInt16();
+
+            // Read a number of properties based on the propertyCount value
+            for (int i = 0; i < propertyCount; i++)
+            {
+                string key = reader.ReadString();
+                string value = reader.ReadString();
+
+                if (!string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(value)) properties[key] = value;
+            }
+
+            return headerSize;
         }
 
         private static int SaveBytes(string extractPath, FileStream stream, InflaterInputStream decompressionStream, long position, int size, byte[] buffer)

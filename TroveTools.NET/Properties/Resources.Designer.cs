@@ -143,10 +143,6 @@ namespace TroveTools.NET.Properties {
         ///  },
         ///  {
         ///    &quot;category&quot;: &quot;Type&quot;,
-        ///    &quot;title&quot;: &quot;Boat&quot;
-        ///  },
-        ///  {
-        ///    &quot;category&quot;: &quot;Type&quot;,
         ///    &quot;title&quot;: &quot;Cosmetics&quot;
         ///  },
         ///  {
@@ -163,14 +159,18 @@ namespace TroveTools.NET.Properties {
         ///  },
         ///  {
         ///    &quot;category&quot;: &quot;Type&quot;,
-        ///    &quot;title&quot;: &quot;Guide&quot;
-        ///  },
-        ///  {
-        ///    &quot;category&quot;: &quot;Type&quot;,
         ///    &quot;title&quot;: &quot;Helmet&quot;
         ///  },
         ///  {
-        ///    &quot;cat [rest of string was truncated]&quot;;.
+        ///    &quot;category&quot;: &quot;Type&quot;,
+        ///    &quot;title&quot;: &quot;Language&quot;
+        ///  },
+        ///  {
+        ///    &quot;category&quot;: &quot;Type&quot;,
+        ///    &quot;title&quot;: &quot;Mag Rider&quot;
+        ///  },
+        ///  {
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ModTags {
             get {
@@ -196,6 +196,30 @@ namespace TroveTools.NET.Properties {
         internal static string Stylesheet {
             get {
                 return ResourceManager.GetString("Stylesheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;.binfab&quot;: &quot;prefabs&quot;,
+        ///  &quot;.blueprint&quot;: &quot;blueprints&quot;,
+        ///  &quot;.bnk&quot;: &quot;audio&quot;,
+        ///  &quot;.common&quot;: &quot;shadersunified\\programs\\common&quot;,
+        ///  &quot;.dds&quot;: &quot;particles\\VFX\\Textures&quot;,
+        ///  &quot;.effect&quot;: &quot;shadersunified\\effects&quot;,
+        ///  &quot;.fbx&quot;: &quot;particles\\VFX\\Meshes&quot;,
+        ///  &quot;.fragment&quot;: &quot;shadersunified\\programs\\fragment&quot;,
+        ///  &quot;.gr2&quot;: &quot;models&quot;,
+        ///  &quot;.gsf&quot;: &quot;models&quot;,
+        ///  &quot;.hcf&quot;: &quot;particles\\VFX\\Meshes&quot;,
+        ///  &quot;.hma&quot;: &quot;particles\\VFX\\MaterialProxies&quot;,
+        ///  &quot;.hml&quot;: &quot;particles\\VFX\\Models&quot;,
+        ///  &quot;.hmm&quot;: &quot;particles\\VFX\\Cache\\Meshes&quot;,
+        ///  &quot;.material&quot;: &quot;shade [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TroveFoldersByExtension {
+            get {
+                return ResourceManager.GetString("TroveFoldersByExtension", resourceCulture);
             }
         }
         
