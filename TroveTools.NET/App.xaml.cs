@@ -25,6 +25,7 @@ namespace TroveTools.NET
 
         protected override void OnStartup(StartupEventArgs se)
         {
+            log4net.Config.XmlConfigurator.Configure();
             foreach (Hierarchy hierarchy in LogManager.GetAllRepositories())
             {
                 foreach (var appender in hierarchy.GetAppenders())

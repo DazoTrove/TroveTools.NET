@@ -12,6 +12,9 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.2.0.2 Release (11/1/2016)
+- Bug fix for Loggly online error logging
+
 ## Version 1.2.0.1 Release (10/30/2016)
 - Improved support for [incorrectly packaged mods](https://github.com/DazoTrove/TroveTools.NET/issues/59)
 - Online error logging: changed web service provider from Slack to [Loggly](https://github.com/DazoTrove/TroveTools.NET/issues/60) and raised threshold for logging from warnings to errors
