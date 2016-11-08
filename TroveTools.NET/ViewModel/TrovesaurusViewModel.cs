@@ -84,7 +84,7 @@ namespace TroveTools.NET.ViewModel
             {
                 if (MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail && string.IsNullOrEmpty(MainWindowViewModel.Instance.Settings.TrovesaurusAccountLinkKey))
                 {
-                    log.Error("Trovesaurus mail checking requires that a valid account link key is entered");
+                    log.Warn("Trovesaurus mail checking requires that a valid account link key is entered");
                     MainWindowViewModel.Instance.Settings.TrovesaurusCheckMail = false;
                 }
                 TimeSpan checkInterval = new TimeSpan(0, 1, 0);

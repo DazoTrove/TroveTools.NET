@@ -12,6 +12,10 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
+## Version 1.2.0.3 Release (11/7/2016)
+- Lowered the log message informing users that a valid account link key is required from error to warning
+- My Mods tab: updated the error message for incorrectly packaged mods to show the incorrect folder name rather than only showing "Incorrectly packaged mod file: [] is not an overridable folder" in most cases
+
 ## Version 1.2.0.2 Release (11/1/2016)
 - Bug fix for Loggly online error logging
 

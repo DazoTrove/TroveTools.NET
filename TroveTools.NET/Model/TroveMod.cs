@@ -837,6 +837,7 @@ namespace TroveTools.NET.Model
 
             // Add override folder at deepest folder level if not already included in zip file
             if (!folder.EndsWith(OverrideFolder, StringComparison.OrdinalIgnoreCase)) folder = Path.Combine(folder, OverrideFolder);
+            string origFolder = folder;
 
             // Check for valid installation location
             validFolder = File.Exists(Path.Combine(basePath, Path.GetDirectoryName(folder), IndexFile));
@@ -866,9 +867,9 @@ namespace TroveTools.NET.Model
                     if (!validFolder)
                     {
                         if (errorCount == 0)
-                            log.ErrorFormat("Incorrectly packaged mod file: [{0}] is not an overridable folder (zip entry path: {1}, mod: {2})", Path.GetDirectoryName(folder), entry.FullName, Name);
+                            log.ErrorFormat("Incorrectly packaged mod file: [{0}] is not an overridable folder (zip entry path: {1}, mod: {2})", Path.GetDirectoryName(origFolder), entry.FullName, Name);
                         else if (log.IsDebugEnabled)
-                            log.DebugFormat("Incorrectly packaged mod file: [{0}] is not an overridable folder (zip entry path: {1}, mod: {2})", Path.GetDirectoryName(folder), entry.FullName, Name);
+                            log.DebugFormat("Incorrectly packaged mod file: [{0}] is not an overridable folder (zip entry path: {1}, mod: {2})", Path.GetDirectoryName(origFolder), entry.FullName, Name);
 
                         errorCount++;
                     }

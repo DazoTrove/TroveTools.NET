@@ -21,7 +21,7 @@ namespace TroveTools.NET.Model
         {
             if (string.IsNullOrEmpty(accountLinkKey))
             {
-                log.Error("Trove game status updating requires that a valid account link key is entered");
+                log.Warn("Trove game status updating requires that a valid account link key is entered");
                 return;
             }
             log.InfoFormat("Starting Trove game status checking");
