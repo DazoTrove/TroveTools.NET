@@ -19,7 +19,7 @@ namespace TroveTools.NET.Model
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public const string TrovesaurusBaseUrl = "https://www.trovesaurus.com/";
+        public const string TrovesaurusBaseUrl = "http://www.trovesaurus.com/";
         public const string ModListUrl = TrovesaurusBaseUrl + "modsapi.php?mode=list";
         public const string ModDownloadUrl = TrovesaurusBaseUrl + "mod.php?id={0}&download={1}";
         public const string ModViewUrl = TrovesaurusBaseUrl + "mod.php?id={0}";
