@@ -12,7 +12,10 @@ If you are a new player lower than Mastery Rank 20, you can earn a free class co
 - **Pirrot Merchants:** a list of items that can be purchased from the pirate merchants in Treasure Isles including identifying features of the ships
 - **Mastery:** a list of various things that grant mastery points
 
-## Version 1.2.0.4 Release (11/7/2016)
+## Version 1.2.0.5 Release (TBD)
+- Settings tab: Modified method of accessing 32-bit and 64-bit Registry settings to detect Trove game location and added Registry search for "Glyph Trove" in order to accomodate the various regions (such as "Glyph Trove North America", etc.)
+
+## Version 1.2.0.4 Release (11/16/2016)
 - Changed calls to Trovesaurus.com to use HTTP instead of HTTPS since the site is now redirecting to HTTP
 
 ## Version 1.2.0.3 Release (11/7/2016)

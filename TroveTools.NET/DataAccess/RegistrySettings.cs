@@ -4,9 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using TroveTools.NET.Framework;
 using TroveTools.NET.Model;
 
@@ -28,14 +26,9 @@ namespace TroveTools.NET.DataAccess
         private const string ProductName = "TroveTools .NET";
         private const string RunCommandFormat = "\"{0}\"";
 
-        private const string WinUninstall = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
-        private const string Win64Uninstall = @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
-        private const string WinUninstallGlyphTroveLive = WinUninstall + @"\Glyph Trove";
-        private const string Win64UninstallGlyphTroveLive = Win64Uninstall + @"\Glyph Trove";
+        private const string WinUninstall = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
         private const string WinUninstallSteamTrove = WinUninstall + @"\Steam App 304050";
-        private const string Win64UninstallSteamTrove = Win64Uninstall + @"\Steam App 304050";
-        private const string WinUninstallTrovePTS = WinUninstall + @"\Glyph Trove PTS-US";
-        private const string Win64UninstallTrovePTS = Win64Uninstall + @"\Glyph Trove PTS-US";
+        private const string GlyphTrove = "Glyph Trove";
         private const string LocationValue = "InstallLocation";
         private const string LivePath = "Live";
         private const string PtsPath = "PTS";
@@ -144,47 +137,59 @@ namespace TroveTools.NET.DataAccess
             // Check registry for installation locations using both the standard windows uninstall key and the win 64 uninstall key
             try
             {
-                // Glyph Live
-                string path = Registry.GetValue(Win64UninstallGlyphTroveLive, LocationValue, null) as string;
-                if (path != null) potentialLocs.AddIfMissing(path, "Trove Live (Registry: Glyph)");
+                // Check both the local machine and current user hives
+                var hives = new RegistryHive[] { RegistryHive.LocalMachine, RegistryHive.CurrentUser };
 
-                path = Registry.GetValue(WinUninstallGlyphTroveLive, LocationValue, null) as string;
-                if (path != null) potentialLocs.AddIfMissing(path, "Trove Live (Registry: Glyph)");
+                // Check both the 32-bit and 64-bit registry views
+                var views = new RegistryView[] { RegistryView.Registry32, RegistryView.Registry64 };
 
-                // Steam Live (try adding Live folder by itself and under Games\Trove)
-                path = Registry.GetValue(Win64UninstallSteamTrove, LocationValue, null) as string;
-                if (path != null) potentialLocs.AddIfMissing(Path.Combine(path, SteamLivePath), "Trove Live (Registry: Steam)");
+                foreach (var hive in hives)
+                {
+                    foreach (var view in views)
+                    {
+                        RegistryKey baseKey = null;
+                        try { baseKey = RegistryKey.OpenBaseKey(hive, view); }
+                        catch { }
 
-                path = Registry.GetValue(WinUninstallSteamTrove, LocationValue, null) as string;
-                if (path != null) potentialLocs.AddIfMissing(Path.Combine(path, SteamLivePath), "Trove Live (Registry: Steam)");
+                        if (baseKey != null)
+                        {
+                            string path = null;
 
-                path = Registry.GetValue(Win64UninstallSteamTrove, LocationValue, null) as string;
-                if (path != null) potentialLocs.AddIfMissing(Path.Combine(path, LivePath), "Trove Live (Registry: Steam)");
+                            // Glyph Registry settings
+                            using (var uninstallKey = baseKey?.OpenSubKey(WinUninstall))
+                            {
+                                foreach (string troveKey in uninstallKey?.GetSubKeyNames()?.Where(k => k.StartsWith(GlyphTrove)))
+                                {
+                                    path = GetRegistryValue(uninstallKey, troveKey, LocationValue, null);
+                                    if (path != null) potentialLocs.AddIfMissing(path, string.Format("{0} (Registry: Glyph)", troveKey.Replace("Glyph ", "")));
+                                }
+                            }
 
-                path = Registry.GetValue(WinUninstallSteamTrove, LocationValue, null) as string;
-                if (path != null) potentialLocs.AddIfMissing(Path.Combine(path, LivePath), "Trove Live (Registry: Steam)");
-                
-                // Glyph PTS
-                path = Registry.GetValue(Win64UninstallTrovePTS, LocationValue, null) as string;
-                if (path != null) potentialLocs.AddIfMissing(path, "Trove PTS (Registry: Glyph)");
+                            // Steam
+                            path = GetRegistryValue(baseKey, WinUninstallSteamTrove, LocationValue, null);
+                            if (path != null)
+                            {
+                                // Steam Live (try adding Live folder by itself and under Games\Trove)
+                                potentialLocs.AddIfMissing(Path.Combine(path, LivePath), "Trove Live (Registry: Steam)");
+                                potentialLocs.AddIfMissing(Path.Combine(path, SteamLivePath), "Trove Live (Registry: Steam)");
 
-                path = Registry.GetValue(WinUninstallTrovePTS, LocationValue, null) as string;
-                if (path != null) potentialLocs.AddIfMissing(path, "Trove PTS (Registry: Glyph)");
+                                // Steam PTS (try adding PTS folder by itself and under Games\Trove)
+                                potentialLocs.AddIfMissing(Path.Combine(path, PtsPath), "Trove PTS (Registry: Steam)");
+                                potentialLocs.AddIfMissing(Path.Combine(path, SteamPtsPath), "Trove PTS (Registry: Steam)");
+                            }
 
-                // Steam PTS (try adding PTS folder by itself and under Games\Trove)
-                path = Registry.GetValue(Win64UninstallSteamTrove, LocationValue, null) as string;
-                if (path != null) potentialLocs.AddIfMissing(Path.Combine(path, PtsPath), "Trove PTS (Registry: Steam)");
-
-                path = Registry.GetValue(WinUninstallSteamTrove, LocationValue, null) as string;
-                if (path != null) potentialLocs.AddIfMissing(Path.Combine(path, PtsPath), "Trove PTS (Registry: Steam)");
-
-                path = Registry.GetValue(Win64UninstallSteamTrove, LocationValue, null) as string;
-                if (path != null) potentialLocs.AddIfMissing(Path.Combine(path, SteamPtsPath), "Trove PTS (Registry: Steam)");
-
-                path = Registry.GetValue(WinUninstallSteamTrove, LocationValue, null) as string;
-                if (path != null) potentialLocs.AddIfMissing(Path.Combine(path, SteamPtsPath), "Trove PTS (Registry: Steam)");
+                            baseKey.Close();
+                        }
+                    }
+                }
             }
             catch (Exception ex) { log.Error("Error getting Trove locations from Windows Registry", ex); }
+        }
+
+        private static string GetRegistryValue(RegistryKey baseKey, string subKeyName, string valueName, string defaultValue)
+        {
+            try { using (var key = baseKey?.OpenSubKey(subKeyName)) return key?.GetValue(valueName, defaultValue) as string; }
+            catch { return defaultValue; }
         }
     }
 }
