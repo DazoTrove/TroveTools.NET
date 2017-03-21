@@ -19,7 +19,7 @@ namespace TroveTools.NET.Model
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public const string TrovesaurusBaseUrl = "http://www.trovesaurus.com/";
+        public const string TrovesaurusBaseUrl = "https://trovesaurus.com/";
         public const string ModListUrl = TrovesaurusBaseUrl + "modsapi.php?mode=list";
         public const string ModDownloadUrl = TrovesaurusBaseUrl + "mod.php?id={0}&download={1}";
         public const string ModViewUrl = TrovesaurusBaseUrl + "mod.php?id={0}";
@@ -43,8 +43,8 @@ namespace TroveTools.NET.Model
         public const string MailboxUrl = TrovesaurusBaseUrl + "mail";
 
         public const string ModLoaderQuerystring = "ml=TroveTools.NET";
-        public const string ModPackRegex = @"<h3><a href=""(?<Url>https://www\.trovesaurus\.com/modpack=(?<PackId>\d+)/[^""]*)"">(?<Name>[^<]*)</a></h3>.*?Created by <a href=[^>]+>(?<Author>[^<]+)</a>(?<Details>.*?)<hr/>";
-        public const string PackModsRegex = @"<a href=""https://www\.trovesaurus\.com/mod=(?<ModId>\d+)";
+        public const string ModPackRegex = @"<h3><a href=""(?<Url>https?://(?:www\.)?trovesaurus\.com/modpack=(?<PackId>\d+)/[^""]*)"">(?<Name>[^<]*)</a></h3>.*?Created by <a href=[^>]+>(?<Author>[^<]+)</a>(?<Details>.*?)<hr/>";
+        public const string PackModsRegex = @"<a href=""https?://(?:www\.)?trovesaurus\.com/mod=(?<ModId>\d+)";
 
         private static List<TroveMod> _ModList = null;
         private static List<TroveModPack> _ModPackList = null;
