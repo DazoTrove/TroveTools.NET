@@ -4,12 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using TroveTools.NET.Model;
 
 namespace TroveTools.NET.Framework
 {
     class WebClientExtended : WebClient
     {
-        public WebClientExtended() : base() { }
+        public WebClientExtended() : this(new CookieContainer()) { }
 
         public WebClientExtended(CookieContainer container) : base()
         {
@@ -93,6 +94,8 @@ namespace TroveTools.NET.Framework
                 httpRequest.Timeout = Timeout;
                 httpRequest.CookieContainer = CookieContainer;
                 httpRequest.KeepAlive = KeepAlive;
+                httpRequest.MaximumAutomaticRedirections = 3;
+                httpRequest.UserAgent = string.Format("Mozilla/5.0 (compatible; TroveTools/{0})", ApplicationDetails.GetCurrentVersion());
                 if (AutomaticDecompression != DecompressionMethods.None) httpRequest.AutomaticDecompression = AutomaticDecompression;
                 if (IfModifiedSince != DateTime.MinValue) httpRequest.IfModifiedSince = IfModifiedSince;
                 if (!string.IsNullOrEmpty(Accept)) httpRequest.Accept = Accept;

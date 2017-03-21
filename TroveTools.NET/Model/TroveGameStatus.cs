@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using SharpConfig;
+using System.Management;
+using System.ComponentModel;
 
 namespace TroveTools.NET.Model
 {
@@ -50,7 +52,23 @@ namespace TroveTools.NET.Model
         {
             try
             {
-                bool isTroveRunning = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(TroveLocation.TroveExecutableFileName)).Length > 0;
+                bool isTroveRunning = false;
+                foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(TroveLocation.TroveExecutableFileName)))
+                {
+                    try
+                    {
+                        string cmdLine = process.GetCommandLine();
+                        if (!cmdLine.Contains("tool"))
+                        {
+                            isTroveRunning = true;
+                            break;
+                        }
+                    }
+                    // Catch and ignore "access denied" exceptions.
+                    catch (Win32Exception ex) when (ex.HResult == -2147467259) { }
+                    // Catch and ignore "Cannot process request because the process (<pid>) has exited." exceptions.
+                    catch (InvalidOperationException ex) when (ex.HResult == -2146233079) { }
+                }
                 if (isTroveRunning)
                 {
                     if (!_Online.HasValue || _Online.Value == false)
@@ -71,6 +89,34 @@ namespace TroveTools.NET.Model
                 }
             }
             catch (Exception ex) { log.Error("Error in Trove game status detection", ex); }
+        }
+
+        // Define an extension method for type System.Process that returns the command 
+        // line via WMI.
+        private static string GetCommandLine(this Process process)
+        {
+            string cmdLine = null;
+            using (var searcher = new ManagementObjectSearcher($"SELECT CommandLine FROM Win32_Process WHERE ProcessId = {process.Id}"))
+            {
+                // By definition, the query returns at most 1 match, because the process 
+                // is looked up by ID (which is unique by definition).
+                var matchEnum = searcher.Get().GetEnumerator();
+                if (matchEnum.MoveNext()) // Move to the 1st item.
+                {
+                    cmdLine = matchEnum.Current["CommandLine"]?.ToString();
+                }
+            }
+            if (cmdLine == null)
+            {
+                // Not having found a command line implies 1 of 2 exceptions, which the
+                // WMI query masked:
+                // An "Access denied" exception due to lack of privileges.
+                // A "Cannot process request because the process (<pid>) has exited."
+                // exception due to the process having terminated.
+                // We provoke the same exception again simply by accessing process.MainModule.
+                var dummy = process.MainModule; // Provoke exception.
+            }
+            return cmdLine;
         }
 
         public static string TroveConfigPath
