@@ -23,13 +23,13 @@ namespace TroveTools.NET.Model
 
         public static ModDetails LoadFromYaml(string yamlContents)
         {
-            var deserializer = new DeserializerBuilder().WithNamingConvention(new CamelCaseNamingConvention()).Build();
+            var deserializer = new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
             return deserializer.Deserialize<ModDetails>(yamlContents);
         }
 
         public string GetYaml()
         {
-            var serializer = new SerializerBuilder().WithNamingConvention(new CamelCaseNamingConvention()).Build();
+            var serializer = new SerializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
             return serializer.Serialize(this);
         }
 

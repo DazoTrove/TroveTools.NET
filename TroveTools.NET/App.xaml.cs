@@ -18,7 +18,7 @@ namespace TroveTools.NET
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
-        /// Simple partial method for updating the Loggly Appender settings such as the inputKey.
+        /// Simple partial method for updating the Loggly Appender settings such as the customer token.
         /// This method is to be defined in the partial App class in App.xaml.secret.cs
         /// </summary>
         partial void UpdateLogglyAppenderSettings(LogglyAppender loggly);
@@ -30,8 +30,7 @@ namespace TroveTools.NET
             {
                 foreach (var appender in hierarchy.GetAppenders())
                 {
-                    var loggly = appender as LogglyAppender;
-                    if (loggly != null) UpdateLogglyAppenderSettings(loggly);
+                    if (appender is LogglyAppender loggly) UpdateLogglyAppenderSettings(loggly);
                 }
             }
 
